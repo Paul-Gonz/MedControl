@@ -6,3 +6,4 @@ Integrantes:
 - Génesis Arrieche
 - Paola Mendoza 
 - Jose Heredia
+- Ricardo Salas
