@@ -5,3 +5,4 @@ Integrantes:
 - Paul Gonzalez
 - Génesis Arrieche
 - Paola Mendoza 
+- Jose Heredia
