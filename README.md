@@ -7,3 +7,4 @@ Integrantes:
 - Paola Mendoza 
 - Jose Heredia
 - Ricardo Salas
+- Andres Guedez
