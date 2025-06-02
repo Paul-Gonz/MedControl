@@ -9,6 +9,21 @@
     <title>Iniciar Sesión</title>
     <link href="../Assets/css/styles.css" rel="stylesheet" />
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet" />
+    <style>
+        .logo-placeholder {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto;
+            background-color: transparent;
+            border: 2px dashed #ccc; 
+            border-radius: 8px; 
+            display: block;
+        }
+        .logo-placeholder {
+    background: url(../images/logo.png) center/contain no-repeat;
+    border: none; 
+}
+    </style>
 </head>
 
 <body class="bg-primary d-flex align-items-center justify-content-center" style="height: 100vh; margin: 0;">
@@ -20,7 +35,7 @@
                         <div class="col-lg-5">
                             <div class="card shadow-lg border-0 rounded-lg mt-12">
                                 <div class="card-header text-center">
-                                    <i class="fas fa-user-circle fa-3x mb-3 text-primary"></i>
+                                    <div class="logo-placeholder mb-4"></div>
                                     <h3 class="text-center font-weight-light">Iniciar Sesión</h3>
                                 </div>
                                 <div class="card-body">
@@ -57,5 +72,4 @@
         </div>
     </div>
 </body>
-
 </html>
