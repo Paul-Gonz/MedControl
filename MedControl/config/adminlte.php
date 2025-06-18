@@ -349,7 +349,7 @@ return [
         ],
         [
             'text' => 'Historial Clínico',
-            'url' => 'admin/pages',
+            'url' => '/Expedientes',
             'icon' => 'fas fa-fw fa-history',
         ],
         

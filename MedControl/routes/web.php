@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PacientesController;
 
+use App\Http\Controllers\ExpedienteController;
 Route::get('/', function () {
     return view('welcome');
 });
@@ -19,3 +20,9 @@ Route::post('/Pacientes/update', [PacientesController::class, 'update'])->name('
 Route::post('/Pacientes/destroy', [PacientesController::class, 'destroy'])->name('pacientes.destroy');
 
 Route::resource('doctores', App\Http\Controllers\DoctorController::class);
+
+
+Route::get('/Expedientes', [ExpedienteController::class, 'index'])->name('expedientes.index');
+Route::post('/Expedientes', [ExpedienteController::class, 'store'])->name('expedientes.store');
+Route::post('/Expedientes/update', [ExpedienteController::class, 'update'])->name('expedientes.update');
+Route::post('/Expedientes/destroy', [ExpedienteController::class, 'destroy'])->name('expedientes.destroy');
