@@ -13,3 +13,5 @@ Route::get('/login', function () {
 Route::middleware(['web'])
     ->prefix('admin')
     ->group(base_path('routes/admin.php'));
+
+Route::resource('doctores', App\Http\Controllers\DoctorController::class);
