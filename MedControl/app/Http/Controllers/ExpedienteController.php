@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Expediente; 
+
+
 class ExpedienteController extends Controller
 {
     /**
@@ -13,7 +14,7 @@ class ExpedienteController extends Controller
     public function index()
     {
        $expedientes = Expediente::all();
-       return $expedientes;
+       return view('expedientes', compact('expedientes'));
     }
 
     /**
@@ -30,15 +31,15 @@ class ExpedienteController extends Controller
     public function store(Request $request)
     {
         $expediente = new Expediente();
-        $expediente->diagnostico = $request->input('diagnostico');
-        $expediente->tratamiento = $request->input('tratamiento');
-        $expediente->receta = $request->input('receta');
-        $expediente->observaciones = $request->input('observaciones');
-        $expediente->activo_inactivo = $request->input('activo_inactivo', true);
+        $expediente->diagnostico = $request->diagnostico;
+        $expediente->tratamiento = $request->tratamiento;
+        $expediente->receta = $request->receta;
+        $expediente->observaciones = $request->observaciones;
+        $expediente->activo_inactivo = $request->activo_inactivo;
         $expediente->fecha_creacion = now();
         $expediente->fecha_actualizacion = now();
         $expediente->save();
-
+         return redirect()->route('expedientes.index')->with('success', 'Expediente registrado correctamente.');
     }
 
     /**
@@ -60,18 +61,19 @@ class ExpedienteController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request)
     {
-        $expediente = Expediente::findOrFail($expediente_id);
-        $expediente->diagnostico = $request->input('diagnostico', $expediente->diagnostico);
-        $expediente->tratamiento = $request->input('tratamiento', $expediente->tratamiento);
-        $expediente->receta = $request->input('receta', $expediente->receta);
-        $expediente->observaciones = $request->input('observaciones', $expediente->observaciones);
-        $expediente->activo_inactivo = $request->input('activo_inactivo', $expediente->activo_inactivo);
+        $expediente = Expediente::findOrFail($request->expediente_id);
+
+        $expediente->diagnostico = $request->diagnostico;
+        $expediente->tratamiento = $request->tratamiento;
+        $expediente->receta = $request->receta;
+        $expediente->observaciones = $request->observaciones;
         $expediente->fecha_actualizacion = now();
+        $expediente->activo_inactivo = $request->activo_inactivo;
         $expediente->save();
 
-        return $expediente;
+       return redirect()->route('expedientes.index')->with('success', 'Expediente actualizado correctamente.');
     }
 
     /**
@@ -79,7 +81,7 @@ class ExpedienteController extends Controller
      */
     public function destroy(Request $request)
     {
-        $expediente = Expediente::destroy($request->input('expediente_id'));
-        return $expediente;
+        Expediente::destroy($request->expediente_id);
+        return redirect()->route('expedientes.index')->with('success', 'Expediente eliminado correctamente.');
     }
 }

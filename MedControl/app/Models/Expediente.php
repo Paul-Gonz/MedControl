@@ -1,15 +1,12 @@
 <?php
 
 namespace App\Models;
-
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Expediente extends Model
 {
-    use HasFactory;
 
-    protected $table = 'expediente';
+    protected $table = 'expedientes_clinicos';
 
     protected $fillable = [
         'diagnostico',
@@ -21,7 +18,7 @@ class Expediente extends Model
         'fecha_actualizacion'
     ];
 
-    public $timestamps = true;
+    public $timestamps = false;
 
     protected $primaryKey = 'expediente_id';
 }
