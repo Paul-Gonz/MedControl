@@ -5,6 +5,7 @@ use App\Http\Controllers\PacientesController;
 use App\Http\Controllers\UsuarioController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\ExpedienteController;
+use App\Http\Controllers\Cuenta_BancariaController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -27,6 +28,12 @@ Route::get('/Expedientes', [ExpedienteController::class, 'index'])->name('expedi
 Route::post('/Expedientes', [ExpedienteController::class, 'store'])->name('expedientes.store');
 Route::post('/Expedientes/update', [ExpedienteController::class, 'update'])->name('expedientes.update');
 Route::post('/Expedientes/destroy', [ExpedienteController::class, 'destroy'])->name('expedientes.destroy');
+
+
+Route::get('/Cuenta_Bancaria', [Cuenta_BancariaController::class, 'index'])->name('cuentas_bancarias.index');
+Route::post('/Cuenta_Bancaria', [Cuenta_BancariaController::class, 'store'])->name('cuentas_bancarias.store');
+Route::post('/Cuenta_Bancaria/update', [Cuenta_BancariaController::class, 'update'])->name('cuentas_bancarias.update');
+Route::post('/Cuenta_Bancaria/destroy', [Cuenta_BancariaController::class, 'destroy'])->name('cuentas_bancarias.destroy');
 
 Route::resource('usuarios', UsuarioController::class);
 

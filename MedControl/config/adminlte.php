@@ -333,24 +333,30 @@ return [
             'url' => 'admin/pages',
             'icon' => 'far fa-fw fa-calendar',
         ],
+        
+        [
+            'text' => 'Expedientes clinicos',
+            'url' => '/Expedientes',
+            'icon' => 'fas fa-fw fa-history',
+        ],
+         ['header' => 'GESTION DE DATOS'],
 
         [
             'text' => 'Pacientes',
             'url' => '/Pacientes',
-            'icon' => 'fas fa-fw fa-bed',
+            'icon' => 'fas fa-fw fa-users',
 
         ],
-
-        ['header' => 'account_settings'],
         [
-            'text' => 'Pacientes',
+            'text' => 'Doctores',
             'url' => 'admin/pages',
             'icon' => 'fas fa-fw fa-users',
         ],
+        
         [
-            'text' => 'Historial Clínico',
-            'url' => '/Expedientes',
-            'icon' => 'fas fa-fw fa-history',
+            'text' => 'Cuentas Bancarias',
+            'url' => '/Cuenta_Bancaria',
+            'icon' => 'fas fa-fw fa-users',
         ],
         
         ['header' => 'REPORTES'],
