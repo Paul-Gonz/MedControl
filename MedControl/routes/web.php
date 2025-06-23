@@ -19,14 +19,15 @@ Route::get('/dashboard', function () {
     return view('dashboard');
 });
 
-Route::middleware(['web'])->prefix('admin')->group(base_path('routes/admin.php'));
-
 Route::get('/Pacientes', [PacientesController::class, 'index'])->name('pacientes.index');
 Route::post('/Pacientes', [PacientesController::class, 'store'])->name('pacientes.store');
 Route::post('/Pacientes/update', [PacientesController::class, 'update'])->name('pacientes.update');
 Route::post('/Pacientes/destroy', [PacientesController::class, 'destroy'])->name('pacientes.destroy');
 
-Route::resource('doctores', App\Http\Controllers\DoctorController::class);
+Route::get('/doctores', [App\Http\Controllers\DoctorController::class, 'index'])->name('doctores.index');
+Route::post('/doctores', [App\Http\Controllers\DoctorController::class, 'store'])->name('doctores.store');
+Route::post('/doctores/update', [App\Http\Controllers\DoctorController::class, 'update'])->name('doctores.update');
+Route::post('/doctores/destroy', [App\Http\Controllers\DoctorController::class, 'destroy'])->name('doctores.destroy');
 
 Route::get('/Expedientes', [ExpedienteController::class, 'index'])->name('expedientes.index');
 Route::post('/Expedientes', [ExpedienteController::class, 'store'])->name('expedientes.store');

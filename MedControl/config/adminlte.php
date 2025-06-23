@@ -314,6 +314,12 @@ return [
             'type' => 'darkmode-widget',
             'topnav_right' => true,     
         ],
+         [
+            'text' => 'Cerrar Sesión',
+            'url' => 'logout',
+            'icon' => 'fas fa-fw fa-sign-out-alt',
+            'topnav_right' => true
+        ],
 
         // Sidebar items:
         [
@@ -325,9 +331,10 @@ return [
             'url' => 'admin/blog',
             'can' => 'manage-blog',
         ],
-         ['header' => 'GENERAL'],
 
-        [
+         ['header' => 'GENERAL'],
+        
+         [
             'text' => 'Dashboard',
             'url' => 'dashboard', 
             'icon' => 'fas fa-fw fa-home',
@@ -342,19 +349,19 @@ return [
 
         [
             'text' => 'Pacientes',
-            'url' => '/Pacientes',
+            'url' => 'pacientes',
             'icon' => 'fas fa-fw fa-users',
 
         ],
          [
             'text' => 'Expedientes clinicos',
-            'url' => '/Expedientes',
+            'url' => 'expedientes',
             'icon' => 'fas fa-fw fa-history',
         ],
         
         [
             'text' => 'Citas',
-            'url' => '/Citas',
+            'url' => 'citas',
             'icon' => 'fas fa-fw fa-calendar-check',
         ],
         [
@@ -362,12 +369,17 @@ return [
             'url' => 'doctores',
             'icon' => 'fas fa-fw fa-user-md',
         ],
-        
+        [
+            'text' => 'Especialidades',
+            'url' => 'especialidades',
+            'icon' => 'fas fa-fw fa-stethoscope',
+        ],
         [
             'text' => 'Cuentas Bancarias',
-            'url' => '/Cuenta_Bancaria',
+            'url' => 'cuentas_Bancarias',
             'icon' => 'fas fa-fw fa-university',
         ],
+        
         
         ['header' => 'REPORTES'],
         
@@ -380,13 +392,6 @@ return [
                     'url' => '#',
                 ],
             ],
-        ],
-
-        [
-            'text' => 'Cerrar Sesión',
-            'url' => 'login',
-            'icon' => 'fas fa-fw fa-sign-out-alt',
-            'topnav_right' => true
         ],
     ],
 
