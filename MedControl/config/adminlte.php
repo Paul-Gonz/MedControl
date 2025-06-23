@@ -324,8 +324,8 @@ return [
          ['header' => 'GENERAL'],
 
         [
-            'text' => 'Inicio',
-            'url' => 'admin/inicio', 
+            'text' => 'Dashboard',
+            'url' => 'dashboard', 
             'icon' => 'fas fa-fw fa-home',
         ],
         [
