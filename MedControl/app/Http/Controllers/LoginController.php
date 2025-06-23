@@ -23,7 +23,7 @@ class LoginController extends Controller
         if ($usuario) {
             Session::put('usuario_id', $usuario->usuario_id);
             Session::put('usuario', $usuario->usuario);
-            return redirect('/admin'); // O a donde quieras redirigir
+            return redirect('/dashboard');
         } else {
             return back()->withErrors(['usuario' => 'Usuario o clave incorrectos']);
         }
