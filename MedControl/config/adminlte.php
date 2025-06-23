@@ -310,6 +310,10 @@ return [
             'type' => 'fullscreen-widget',
             'topnav_right' => true,
         ],
+        [
+            'type' => 'darkmode-widget',
+            'topnav_right' => true,     
+        ],
 
         // Sidebar items:
         [
@@ -334,11 +338,6 @@ return [
             'icon' => 'far fa-fw fa-calendar',
         ],
         
-        [
-            'text' => 'Expedientes clinicos',
-            'url' => '/Expedientes',
-            'icon' => 'fas fa-fw fa-history',
-        ],
          ['header' => 'GESTION DE DATOS'],
 
         [
@@ -347,16 +346,27 @@ return [
             'icon' => 'fas fa-fw fa-users',
 
         ],
+         [
+            'text' => 'Expedientes clinicos',
+            'url' => '/Expedientes',
+            'icon' => 'fas fa-fw fa-history',
+        ],
+        
+        [
+            'text' => 'Citas',
+            'url' => '/Citas',
+            'icon' => 'fas fa-fw fa-calendar-check',
+        ],
         [
             'text' => 'Doctores',
-            'url' => 'admin/pages',
-            'icon' => 'fas fa-fw fa-users',
+            'url' => 'doctores',
+            'icon' => 'fas fa-fw fa-user-md',
         ],
         
         [
             'text' => 'Cuentas Bancarias',
             'url' => '/Cuenta_Bancaria',
-            'icon' => 'fas fa-fw fa-users',
+            'icon' => 'fas fa-fw fa-university',
         ],
         
         ['header' => 'REPORTES'],
@@ -371,11 +381,12 @@ return [
                 ],
             ],
         ],
-        ['header' => 'CONFIGURACION'],
+
         [
-            'text' => 'Perfil',
-            'url' => 'admin/settings',
-            'icon' => 'fas fa-fw fa-user',
+            'text' => 'Cerrar Sesión',
+            'url' => 'login',
+            'icon' => 'fas fa-fw fa-sign-out-alt',
+            'topnav_right' => true
         ],
     ],
 
