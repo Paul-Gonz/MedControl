@@ -24,22 +24,24 @@ Route::post('/Pacientes', [PacientesController::class, 'store'])->name('paciente
 Route::post('/Pacientes/update', [PacientesController::class, 'update'])->name('pacientes.update');
 Route::post('/Pacientes/destroy', [PacientesController::class, 'destroy'])->name('pacientes.destroy');
 
-Route::get('/doctores', [App\Http\Controllers\DoctorController::class, 'index'])->name('doctores.index');
-Route::post('/doctores', [App\Http\Controllers\DoctorController::class, 'store'])->name('doctores.store');
-Route::post('/doctores/update', [App\Http\Controllers\DoctorController::class, 'update'])->name('doctores.update');
-Route::post('/doctores/destroy', [App\Http\Controllers\DoctorController::class, 'destroy'])->name('doctores.destroy');
+Route::get('/Doctores', [App\Http\Controllers\DoctorController::class, 'index'])->name('doctores.index');
+Route::post('/Doctores', [App\Http\Controllers\DoctorController::class, 'store'])->name('doctores.store');
+Route::post('/Doctores/update', [App\Http\Controllers\DoctorController::class, 'update'])->name('doctores.update');
+Route::post('/Doctores/destroy', [App\Http\Controllers\DoctorController::class, 'destroy'])->name('doctores.destroy');
 
 Route::get('/Expedientes', [ExpedienteController::class, 'index'])->name('expedientes.index');
 Route::post('/Expedientes', [ExpedienteController::class, 'store'])->name('expedientes.store');
 Route::post('/Expedientes/update', [ExpedienteController::class, 'update'])->name('expedientes.update');
 Route::post('/Expedientes/destroy', [ExpedienteController::class, 'destroy'])->name('expedientes.destroy');
 
-
 Route::get('/Cuenta_Bancaria', [Cuenta_BancariaController::class, 'index'])->name('cuentas_bancarias.index');
 Route::post('/Cuenta_Bancaria', [Cuenta_BancariaController::class, 'store'])->name('cuentas_bancarias.store');
 Route::post('/Cuenta_Bancaria/update', [Cuenta_BancariaController::class, 'update'])->name('cuentas_bancarias.update');
 Route::post('/Cuenta_Bancaria/destroy', [Cuenta_BancariaController::class, 'destroy'])->name('cuentas_bancarias.destroy');
 
-Route::resource('usuarios', UsuarioController::class);
+Route::get('/Usuarios', [UsuarioController::class, 'index'])->name('usuarios.index');
+Route::post('/Usuarios', [UsuarioController::class, 'store'])->name('usuarios.store');
+Route::post('/Usuarios/update', [UsuarioController::class, 'update'])->name('usuarios.update');
+Route::post('/Usuarios/destroy', [UsuarioController::class, 'destroy'])->name('usuarios.destroy');
 
 Route::post('/login', [LoginController::class, 'login'])->name('login.process');

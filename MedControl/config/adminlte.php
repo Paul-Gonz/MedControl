@@ -349,13 +349,13 @@ return [
 
         [
             'text' => 'Pacientes',
-            'url' => 'pacientes',
+            'url' => '/Pacientes',
             'icon' => 'fas fa-fw fa-users',
 
         ],
          [
             'text' => 'Expedientes clinicos',
-            'url' => 'expedientes',
+            'url' => '/Expedientes',
             'icon' => 'fas fa-fw fa-history',
         ],
         
@@ -366,20 +366,30 @@ return [
         ],
         [
             'text' => 'Doctores',
-            'url' => 'doctores',
+            'url' => '/Doctores',
             'icon' => 'fas fa-fw fa-user-md',
         ],
         [
             'text' => 'Especialidades',
-            'url' => 'especialidades',
+            'url' => '/Especialidades',
             'icon' => 'fas fa-fw fa-stethoscope',
         ],
         [
             'text' => 'Cuentas Bancarias',
-            'url' => 'cuentas_Bancarias',
+            'url' => 'Cuenta_Bancaria',
             'icon' => 'fas fa-fw fa-university',
         ],
-        
+        [
+            'text' => 'Consultorios',
+            'url' => '/Consultorios',
+            'icon' => 'fas fa-fw fa-hospital',
+        ],
+        [
+            'text' => 'Usuarios',
+            'url' => '/Usuarios',
+            'icon' => 'fas fa-fw fa-users-cog',
+        ],
+
         
         ['header' => 'REPORTES'],
         
