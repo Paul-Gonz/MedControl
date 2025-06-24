@@ -45,3 +45,8 @@ Route::post('/Usuarios/update', [UsuarioController::class, 'update'])->name('usu
 Route::post('/Usuarios/destroy', [UsuarioController::class, 'destroy'])->name('usuarios.destroy');
 
 Route::post('/login', [LoginController::class, 'login'])->name('login.process');
+
+Route::get('/Especialidades', [App\Http\Controllers\EspecialidadController::class, 'index'])->name('especialidades.index');
+Route::post('/Especialidades', [App\Http\Controllers\EspecialidadController::class, 'store'])->name('especialidades.store');
+Route::post('/Especialidades/update', [App\Http\Controllers\EspecialidadController::class, 'update'])->name('especialidades.update');
+Route::post('/Especialidades/destroy', [App\Http\Controllers\EspecialidadController::class, 'destroy'])->name('especialidades.destroy');
