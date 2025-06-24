@@ -10,6 +10,7 @@ return new class extends Migration
     {
         Schema::create('tipo_consultorio', function (Blueprint $table) {
             $table->id('tipo_consultorio_id');
+            $table->string('nombre_consultorio', 50);
             $table->text('descripcion');
             $table->text('equipamiento');
             $table->tinyInteger('activo_inactivo');

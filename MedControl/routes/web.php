@@ -6,6 +6,7 @@ use App\Http\Controllers\UsuarioController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\ExpedienteController;
 use App\Http\Controllers\Cuenta_BancariaController;
+use App\Http\Controllers\ConsultorioController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -50,3 +51,13 @@ Route::get('/Especialidades', [App\Http\Controllers\EspecialidadController::clas
 Route::post('/Especialidades', [App\Http\Controllers\EspecialidadController::class, 'store'])->name('especialidades.store');
 Route::post('/Especialidades/update', [App\Http\Controllers\EspecialidadController::class, 'update'])->name('especialidades.update');
 Route::post('/Especialidades/destroy', [App\Http\Controllers\EspecialidadController::class, 'destroy'])->name('especialidades.destroy');
+
+Route::get('/Consultorios', [ConsultorioController::class, 'index'])->name('consultorios.index');
+Route::post('/Consultorios', [ConsultorioController::class, 'store'])->name('consultorios.store');
+Route::put('/Consultorios/update/{id}', [ConsultorioController::class, 'update'])->name('consultorios.update');
+Route::delete('/Consultorios/destroy/{id}', [ConsultorioController::class, 'destroy'])->name('consultorios.destroy');
+
+Route::get('/TiposConsultorio', [App\Http\Controllers\TipoConsultorioController::class, 'index'])->name('tipos-consultorio.index');
+Route::post('/TiposConsultorio', [App\Http\Controllers\TipoConsultorioController::class, 'store'])->name('tipos-consultorio.store');
+Route::post('/TiposConsultorio/update/{id}', [App\Http\Controllers\TipoConsultorioController::class, 'update'])->name('tipos-consultorio.update');
+Route::post('/TiposConsultorio/destroy/{id}', [App\Http\Controllers\TipoConsultorioController::class, 'destroy'])->name('tipos-consultorio.destroy');
