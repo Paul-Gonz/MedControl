@@ -8,11 +8,8 @@ use App\Http\Controllers\ExpedienteController;
 use App\Http\Controllers\Cuenta_BancariaController;
 use App\Http\Controllers\ConsultorioController;
 
-Route::get('/', function () {
-    return view('welcome');
-});
 
-Route::get('/login', function () {
+Route::get('/', function () {
     return view('login');
 });
 
@@ -61,3 +58,11 @@ Route::get('/TiposConsultorio', [App\Http\Controllers\TipoConsultorioController:
 Route::post('/TiposConsultorio', [App\Http\Controllers\TipoConsultorioController::class, 'store'])->name('tipos-consultorio.store');
 Route::post('/TiposConsultorio/update/{id}', [App\Http\Controllers\TipoConsultorioController::class, 'update'])->name('tipos-consultorio.update');
 Route::post('/TiposConsultorio/destroy/{id}', [App\Http\Controllers\TipoConsultorioController::class, 'destroy'])->name('tipos-consultorio.destroy');
+
+
+
+
+//reportes
+
+
+Route::get('/Pacientes/pdf', [PacientesController::class, 'reporte'])->name('pacientes.reporte');

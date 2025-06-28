@@ -316,7 +316,7 @@ return [
         ],
          [
             'text' => 'Cerrar Sesión',
-            'url' => 'logout',
+            'url' => '/',
             'icon' => 'fas fa-fw fa-sign-out-alt',
             'topnav_right' => true
         ],
