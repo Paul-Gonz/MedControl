@@ -11,12 +11,11 @@
     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#nuevoConsultorioModal">
         Nuevo Consultorio
     </button>
-    <button type="button" class="btn btn-success" data-toggle="modal" data-target="#nuevoTipoModal">
-        Agregar tipo
-    </button>
+    <a href="{{ route('tipos-consultorio.index') }}" class="btn btn-success">
+        Tipos de consultorios
+    </a>
 </div>
 
-<!-- Modal nuevo tipo de consultario -->
 <div class="modal fade" id="nuevoTipoModal" tabindex="-1" role="dialog" aria-labelledby="nuevoTipoModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">

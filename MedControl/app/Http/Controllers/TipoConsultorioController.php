@@ -7,6 +7,12 @@ use App\Models\TipoConsultorio;
 
 class TipoConsultorioController extends Controller
 {
+    public function index()
+    {
+        $tipos = \App\Models\TipoConsultorio::all();
+        return view('tipos_consultorio', compact('tipos'));
+    }
+
     public function store(Request $request)
     {
         $validated = $request->validate([
