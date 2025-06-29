@@ -7,6 +7,7 @@ use App\Http\Controllers\LoginController;
 use App\Http\Controllers\ExpedienteController;
 use App\Http\Controllers\Cuenta_BancariaController;
 use App\Http\Controllers\ConsultorioController;
+use App\Http\Controllers\CitaController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -61,3 +62,6 @@ Route::get('/TiposConsultorio', [App\Http\Controllers\TipoConsultorioController:
 Route::post('/TiposConsultorio', [App\Http\Controllers\TipoConsultorioController::class, 'store'])->name('tipos-consultorio.store');
 Route::post('/TiposConsultorio/update/{id}', [App\Http\Controllers\TipoConsultorioController::class, 'update'])->name('tipos-consultorio.update');
 Route::post('/TiposConsultorio/destroy/{id}', [App\Http\Controllers\TipoConsultorioController::class, 'destroy'])->name('tipos-consultorio.destroy');
+
+
+Route::resource('citas', CitaController::class);
