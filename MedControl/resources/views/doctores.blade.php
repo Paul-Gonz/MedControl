@@ -9,13 +9,44 @@
 @section('content')
 <div class="mb-3" style="margin-bottom: 2rem !important;">
     <!-- Botón PDF -->
-    <a href="{{ route('doctores.reporte') }}" target="_blank" class="btn btn-danger mr-2">
+    <button type="button" class="btn btn-danger mr-2" data-toggle="modal" data-target="#modalReporteEspecialidad">
         PDF
-    </a>
+    </button>
     <!-- Botón para abrir el modal de nuevo doctor -->
     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#nuevoDoctorModal">
         Nuevo Doctor
     </button>
+</div>
+
+<!-- Modal para seleccionar especialidad y generar PDF -->
+<div class="modal fade" id="modalReporteEspecialidad" tabindex="-1" role="dialog" aria-labelledby="modalReporteEspecialidadLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <form id="formReporteEspecialidad" method="GET" action="{{ route('doctores.reporte.especialidad') }}" target="_blank">
+        <div class="modal-header">
+          <h5 class="modal-title" id="modalReporteEspecialidadLabel">Reporte por Especialidad</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="form-group">
+            <label for="especialidad_id">Especialidad</label>
+            <select class="form-control" name="especialidad_id" id="especialidad_id" required>
+              <option value="">Seleccione una especialidad</option>
+              @foreach($especialidades as $especialidad)
+                <option value="{{ $especialidad->especialidad_id }}">{{ $especialidad->nombre }}</option>
+              @endforeach
+            </select>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+          <button type="submit" class="btn btn-danger">Generar PDF</button>
+        </div>
+      </form>
+    </div>
+  </div>
 </div>
 
 <!-- Modal Nuevo Doctor -->

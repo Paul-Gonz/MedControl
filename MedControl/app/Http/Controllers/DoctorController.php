@@ -102,4 +102,24 @@ class DoctorController extends Controller
         $pdf = Pdf::loadView('doctoresPDF', compact('doctores'));
         return $pdf->stream('reporteDoctores.pdf');
     }
+
+    public function reportePorEspecialidad(Request $request)
+    {
+        $request->validate([
+            'especialidad_id' => 'required|integer|exists:especialidades,especialidad_id',
+        ]);
+        $especialidad_id = $request->especialidad_id;
+        $doctores = Doctor::whereIn('doctor_id', function($query) use ($especialidad_id) {
+            $query->select('doctor_id')
+                ->from('doctor_por_especialidad')
+                ->where('especialidad_id', $especialidad_id);
+        })->get();
+        // Obtener nombre de la especialidad
+        $especialidad = \App\Models\Especialidad::find($especialidad_id);
+        foreach ($doctores as $doctor) {
+            $doctor->especialidad_nombre = $especialidad->nombre;
+        }
+        $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('doctoresPDF', compact('doctores', 'especialidad'));
+        return $pdf->stream('reporteDoctores_' . $especialidad->nombre . '.pdf');
+    }
 }

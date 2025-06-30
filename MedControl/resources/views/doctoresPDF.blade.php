@@ -55,10 +55,20 @@
         h1 {
             text-align: center;
         }
+        .especialidad-titulo {
+            text-align: center;
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
     </style>
 </head>
 <body>
     <h1>Listado de Doctores por Especialidad</h1>
+    @isset($especialidad)
+        <div class="especialidad-titulo">
+            <strong>Especialidad:</strong> {{ $especialidad->nombre }}
+        </div>
+    @endisset
     <div class="card">
         <div class="card-body">
             <table class="table table-bordered table-striped">
@@ -85,7 +95,7 @@
                             <td>{{ $doctor->honorarios }}</td>
                             <td>{{ $doctor->contacto_telefono }}</td>
                             <td>{{ $doctor->contacto_email }}</td>
-                            <td>{{ $doctor->especialidad_nombre ?? 'Sin asignar' }}</td>
+                            <td>{{ $doctor->especialidad_nombre ?? '' }}</td>
                             <td>
                                 @if($doctor->activo_inactivo)
                                     <span class="badge badge-success">Activo</span>
