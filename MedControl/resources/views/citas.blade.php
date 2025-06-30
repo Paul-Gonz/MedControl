@@ -38,7 +38,7 @@
             @foreach($citas as $cita)
                 <tr>
                     <td>{{ $cita->cita_id }}</td>
-                    <td>{{ $cita->paciente->nombre ?? $cita->paciente_id }}</td>
+                    <td>{{ $cita->paciente->nombre_completo ?? $cita->paciente_id }}</td>
                     <td>{{ $cita->motivo }}</td>
                     <td>{{ $cita->fecha_hora_inicio }}</td>
                     <td>{{ $cita->fecha_hora_fin }}</td>
@@ -83,8 +83,8 @@
                 <select name="doctor_especialista_id" class="form-control select2-doctor" required>
                     <option value="">Seleccione un doctor</option>
                     @foreach($doctores as $doctor)
-                        <option value="{{ $doctor->doctor_id }}" {{ old('doctor_especialista_id', $cita->doctor_especialista_id ?? '') == $doctor->doctor_id ? 'selected' : '' }}>
-                            {{ $doctor->doctor_id }} - {{ $doctor->nombre_completo }} -  {{ $doctor->especialidad_nombre }}
+                        <option value="{{ $doctor->relacion_id }}" {{ old('doctor_especialista_id', $cita->doctor_especialista_id ?? '') == $doctor->relacion_id ? 'selected' : '' }}>
+                            {{ $doctor->doctor_id }} - {{ $doctor->nombre_completo }} - {{ $doctor->especialidad_nombre }}
                         </option>
                     @endforeach
                 </select>

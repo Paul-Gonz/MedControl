@@ -8,6 +8,7 @@ use App\Models\Paciente;
 use App\Models\Doctor;
 use App\Models\Consultorio;
 use App\Models\Expediente;
+use Illuminate\Support\Facades\DB;
 
 class CitaController extends Controller
 {
@@ -22,27 +23,22 @@ class CitaController extends Controller
 
     public function create()
     {
-        $pacientes = \App\Models\Paciente::all();
-        $consultorios = \App\Models\Consultorio::all();
-        $expedientes = \App\Models\Expediente::all();
-        $doctores = \App\Models\Doctor::all();
-        // Agregar especialidad_nombre a cada doctor
-        foreach ($doctores as $doctor) {
-            $rel = \DB::table('doctor_por_especialidad')->where('doctor_id', $doctor->doctor_id)->first();
-            if ($rel) {
-                $especialidad = \DB::table('especialidades')->where('especialidad_id', $rel->especialidad_id)->first();
-                $doctor->especialidad_nombre = $especialidad ? $especialidad->nombre : 'Sin especialidad';
-            } else {
-                $doctor->especialidad_nombre = 'Sin especialidad';
-            }
-        }
-        return view('citas', [
-            'mode' => 'create',
-            'pacientes' => $pacientes,
-            'consultorios' => $consultorios,
-            'expedientes' => $expedientes,
-            'doctores' => $doctores,
-        ]);
+        $doctores = DB::table('doctor_por_especialidad as dpe')
+            ->join('doctores as d', 'd.doctor_id', '=', 'dpe.doctor_id')
+            ->join('especialidades as e', 'e.especialidad_id', '=', 'dpe.especialidad_id')
+            ->select(
+                'dpe.relacion_id',
+                'd.doctor_id',
+                'd.nombre_completo',
+                'e.nombre as especialidad_nombre'
+            )
+            ->get();
+
+        $pacientes = Paciente::all();
+        $consultorios = Consultorio::with('tipoConsultorio')->get();
+        $expedientes = Expediente::all();
+        $mode = 'create';
+        return view('citas', compact('doctores', 'pacientes', 'consultorios', 'expedientes', 'mode'));
     }
 
     public function store(Request $request)
@@ -64,14 +60,21 @@ class CitaController extends Controller
     public function edit($id)
     {
         $cita = Cita::findOrFail($id);
-        return view('citas', [
-            'mode' => 'edit',
-            'cita' => $cita,
-            'pacientes' => Paciente::all(),
-            'doctores' => Doctor::all(),
-            'consultorios' => Consultorio::all(),
-            'expedientes' => Expediente::all()
-        ]);
+        $doctores = DB::table('doctor_por_especialidad as dpe')
+            ->join('doctores as d', 'd.doctor_id', '=', 'dpe.doctor_id')
+            ->join('especialidades as e', 'e.especialidad_id', '=', 'dpe.especialidad_id')
+            ->select(
+                'dpe.relacion_id',
+                'd.doctor_id',
+                'd.nombre_completo',
+                'e.nombre as especialidad_nombre'
+            )
+            ->get();
+        $pacientes = Paciente::all();
+        $consultorios = Consultorio::with('tipoConsultorio')->get();
+        $expedientes = Expediente::all();
+        $mode = 'edit';
+        return view('citas', compact('cita', 'doctores', 'pacientes', 'consultorios', 'expedientes', 'mode'));
     }
 
     public function update(Request $request, $id)
