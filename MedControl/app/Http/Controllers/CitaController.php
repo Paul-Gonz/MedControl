@@ -4,6 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\Cita;
 use Illuminate\Http\Request;
+use App\Models\Paciente;
+use App\Models\Doctor;
+use App\Models\Consultorio;
+use App\Models\Expediente;
 
 class CitaController extends Controller
 {
@@ -17,11 +21,15 @@ class CitaController extends Controller
     }
 
     public function create()
-    {
-        return view('citas', [
-            'mode' => 'create'
-        ]);
-    }
+{
+    return view('citas', [
+        'mode' => 'create',
+        'pacientes' => Paciente::all(),
+        'doctores' => Doctor::all(),
+        'consultorios' => Consultorio::all(),
+        'expedientes' => Expediente::all()
+    ]);
+}
 
     public function store(Request $request)
     {
@@ -40,13 +48,17 @@ class CitaController extends Controller
     }
 
     public function edit($id)
-    {
-        $cita = Cita::findOrFail($id);
-        return view('citas', [
-            'mode' => 'edit',
-            'cita' => $cita
-        ]);
-    }
+{
+    $cita = Cita::findOrFail($id);
+    return view('citas', [
+        'mode' => 'edit',
+        'cita' => $cita,
+        'pacientes' => Paciente::all(),
+        'doctores' => Doctor::all(),
+        'consultorios' => Consultorio::all(),
+        'expedientes' => Expediente::all()
+    ]);
+}
 
     public function update(Request $request, $id)
     {

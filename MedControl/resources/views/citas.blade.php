@@ -68,24 +68,48 @@
             @endif
 
             <div class="mb-3">
-                <label for="paciente_id" class="form-label">Paciente (ID)</label>
-                <input type="number" name="paciente_id" class="form-control" 
-                  value="{{ old('paciente_id', $cita->paciente_id ?? '') }}" required>
+                <label for="paciente_id" class="form-label">Paciente</label>
+                <select name="paciente_id" class="form-control" required>
+                    <option value="">Seleccione un paciente</option>
+                    @foreach($pacientes as $paciente)
+                        <option value="{{ $paciente->paciente_id }}" {{ old('paciente_id', $cita->paciente_id ?? '') == $paciente->paciente_id ? 'selected' : '' }}>
+                            {{ $paciente->paciente_id }} - {{ $paciente->nombre_completo }} - {{ $paciente->cedula_identidad }}
+                        </option>
+                    @endforeach
+                </select>
             </div>
             <div class="mb-3">
-                <label for="doctor_especialista_id" class="form-label">Doctor Especialista (ID)</label>
-                <input type="number" name="doctor_especialista_id" class="form-control" 
-                  value="{{ old('doctor_especialista_id', $cita->doctor_especialista_id ?? '') }}" required>
+                <label for="doctor_especialista_id" class="form-label">Doctor Especialista</label>
+                <select name="doctor_especialista_id" class="form-control" required>
+                    <option value="">Seleccione un doctor</option>
+                    @foreach($doctores as $doctor)
+                        <option value="{{ $doctor->doctor_id }}" {{ old('doctor_especialista_id', $cita->doctor_especialista_id ?? '') == $doctor->doctor_id ? 'selected' : '' }}>
+                            {{ $doctor->doctor_id }} - {{ $doctor->nombre_completo }}
+                        </option>
+                    @endforeach
+                </select>
             </div>
             <div class="mb-3">
-                <label for="consultorio_id" class="form-label">Consultorio (ID)</label>
-                <input type="number" name="consultorio_id" class="form-control" 
-                  value="{{ old('consultorio_id', $cita->consultorio_id ?? '') }}" required>
+                <label for="consultorio_id" class="form-label">Consultorio</label>
+                <select name="consultorio_id" class="form-control" required>
+                    <option value="">Seleccione un consultorio</option>
+                    @foreach($consultorios as $consultorio)
+                        <option value="{{ $consultorio->consultorio_id }}" {{ old('consultorio_id', $cita->consultorio_id ?? '') == $consultorio->consultorio_id ? 'selected' : '' }}>
+                            {{ $consultorio->consultorio_id }} - {{ $consultorio->nombre ?? 'Consultorio' }}
+                        </option>
+                    @endforeach
+                </select>
             </div>
             <div class="mb-3">
-                <label for="expediente_id" class="form-label">Expediente (ID)</label>
-                <input type="number" name="expediente_id" class="form-control" 
-                  value="{{ old('expediente_id', $cita->expediente_id ?? '') }}" required>
+                <label for="expediente_id" class="form-label">Expediente</label>
+                <select name="expediente_id" class="form-control" required>
+                    <option value="">Seleccione un expediente</option>
+                    @foreach($expedientes as $expediente)
+                        <option value="{{ $expediente->expediente_id }}" {{ old('expediente_id', $cita->expediente_id ?? '') == $expediente->expediente_id ? 'selected' : '' }}>
+                            {{ $expediente->expediente_id }} - {{ $expediente->descripcion ?? 'Expediente' }}
+                        </option>
+                    @endforeach
+                </select>
             </div>
             <div class="mb-3">
                 <label for="motivo" class="form-label">Motivo</label>
