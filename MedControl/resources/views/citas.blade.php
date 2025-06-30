@@ -69,7 +69,7 @@
 
             <div class="mb-3">
                 <label for="paciente_id" class="form-label">Paciente</label>
-                <select name="paciente_id" class="form-control" required>
+                <select name="paciente_id" class="form-control select2-paciente" required>
                     <option value="">Seleccione un paciente</option>
                     @foreach($pacientes as $paciente)
                         <option value="{{ $paciente->paciente_id }}" {{ old('paciente_id', $cita->paciente_id ?? '') == $paciente->paciente_id ? 'selected' : '' }}>
@@ -80,11 +80,11 @@
             </div>
             <div class="mb-3">
                 <label for="doctor_especialista_id" class="form-label">Doctor Especialista</label>
-                <select name="doctor_especialista_id" class="form-control" required>
+                <select name="doctor_especialista_id" class="form-control select2-doctor" required>
                     <option value="">Seleccione un doctor</option>
                     @foreach($doctores as $doctor)
                         <option value="{{ $doctor->doctor_id }}" {{ old('doctor_especialista_id', $cita->doctor_especialista_id ?? '') == $doctor->doctor_id ? 'selected' : '' }}>
-                            {{ $doctor->doctor_id }} - {{ $doctor->nombre_completo }}
+                            {{ $doctor->doctor_id }} - {{ $doctor->nombre_completo }} -  {{ $doctor->especialidad_nombre }}
                         </option>
                     @endforeach
                 </select>
@@ -95,7 +95,7 @@
                     <option value="">Seleccione un consultorio</option>
                     @foreach($consultorios as $consultorio)
                         <option value="{{ $consultorio->consultorio_id }}" {{ old('consultorio_id', $cita->consultorio_id ?? '') == $consultorio->consultorio_id ? 'selected' : '' }}>
-                            {{ $consultorio->consultorio_id }} - {{ $consultorio->nombre ?? 'Consultorio' }}
+                            {{ $consultorio->consultorio_id }} - {{ $consultorio->nombre_consultorio ?? 'Consultorio' }} - {{ $consultorio->tipoConsultorio->descripcion ?? 'Tipo Sin Describir' }}
                         </option>
                     @endforeach
                 </select>
@@ -149,4 +149,26 @@
         </form>
     @endif
 </div>
+@endsection
+
+@section('css')
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+@endsection
+
+@section('js')
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $('.select2-doctor').select2({
+            width: '100%',
+            placeholder: 'Seleccione un doctor',
+            allowClear: true
+        });
+        $('.select2-paciente').select2({
+            width: '100%',
+            placeholder: 'Seleccione un paciente',
+            allowClear: true
+        });
+    });
+</script>
 @endsection
