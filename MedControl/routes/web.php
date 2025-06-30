@@ -12,11 +12,8 @@ use App\Http\Controllers\DoctorController;
 use App\Http\Controllers\EspecialidadController;
 use App\Http\Controllers\TipoConsultorioController;
 
-Route::get('/', function () {
-    return view('welcome');
-});
 
-Route::get('/login', function () {
+Route::get('/', function () {
     return view('login');
 });
 
@@ -68,3 +65,9 @@ Route::post('/TiposConsultorio/update/{id}', [App\Http\Controllers\TipoConsultor
 Route::post('/TiposConsultorio/destroy/{id}', [App\Http\Controllers\TipoConsultorioController::class, 'destroy'])->name('tipos-consultorio.destroy');
 
 Route::resource('citas', CitaController::class);
+
+
+
+
+//reportes
+Route::get('/Pacientes/pdf', [PacientesController::class, 'reporte'])->name('pacientes.reporte');
