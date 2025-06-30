@@ -71,3 +71,5 @@ Route::resource('citas', CitaController::class);
 
 //reportes
 Route::get('/Pacientes/pdf', [PacientesController::class, 'reporte'])->name('pacientes.reporte');
+Route::get('/Doctores/pdf', [DoctorController::class, 'reporte'])->name('doctores.reporte');
+Route::get('/Doctores/pdf-especialidad', [DoctorController::class, 'reportePorEspecialidad'])->name('doctores.reporte.especialidad');

@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Doctor;
 use App\Models\Cuenta_Bancaria;
 use App\Models\Especialidad;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 
 class DoctorController extends Controller
@@ -81,5 +82,44 @@ class DoctorController extends Controller
         $doctor = Doctor::findOrFail($id);
         $doctor->delete();
         return redirect()->route('doctores.index')->with('success', 'Doctor eliminado correctamente.');
+    }
+    
+    public function reporte()
+    {
+        $doctores = Doctor::all();
+        // Obtener especialidad para cada doctor (igual que en index)
+        foreach ($doctores as $doctor) {
+            $rel = \DB::table('doctor_por_especialidad')->where('doctor_id', $doctor->doctor_id)->first();
+            if ($rel) {
+                $especialidad = \DB::table('especialidades')->where('especialidad_id', $rel->especialidad_id)->first();
+                $doctor->especialidad_id = $especialidad ? $especialidad->especialidad_id : null;
+                $doctor->especialidad_nombre = $especialidad ? $especialidad->nombre : 'Sin asignar';
+            } else {
+                $doctor->especialidad_id = null;
+                $doctor->especialidad_nombre = 'Sin asignar';
+            }
+        }
+        $pdf = Pdf::loadView('doctoresPDF', compact('doctores'));
+        return $pdf->stream('reporteDoctores.pdf');
+    }
+
+    public function reportePorEspecialidad(Request $request)
+    {
+        $request->validate([
+            'especialidad_id' => 'required|integer|exists:especialidades,especialidad_id',
+        ]);
+        $especialidad_id = $request->especialidad_id;
+        $doctores = Doctor::whereIn('doctor_id', function($query) use ($especialidad_id) {
+            $query->select('doctor_id')
+                ->from('doctor_por_especialidad')
+                ->where('especialidad_id', $especialidad_id);
+        })->get();
+        // Obtener nombre de la especialidad
+        $especialidad = \App\Models\Especialidad::find($especialidad_id);
+        foreach ($doctores as $doctor) {
+            $doctor->especialidad_nombre = $especialidad->nombre;
+        }
+        $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('doctoresPDF', compact('doctores', 'especialidad'));
+        return $pdf->stream('reporteDoctores_' . $especialidad->nombre . '.pdf');
     }
 }
