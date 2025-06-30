@@ -7,6 +7,10 @@ use App\Http\Controllers\LoginController;
 use App\Http\Controllers\ExpedienteController;
 use App\Http\Controllers\Cuenta_BancariaController;
 use App\Http\Controllers\ConsultorioController;
+use App\Http\Controllers\CitaController;
+use App\Http\Controllers\DoctorController;
+use App\Http\Controllers\EspecialidadController;
+use App\Http\Controllers\TipoConsultorioController;
 
 
 Route::get('/', function () {
@@ -26,6 +30,7 @@ Route::get('/Doctores', [App\Http\Controllers\DoctorController::class, 'index'])
 Route::post('/Doctores', [App\Http\Controllers\DoctorController::class, 'store'])->name('doctores.store');
 Route::post('/Doctores/update', [App\Http\Controllers\DoctorController::class, 'update'])->name('doctores.update');
 Route::post('/Doctores/destroy', [App\Http\Controllers\DoctorController::class, 'destroy'])->name('doctores.destroy');
+Route::post('/Doctores/{id}', [DoctorController::class, 'update'])->name('doctores.update');
 
 Route::get('/Expedientes', [ExpedienteController::class, 'index'])->name('expedientes.index');
 Route::post('/Expedientes', [ExpedienteController::class, 'store'])->name('expedientes.store');
@@ -59,10 +64,10 @@ Route::post('/TiposConsultorio', [App\Http\Controllers\TipoConsultorioController
 Route::post('/TiposConsultorio/update/{id}', [App\Http\Controllers\TipoConsultorioController::class, 'update'])->name('tipos-consultorio.update');
 Route::post('/TiposConsultorio/destroy/{id}', [App\Http\Controllers\TipoConsultorioController::class, 'destroy'])->name('tipos-consultorio.destroy');
 
+Route::resource('citas', CitaController::class);
+
 
 
 
 //reportes
-
-
 Route::get('/Pacientes/pdf', [PacientesController::class, 'reporte'])->name('pacientes.reporte');

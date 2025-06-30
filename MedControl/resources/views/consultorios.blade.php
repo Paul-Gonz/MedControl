@@ -11,12 +11,11 @@
     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#nuevoConsultorioModal">
         Nuevo Consultorio
     </button>
-    <button type="button" class="btn btn-success" data-toggle="modal" data-target="#nuevoTipoModal">
-        Agregar tipo
-    </button>
+    <a href="{{ route('tipos-consultorio.index') }}" class="btn btn-success">
+        Tipos de consultorios
+    </a>
 </div>
 
-<!-- Modal nuevo tipo de consultario -->
 <div class="modal fade" id="nuevoTipoModal" tabindex="-1" role="dialog" aria-labelledby="nuevoTipoModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
@@ -72,6 +71,10 @@
         </div>
         <div class="modal-body">
             <div class="form-group">
+                <label>Nombre del Consultorio</label>
+                <input type="text" class="form-control" name="nombre_consultorio" required>
+            </div>
+            <div class="form-group">
                 <label>Tipo de Consultorio</label>
                 <select class="form-control" name="tipo_id" id="tipo_id" required>
                     <option value="">Seleccione un tipo</option>
@@ -81,7 +84,7 @@
                             data-descripcion="{{ $tipo->descripcion }}"
                             data-equipamiento="{{ $tipo->equipamiento }}"
                         >
-                            {{ $tipo->nombre_consultorio }}
+                            {{ $tipo->tipo_consultorio_id }} - {{ $tipo->descripcion }}
                         </option>
                     @endforeach
                 </select>
@@ -129,6 +132,7 @@
             <thead>
                 <tr>
                     <th>ID</th>
+                    <th>Nombre del Consultorio</th>
                     <th>Tipo de Consultorio</th>
                     <th>Ubicación</th>
                     <th>Estado del Consultorio</th>
@@ -140,7 +144,8 @@
                 @foreach($consultorios as $consultorio)
                     <tr>
                         <td>{{ $consultorio->consultorio_id }}</td>
-                        <td>{{ $consultorio->tipoConsultorio->nombre_consultorio ?? '' }}</td>
+                        <td>{{ $consultorio->nombre_consultorio }}</td>
+                        <td>{{ $consultorio->tipoConsultorio->tipo_consultorio_id ?? '' }} - {{ $consultorio->tipoConsultorio->descripcion ?? '' }}</td>
                         <td>{{ $consultorio->ubicacion }}</td>
                         <td>{{ ucfirst(str_replace('_', ' ', $consultorio->estado_consultorio)) }}</td>
                         <td>
@@ -169,10 +174,16 @@
                                     </div>
                                     <div class="modal-body">
                                         <div class="form-group">
+                                            <label>Nombre del Consultorio</label>
+                                            <input type="text" class="form-control" name="nombre_consultorio" value="{{ $consultorio->nombre_consultorio }}" required>
+                                        </div>
+                                        <div class="form-group">
                                             <label>Tipo de Consultorio</label>
                                             <select class="form-control" name="tipo_id" required>
                                                 @foreach($tiposConsultorio as $tipo)
-                                                    <option value="{{ $tipo->tipo_consultorio_id }}" {{ $consultorio->tipo_id == $tipo->tipo_consultorio_id ? 'selected' : '' }}>{{ $tipo->nombre_consultorio }}</option>
+                                                    <option value="{{ $tipo->tipo_consultorio_id }}" {{ $consultorio->tipo_id == $tipo->tipo_consultorio_id ? 'selected' : '' }}>
+                                                        {{ $tipo->tipo_consultorio_id }} - {{ $tipo->descripcion }}
+                                                    </option>
                                                 @endforeach
                                             </select>
                                         </div>

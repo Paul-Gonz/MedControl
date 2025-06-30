@@ -7,10 +7,15 @@ use App\Models\TipoConsultorio;
 
 class TipoConsultorioController extends Controller
 {
+    public function index()
+    {
+        $tipos = \App\Models\TipoConsultorio::all();
+        return view('tipos_consultorio', compact('tipos'));
+    }
+
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'nombre_consultorio' => 'required|string|max:255',
             'descripcion' => 'nullable|string',
             'equipamiento' => 'nullable|string',
             'activo_inactivo' => 'required|boolean',
@@ -26,7 +31,6 @@ class TipoConsultorioController extends Controller
         $tipo = TipoConsultorio::findOrFail($id);
 
         $validated = $request->validate([
-            'nombre_consultorio' => 'required|string|max:255',
             'descripcion' => 'nullable|string',
             'equipamiento' => 'nullable|string',
             'activo_inactivo' => 'required|boolean',
