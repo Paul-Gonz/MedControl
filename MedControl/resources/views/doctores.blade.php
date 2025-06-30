@@ -7,7 +7,11 @@
 @stop
 
 @section('content')
-<div class="mb-3">
+<div class="mb-3" style="margin-bottom: 2rem !important;">
+    <!-- Botón PDF -->
+    <a href="{{ route('doctores.reporte') }}" target="_blank" class="btn btn-danger mr-2">
+        PDF
+    </a>
     <!-- Botón para abrir el modal de nuevo doctor -->
     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#nuevoDoctorModal">
         Nuevo Doctor
