@@ -26,7 +26,7 @@ class Cita extends Model
     // Relación opcional con paciente (ajusta si tienes el modelo Paciente)
     public function paciente()
     {
-        return $this->belongsTo(Paciente::class, 'paciente_id');
+        return $this->belongsTo(Paciente::class, 'paciente_id', 'paciente_id');
     }
 
     public function facturas()
