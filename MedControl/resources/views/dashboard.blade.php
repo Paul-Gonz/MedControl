@@ -60,6 +60,17 @@
                 </div>
             </div>
         </div>
+        <!-- Gráfico de Barras: Cantidad de citas por día de esta semana -->
+        <div class="row mt-4">
+            <div class="col-md-12">
+                <div class="card mb-4">
+                    <div class="card-header">Cantidad de Citas por Día de Esta Semana</div>
+                    <div class="card-body d-flex justify-content-center align-items-center" style="height:320px;">
+                        <canvas id="citasSemanaChart" style="width:100%;max-width:1000px;max-height:300px;"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 @stop
 
@@ -178,7 +189,7 @@
         // Gráfico de Línea: Ingresos y Egresos mensuales (funcional)
         fetch("{{ route('dashboard.ingresosEgresos') }}")
             .then(response => response.json())
-            .then(data => {
+            .then (data => {
                 const ctxIngresos = document.getElementById('ingresosChart').getContext('2d');
                 new Chart(ctxIngresos, {
                     type: 'line',
@@ -304,50 +315,46 @@
                 });
             });
 
-        // Gráfico de Barras: Cantidad de citas por día de esta semana
-        document.querySelector('.row.justify-content-center').insertAdjacentHTML('beforeend', `
-            <div class="col-md-12">
-                <div class="card mb-4">
-                    <div class="card-header">Cantidad de Citas por Día (Esta Semana)</div>
-                    <div class="card-body d-flex justify-content-center align-items-center" style="height:320px;">
-                        <canvas id="citasSemanaChart" style="width:100%;max-width:1000px;max-height:300px;"></canvas>
-                    </div>
-                </div>
-            </div>
-        `);
-
-        const ctxCitasSemana = document.getElementById('citasSemanaChart').getContext('2d');
-        new Chart(ctxCitasSemana, {
-            type: 'bar',
-            data: {
-                labels: ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'],
-                datasets: [
-                    {
-                        label: 'Citas agendadas',
-                        data: [3, 2, 4, 1, 2, 0, 0], // Ejemplo de datos
-                        backgroundColor: 'rgba(0, 123, 255, 0.7)'
-                    }
-                ]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        title: {
-                            display: true,
-                            text: 'Cantidad de citas'
-                        }
+        // Gráfico de Barras: Cantidad de citas por día de esta semana (funcional)
+        fetch("{{ route('dashboard.citasPorDiaSemana') }}")
+            .then(response => response.json())
+            .then(data => {
+                const canvas = document.getElementById('citasSemanaChart');
+                if (!canvas) return;
+                const ctx = canvas.getContext('2d');
+                new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: data.labels,
+                        datasets: [
+                            {
+                                label: 'Citas agendadas',
+                                data: data.data,
+                                backgroundColor: 'rgba(0, 123, 255, 0.7)'
+                            }
+                        ]
                     },
-                    x: {
-                        title: {
-                            display: true,
-                            text: 'Día de la semana'
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                title: {
+                                    display: true,
+                                    text: 'Cantidad de citas'
+                                }
+                            },
+                            x: {
+                                title: {
+                                    display: true,
+                                    text: 'Día de la semana'
+                                }
+                            }
                         }
                     }
-                }
-            }});
+                });
+            });
 
         // Gráfico de Barras: Top 10 doctores con más consultas pagadas este mes
         document.addEventListener('DOMContentLoaded', function() {

@@ -29,6 +29,8 @@ Route::get('/dashboard/especialidades-mas-demandadas', [DashboardController::cla
 Route::get('/dashboard/ingresos-egresos', [DashboardController::class, 'ingresosEgresosPorMes'])->name('dashboard.ingresosEgresos');
 // Horas de uso de consultorios
 Route::get('/dashboard/horas-uso-consultorios', [App\Http\Controllers\DashboardController::class, 'horasUsoConsultorios'])->name('dashboard.horasUsoConsultorios');
+// Cantidad de citas por día de la semana actual
+Route::get('/dashboard/citas-por-dia-semana', [App\Http\Controllers\DashboardController::class, 'citasPorDiaSemana'])->name('dashboard.citasPorDiaSemana');
 
 
 

@@ -173,4 +173,35 @@ class DashboardController extends Controller
             'data' => $data
         ]);
     }
+
+    // Cantidad de citas por día de la semana actual
+    public function citasPorDiaSemana()
+    {
+        $start = Carbon::now()->startOfWeek();
+        $end = Carbon::now()->endOfWeek();
+        \App::setLocale('es');
+        $dias = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'];
+        $fechas = [];
+        for ($i = 0; $i < 7; $i++) {
+            $fechas[] = $start->copy()->addDays($i)->format('d/m');
+        }
+        $labels = array_map(function($dia, $fecha) {
+            return $dia . ' (' . $fecha . ')';
+        }, $dias, $fechas);
+        $citas = DB::table('citas')
+            ->select(DB::raw('DAYOFWEEK(fecha_hora_inicio) as dia_semana'), DB::raw('COUNT(*) as cantidad'))
+            ->whereBetween('fecha_hora_inicio', [$start, $end])
+            ->where('activo_inactivo', 1)
+            ->groupBy('dia_semana')
+            ->get();
+        $data = array_fill(0, 7, 0);
+        foreach ($citas as $cita) {
+            $index = ($cita->dia_semana + 5) % 7; // DAYOFWEEK: 1=Domingo, 2=Lunes,...7=Sábado
+            $data[$index] = $cita->cantidad;
+        }
+        return response()->json([
+            'labels' => $labels,
+            'data' => $data
+        ]);
+    }
 }
