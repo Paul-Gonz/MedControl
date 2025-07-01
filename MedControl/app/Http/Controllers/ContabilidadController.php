@@ -22,7 +22,7 @@ class ContabilidadController extends Controller
         $pagos = Pago::whereBetween('fecha_pago', [$desde, $hasta])->get();
         $pagos_doctores = PagoDoctor::whereBetween('fecha_pago', [$desde, $hasta])->get();
 
-        return view('contabilidad.libro_diario', compact('pagos', 'pagos_doctores', 'desde', 'hasta'));
+        return view('libro_diario', compact('pagos', 'pagos_doctores', 'desde', 'hasta'));
     }
 
     public function libroMayor(Request $request)
@@ -34,6 +34,6 @@ class ContabilidadController extends Controller
         $pagos = Pago::whereBetween('fecha_pago', [$inicio, $fin])->get();
         $pagos_doctores = PagoDoctor::whereBetween('fecha_pago', [$inicio, $fin])->get();
 
-        return view('contabilidad.libro_mayor', compact('pagos', 'pagos_doctores', 'mes'));
+        return view('libro_mayor', compact('pagos', 'pagos_doctores', 'mes'));
     }
 }
