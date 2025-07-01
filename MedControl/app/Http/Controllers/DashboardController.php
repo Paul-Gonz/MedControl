@@ -135,4 +135,42 @@ class DashboardController extends Controller
             return response()->json(['error' => $e->getMessage()], 500);
         }
     }
+
+    // Horas de uso de consultorios (últimos 6 meses, ejemplo funcional)
+    public function horasUsoConsultorios()
+    {
+        // Rango: últimos 6 meses incluyendo el actual
+        $start = Carbon::now()->subMonths(5)->startOfMonth();
+        $end = Carbon::now()->endOfMonth();
+        \App::setLocale('es');
+        $meses = collect();
+        $period = \Carbon\CarbonPeriod::create($start, '1 month', $end);
+        foreach ($period as $date) {
+            $meses->push([
+                'mes' => $date->format('Y-m'),
+                'nombre' => ucfirst($date->isoFormat('MMMM YYYY'))
+            ]);
+        }
+
+        // Consultorios (corregido: nombre_consultorio)
+        $consultorios = DB::table('consultorios')->select('consultorio_id', 'nombre_consultorio')->get();
+
+        // Horas de uso por consultorio (suma de duración de citas en horas, siempre positivo)
+        $horasPorConsultorio = DB::table('citas')
+            ->select('consultorio_id', DB::raw('SUM(ABS(TIMESTAMPDIFF(SECOND, fecha_hora_inicio, fecha_hora_fin)))/3600 as horas'))
+            ->whereBetween('fecha_hora_inicio', [$start, $end])
+            ->where('activo_inactivo', 1)
+            ->groupBy('consultorio_id')
+            ->pluck('horas', 'consultorio_id');
+
+        $labels = $consultorios->pluck('nombre_consultorio');
+        $data = $consultorios->map(function($c) use ($horasPorConsultorio) {
+            return round($horasPorConsultorio[$c->consultorio_id] ?? 0, 1);
+        });
+
+        return response()->json([
+            'labels' => $labels,
+            'data' => $data
+        ]);
+    }
 }

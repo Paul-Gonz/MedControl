@@ -27,6 +27,8 @@ Route::get('/dashboard/citas-por-mes', [DashboardController::class, 'citasPorMes
 Route::get('/dashboard/especialidades-mas-demandadas', [DashboardController::class, 'especialidadesMasDemandadas'])->name('dashboard.especialidadesMasDemandadas');
 // Gráfica de ingresos y egresos mensuales
 Route::get('/dashboard/ingresos-egresos', [DashboardController::class, 'ingresosEgresosPorMes'])->name('dashboard.ingresosEgresos');
+// Horas de uso de consultorios
+Route::get('/dashboard/horas-uso-consultorios', [App\Http\Controllers\DashboardController::class, 'horasUsoConsultorios'])->name('dashboard.horasUsoConsultorios');
 
 
 

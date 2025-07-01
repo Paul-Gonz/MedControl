@@ -19,39 +19,38 @@
         </div>
     @endif
 
-    <!-- Botón para generar reporte -->
-<button class="btn btn-info mb-3" data-bs-toggle="modal" data-bs-target="#modalReporteCitas">
-    Generar Reporte
-</button>
-
-<!-- Modal para seleccionar el tipo de reporte -->
-<div class="modal fade" id="modalReporteCitas" tabindex="-1" aria-labelledby="modalReporteCitasLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <form action="{{ route('citas.reporte.pdf') }}" method="GET" target="_blank">
-        <div class="modal-header">
-          <h5 class="modal-title" id="modalReporteCitasLabel">Generar Reporte de Citas</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-        </div>
-        <div class="modal-body">
-          <div class="form-check">
-            <input class="form-check-input" type="radio" name="tipo" id="especialidad" value="especialidad" checked>
-            <label class="form-check-label" for="especialidad">Por Especialidad</label>
-          </div>
-          <div class="form-check">
-            <input class="form-check-input" type="radio" name="tipo" id="doctor" value="doctor">
-            <label class="form-check-label" for="doctor">Por Doctor</label>
-          </div>
-        </div>
-        <div class="modal-footer">
-          <button type="submit" class="btn btn-primary">Generar PDF</button>
-        </div>
-      </form>
-    </div>
-  </div>
-</div>
-
     @if($mode == 'index')
+        <!-- Botón para generar reporte -->
+        <button class="btn btn-info mb-3" data-bs-toggle="modal" data-bs-target="#modalReporteCitas">
+            Generar Reporte
+        </button>
+
+        <!-- Modal para seleccionar el tipo de reporte -->
+        <div class="modal fade" id="modalReporteCitas" tabindex="-1" aria-labelledby="modalReporteCitasLabel" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <form action="{{ route('citas.reporte.pdf') }}" method="GET" target="_blank">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="modalReporteCitasLabel">Generar Reporte de Citas</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                  <div class="form-check">
+                    <input class="form-check-input" type="radio" name="tipo" id="especialidad" value="especialidad" checked>
+                    <label class="form-check-label" for="especialidad">Por Especialidad</label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="radio" name="tipo" id="doctor" value="doctor">
+                    <label class="form-check-label" for="doctor">Por Doctor</label>
+                  </div>
+                </div>
+                <div class="modal-footer">
+                  <button type="submit" class="btn btn-primary">Generar PDF</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
         <a href="{{ route('citas.create') }}" class="btn btn-success mb-3">Nueva Cita</a>
         <table class="table table-bordered table-striped">
             <thead>
@@ -178,13 +177,17 @@
             </div>
             <div class="mb-3">
                 <label for="costo" class="form-label">Costo de la Cita en $</label>
-                <input type="number" step="0.01" name="costo" class="form-control" value="{{ old('costo', $cita->costo ?? '') }}" required>
+                <input type="number" step="0.01" name="costo" class="form-control"
+                    value="{{ old('costo', isset($cita) ? ($cita->costo ?? optional($cita->facturas->first())->subtotal ?? '') : '') }}" required>
             </div>
             <button type="submit" class="btn btn-{{ $isEdit ? 'primary' : 'success' }}">
                 {{ $isEdit ? 'Actualizar' : 'Guardar' }}
             </button>
             <a href="{{ route('citas.index') }}" class="btn btn-secondary">Cancelar</a>
         </form>
+        <div>
+            <p> </p>
+        </div>
     @endif
 </div>
 @endsection

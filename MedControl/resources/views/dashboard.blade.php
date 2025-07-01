@@ -53,7 +53,7 @@
         <div class="row mt-4">
             <div class="col-md-8">
                 <div class="card mb-4">
-                    <div class="card-header">Horas de Uso de Consultorios (Ejemplo)</div>
+                    <div class="card-header">Horas de Uso de Consultorios </div>
                     <div class="card-body d-flex justify-content-center align-items-center" style="height:320px;">
                         <canvas id="ocupacionChart" style="width:100%;max-width:1000px;max-height:300px;"></canvas>
                     </div>
@@ -247,69 +247,62 @@
                 });
             });
 
-        // Gráfico de Barras: Horas de uso de consultorios (ejemplo)
-        const ocupacionChartContainer = document.getElementById('ocupacionChart')?.parentElement;
-        if (ocupacionChartContainer) {
-            ocupacionChartContainer.parentElement.parentElement.remove(); // Elimina el gráfico anterior si existe
-        }
-        document.querySelector('.row.justify-content-center').insertAdjacentHTML('beforeend', `
-            <div class="col-md-12">
-                <div class="card mb-4">
-                    <div class="card-header">Horas de Uso de Consultorios (Ejemplo)</div>
-                    <div class="card-body d-flex justify-content-center align-items-center" style="height:320px;">
-                        <canvas id="ocupacionChart" style="width:100%;max-width:1000px;max-height:300px;"></canvas>
-                    </div>
-                </div>
-            </div>
-        `);
-
-        const ctxOcupacion = document.getElementById('ocupacionChart').getContext('2d');
-        new Chart(ctxOcupacion, {
-            type: 'bar',
-            data: {
-                labels: ['Consultorio 1', 'Consultorio 2', 'Consultorio 3', 'Consultorio 4', 'Consultorio 5'],
-                datasets: [
-                    {
-                        label: 'Horas de uso',
-                        data: [120, 95, 80, 140, 110],
-                        backgroundColor: [
-                            'rgba(54, 162, 235, 0.7)',
-                            'rgba(255, 99, 132, 0.7)',
-                            'rgba(255, 206, 86, 0.7)',
-                            'rgba(75, 192, 192, 0.7)',
-                            'rgba(153, 102, 255, 0.7)'
-                        ],
-                        borderColor: [
-                            'rgba(54, 162, 235, 1)',
-                            'rgba(255, 99, 132, 1)',
-                            'rgba(255, 206, 86, 1)',
-                            'rgba(75, 192, 192, 1)',
-                            'rgba(153, 102, 255, 1)'
-                        ],
-                        borderWidth: 1
-                    }
-                ]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        title: {
-                            display: true,
-                            text: 'Horas de uso'
-                        }
+        // Gráfico de Barras: Horas de uso de consultorios (funcional)
+        fetch("{{ route('dashboard.horasUsoConsultorios') }}")
+            .then(response => response.json())
+            .then(data => {
+                const canvas = document.getElementById('ocupacionChart');
+                if (!canvas) return;
+                const ctxOcupacion = canvas.getContext('2d');
+                new Chart(ctxOcupacion, {
+                    type: 'bar',
+                    data: {
+                        labels: data.labels,
+                        datasets: [
+                            {
+                                label: 'Horas de uso',
+                                data: data.data,
+                                backgroundColor: [
+                                    'rgba(54, 162, 235, 0.7)',
+                                    'rgba(255, 99, 132, 0.7)',
+                                    'rgba(255, 206, 86, 0.7)',
+                                    'rgba(75, 192, 192, 0.7)',
+                                    'rgba(153, 102, 255, 0.7)',
+                                    'rgba(255, 159, 64, 0.7)'
+                                ],
+                                borderColor: [
+                                    'rgba(54, 162, 235, 1)',
+                                    'rgba(255, 99, 132, 1)',
+                                    'rgba(255, 206, 86, 1)',
+                                    'rgba(75, 192, 192, 1)',
+                                    'rgba(153, 102, 255, 1)',
+                                    'rgba(255, 159, 64, 1)'
+                                ],
+                                borderWidth: 1
+                            }
+                        ]
                     },
-                    x: {
-                        title: {
-                            display: true,
-                            text: 'Consultorios'
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                title: {
+                                    display: true,
+                                    text: 'Horas de uso'
+                                }
+                            },
+                            x: {
+                                title: {
+                                    display: true,
+                                    text: 'Consultorios'
+                                }
+                            }
                         }
                     }
-                }
-            }
-        });
+                });
+            });
 
         // Gráfico de Barras: Cantidad de citas por día de esta semana
         document.querySelector('.row.justify-content-center').insertAdjacentHTML('beforeend', `
