@@ -204,4 +204,27 @@ class DashboardController extends Controller
             'data' => $data
         ]);
     }
+
+    // Top 10 doctores con más consultas pagadas este mes
+    public function topDoctoresPagadasMes()
+    {
+        $start = Carbon::now()->startOfMonth();
+        $end = Carbon::now()->endOfMonth();
+        // Se asume que una consulta pagada es una cita completada con pago registrado
+        $doctores = DB::table('citas')
+            ->join('doctor_por_especialidad', 'citas.doctor_especialista_id', '=', 'doctor_por_especialidad.relacion_id')
+            ->join('doctores', 'doctor_por_especialidad.doctor_id', '=', 'doctores.doctor_id')
+            ->select('doctores.nombre_completo as doctor', DB::raw('COUNT(*) as cantidad'))
+            ->whereBetween('citas.fecha_hora_inicio', [$start, $end])
+            ->where('citas.estado_cita', 'completada')
+            ->where('citas.activo_inactivo', 1)
+            ->groupBy('doctores.nombre_completo')
+            ->orderByDesc('cantidad')
+            ->limit(10)
+            ->get();
+        return response()->json([
+            'labels' => $doctores->pluck('doctor'),
+            'data' => $doctores->pluck('cantidad')
+        ]);
+    }
 }

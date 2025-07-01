@@ -52,7 +52,11 @@
           </div>
         </div>
         <a href="{{ route('citas.create') }}" class="btn btn-success mb-3">Nueva Cita</a>
-        <table class="table table-bordered table-striped">
+        <!-- Barra de búsqueda -->
+        <div class="mb-3">
+            <input type="text" id="busquedaCita" class="form-control" placeholder="Buscar por paciente, motivo, estado o ID...">
+        </div>
+        <table class="table table-bordered table-striped" id="tablaCitas">
             <thead>
                 <tr>
                     <th>ID</th>
@@ -84,6 +88,9 @@
                             @method('DELETE')
                             <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('¿Eliminar esta cita?')">Eliminar</button>
                         </form>
+                        @if($cita->estado_cita !== 'completada')
+                            <button type="button" class="btn btn-success btn-sm btn-completar-cita" data-id="{{ $cita->cita_id }}">Completar</button>
+                        @endif
                     </td>
                 </tr>
             @endforeach
@@ -213,6 +220,48 @@
             placeholder: 'Seleccione un paciente',
             allowClear: true
         });
+        // Acción para completar cita
+        $(document).on('click', '.btn-completar-cita', function() {
+            var btn = $(this);
+            var citaId = btn.data('id');
+            if(confirm('¿Marcar esta cita como completada?')) {
+                $.ajax({
+                    url: '/citas/' + citaId + '/completar',
+                    type: 'PATCH',
+                    data: {
+                        _token: '{{ csrf_token() }}'
+                    },
+                    success: function(response) {
+                        if(response.success) {
+                            // Actualizar la celda de estado y ocultar el botón
+                            var row = btn.closest('tr');
+                            row.find('td:nth-child(6)').text('Completada');
+                            btn.remove();
+                        } else {
+                            alert(response.message || 'No se pudo completar la cita.');
+                        }
+                    },
+                    error: function() {
+                        alert('Error al completar la cita.');
+                    }
+                });
+            }
+        });
     });
 </script>
+@push('js')
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const input = document.getElementById('busquedaCita');
+    const table = document.getElementById('tablaCitas');
+    input.addEventListener('keyup', function() {
+        const filtro = input.value.toLowerCase();
+        for (let row of table.tBodies[0].rows) {
+            let texto = row.innerText.toLowerCase();
+            row.style.display = texto.includes(filtro) ? '' : 'none';
+        }
+    });
+});
+</script>
+@endpush
 @endsection

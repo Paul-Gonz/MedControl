@@ -13,7 +13,7 @@ return new class extends Migration
             $table->unsignedBigInteger('paciente_id');
             $table->unsignedBigInteger('doctor_especialista_id');
             $table->unsignedBigInteger('consultorio_id');
-            $table->unsignedBigInteger('expediente_id');
+            $table->unsignedBigInteger('expediente_id')->nullable();
             $table->text('motivo');
             $table->dateTime('fecha_hora_inicio');
             $table->dateTime('fecha_hora_fin');

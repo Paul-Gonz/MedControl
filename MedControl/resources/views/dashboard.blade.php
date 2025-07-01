@@ -42,7 +42,7 @@
         <div class="row mt-4">
             <div class="col-md-12">
                 <div class="card mb-4">
-                    <div class="card-header">Top 10 Doctores con Más Consultas Pagadas Este Mes</div>
+                    <div class="card-header">Top 10 Doctores con Más Consultas Completadas Este Mes</div>
                     <div class="card-body d-flex justify-content-center align-items-center" style="height:320px;">
                         <canvas id="topDoctoresPagadasChart" style="width:100%;max-width:1000px;max-height:300px;"></canvas>
                     </div>
@@ -356,48 +356,52 @@
                 });
             });
 
-        // Gráfico de Barras: Top 10 doctores con más consultas pagadas este mes
-        document.addEventListener('DOMContentLoaded', function() {
-            const topDoctoresLabels = [
-                'Dr. Juan Pérez', 'Dra. María López', 'Dr. Carlos Ruiz', 'Dra. Ana Torres', 'Dr. Luis Gómez',
-                'Dra. Sofía Martínez', 'Dr. Pablo Sánchez', 'Dra. Laura Díaz', 'Dr. Andrés Castro', 'Dra. Paula Romero'
-            ];
-            const topDoctoresData = [25, 22, 20, 18, 17, 15, 14, 13, 12, 11]; // Ejemplo de datos
-            const ctxTopDoctores = document.getElementById('topDoctoresPagadasChart').getContext('2d');
-            new Chart(ctxTopDoctores, {
-                type: 'bar',
-                data: {
-                    labels: topDoctoresLabels,
-                    datasets: [{
-                        label: 'Consultas pagadas',
-                        data: topDoctoresData,
-                        backgroundColor: 'rgba(255, 99, 132, 0.7)',
-                        borderColor: 'rgba(255, 99, 132, 1)',
-                        borderWidth: 1
-                    }]
-                },
-                options: {
-                    indexAxis: 'y', // Barra horizontal
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    scales: {
-                        x: {
-                            beginAtZero: true,
-                            title: {
-                                display: true,
-                                text: 'Cantidad de consultas pagadas'
-                            }
-                        },
-                        y: {
-                            title: {
-                                display: true,
-                                text: 'Doctor'
+        // Gráfico de Barras: Top 10 doctores con más consultas pagadas este mes (funcional)
+        fetch("{{ route('dashboard.topDoctoresPagadasMes') }}")
+            .then(response => response.json())
+            .then(data => {
+                const ctxTopDoctores = document.getElementById('topDoctoresPagadasChart').getContext('2d');
+                new Chart(ctxTopDoctores, {
+                    type: 'bar',
+                    data: {
+                        labels: data.labels,
+                        datasets: [{
+                            label: 'Consultas pagadas',
+                            data: data.data,
+                            backgroundColor: 'rgba(255, 99, 132, 0.7)',
+                            borderColor: 'rgba(255, 99, 132, 1)',
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        indexAxis: 'y', // Barra horizontal
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            x: {
+                                beginAtZero: true,
+                                title: {
+                                    display: true,
+                                    text: 'Cantidad de consultas pagadas'
+                                },
+                                ticks: {
+                                    precision: 0,
+                                    callback: function(value) {
+                                        return Number.isInteger(value) ? value : '';
+                                    }
+                                },
+                                    stepSize: 1
+                            },
+                            y: {
+                                title: {
+                                    display: true,
+                                    text: 'Doctor'
+                                }
                             }
                         }
                     }
-                }
+                });
             });
-        });
     </script>
     <script> console.log("Hi, I'm using the Laravel-AdminLTE package!"); </script>
 @stop

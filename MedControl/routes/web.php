@@ -31,6 +31,8 @@ Route::get('/dashboard/ingresos-egresos', [DashboardController::class, 'ingresos
 Route::get('/dashboard/horas-uso-consultorios', [App\Http\Controllers\DashboardController::class, 'horasUsoConsultorios'])->name('dashboard.horasUsoConsultorios');
 // Cantidad de citas por día de la semana actual
 Route::get('/dashboard/citas-por-dia-semana', [App\Http\Controllers\DashboardController::class, 'citasPorDiaSemana'])->name('dashboard.citasPorDiaSemana');
+// Top 10 doctores con más consultas pagadas este mes
+Route::get('/dashboard/top-doctores-pagadas', [App\Http\Controllers\DashboardController::class, 'topDoctoresPagadasMes'])->name('dashboard.topDoctoresPagadasMes');
 
 
 
@@ -89,10 +91,7 @@ Route::post('/TiposConsultorio/update/{id}', [App\Http\Controllers\TipoConsultor
 Route::post('/TiposConsultorio/destroy/{id}', [App\Http\Controllers\TipoConsultorioController::class, 'destroy'])->name('tipos-consultorio.destroy');
 
 Route::resource('citas', CitaController::class);
-
-
-
-
+Route::patch('/citas/{id}/completar', [CitaController::class, 'completar'])->name('citas.completar');
 
 Route::resource('pagos', App\Http\Controllers\PagoController::class);
 

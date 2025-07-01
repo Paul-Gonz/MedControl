@@ -49,7 +49,7 @@ class CitaController extends Controller
             'paciente_id' => 'required',
             'doctor_especialista_id' => 'required',
             'consultorio_id' => 'required',
-            'expediente_id' => 'required',
+            'expediente_id' => 'nullable',
             'motivo' => 'required',
             'fecha_hora_inicio' => 'required|date',
             'fecha_hora_fin' => 'required|date',
@@ -130,7 +130,7 @@ class CitaController extends Controller
             'paciente_id' => 'required',
             'doctor_especialista_id' => 'required',
             'consultorio_id' => 'required',
-            'expediente_id' => 'required',
+            'expediente_id' => 'nullable',
             'motivo' => 'required',
             'fecha_hora_inicio' => 'required|date',
             'fecha_hora_fin' => 'required|date',
@@ -156,5 +156,15 @@ class CitaController extends Controller
         return redirect()->route('citas.index')->with('success', 'Cita eliminada correctamente');
     }
 
+    public function completar($id)
+    {
+        $cita = Cita::findOrFail($id);
+        if ($cita->estado_cita !== 'completada') {
+            $cita->estado_cita = 'completada';
+            $cita->save();
+            return response()->json(['success' => true, 'estado' => 'completada']);
+        }
+        return response()->json(['success' => false, 'message' => 'La cita ya está completada.']);
+    }
     
 }
