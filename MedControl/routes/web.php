@@ -25,6 +25,7 @@ Route::get('/Pacientes', [PacientesController::class, 'index'])->name('pacientes
 Route::post('/Pacientes', [PacientesController::class, 'store'])->name('pacientes.store');
 Route::post('/Pacientes/update', [PacientesController::class, 'update'])->name('pacientes.update');
 Route::post('/Pacientes/destroy', [PacientesController::class, 'destroy'])->name('pacientes.destroy');
+Route::post('/Pacientes/reingresar', [PacientesController::class, 'reingresar'])->name('pacientes.reingresar');
 
 Route::get('/Doctores', [App\Http\Controllers\DoctorController::class, 'index'])->name('doctores.index');
 Route::post('/Doctores', [App\Http\Controllers\DoctorController::class, 'store'])->name('doctores.store');
