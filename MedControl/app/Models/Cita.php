@@ -19,12 +19,28 @@ class Cita extends Model
         'fecha_hora_inicio',
         'fecha_hora_fin',
         'estado_cita',
-        'activo_inactivo'
+        'activo_inactivo',
+        'costo',
     ];
 
     // Relación opcional con paciente (ajusta si tienes el modelo Paciente)
     public function paciente()
     {
         return $this->belongsTo(Paciente::class, 'paciente_id');
+    }
+
+    public function facturas()
+    {
+        return $this->hasMany(\App\Models\Factura::class, 'cita_id', 'cita_id');
+    }
+
+    public function doctorEspecialista()
+    {
+        return $this->belongsTo(\App\Models\Doctor::class, 'doctor_especialista_id', 'doctor_id');
+    }
+    
+    public function doctorPorEspecialidad()
+    {
+        return $this->belongsTo(\App\Models\DoctorPorEspecialidad::class, 'doctor_especialista_id', 'relacion_id');
     }
 }

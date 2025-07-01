@@ -66,7 +66,7 @@ Route::post('/TiposConsultorio/destroy/{id}', [App\Http\Controllers\TipoConsulto
 
 Route::resource('citas', CitaController::class);
 
-
+Route::resource('pagos', App\Http\Controllers\PagoController::class);
 
 
 //reportes
