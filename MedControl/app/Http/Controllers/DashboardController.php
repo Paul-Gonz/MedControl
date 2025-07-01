@@ -123,12 +123,14 @@ class DashboardController extends Controller
                 'egresos' => [],
                 'total' => []
             ];
+            $acumulado = 0;
             foreach ($meses as $mes) {
                 $ing = (float)($ingresos[$mes['mes']] ?? 0);
                 $egr = (float)($egresos[$mes['mes']] ?? 0);
                 $result['ingresos'][] = $ing;
                 $result['egresos'][] = $egr;
-                $result['total'][] = $ing - $egr;
+                $acumulado += ($ing - $egr);
+                $result['total'][] = $acumulado;
             }
             return response()->json($result);
         } catch (\Throwable $e) {
