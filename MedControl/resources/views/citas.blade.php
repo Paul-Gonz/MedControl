@@ -31,6 +31,7 @@
                     <th>Fin</th>
                     <th>Estado</th>
                     <th>Activo</th>
+                    <th>Costo</th>
                     <th>Acciones</th>
                 </tr>
             </thead>
@@ -44,6 +45,7 @@
                     <td>{{ $cita->fecha_hora_fin }}</td>
                     <td>{{ ucfirst($cita->estado_cita) }}</td>
                     <td>{{ $cita->activo_inactivo ? 'Sí' : 'No' }}</td>
+                    <td>{{ optional($cita->facturas->first())->subtotal !== null ? '$' . number_format($cita->facturas->first()->subtotal, 2) : '-' }}</td>
                     <td>
                         <a href="{{ route('citas.edit', $cita->cita_id) }}" class="btn btn-primary btn-sm">Editar</a>
                         <form action="{{ route('citas.destroy', $cita->cita_id) }}" method="POST" style="display:inline;">
@@ -141,6 +143,10 @@
                     <option value="1" {{ old('activo_inactivo', $cita->activo_inactivo ?? 1) == 1 ? 'selected' : '' }}>Activo</option>
                     <option value="0" {{ old('activo_inactivo', $cita->activo_inactivo ?? 1) == 0 ? 'selected' : '' }}>Inactivo</option>
                 </select>
+            </div>
+            <div class="mb-3">
+                <label for="costo" class="form-label">Costo de la Cita en $</label>
+                <input type="number" step="0.01" name="costo" class="form-control" value="{{ old('costo', $cita->costo ?? '') }}" required>
             </div>
             <button type="submit" class="btn btn-{{ $isEdit ? 'primary' : 'success' }}">
                 {{ $isEdit ? 'Actualizar' : 'Guardar' }}

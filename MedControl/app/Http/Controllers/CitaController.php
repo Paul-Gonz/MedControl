@@ -8,6 +8,7 @@ use App\Models\Paciente;
 use App\Models\Doctor;
 use App\Models\Consultorio;
 use App\Models\Expediente;
+use App\Models\Factura;
 use Illuminate\Support\Facades\DB;
 
 class CitaController extends Controller
@@ -51,10 +52,22 @@ class CitaController extends Controller
             'motivo' => 'required',
             'fecha_hora_inicio' => 'required|date',
             'fecha_hora_fin' => 'required|date',
-            'estado_cita' => 'required'
+            'estado_cita' => 'required',
+            'costo' => 'required|numeric|min:0',
         ]);
-        Cita::create($request->all());
-        return redirect()->route('citas.index')->with('success', 'Cita creada correctamente');
+        $cita = Cita::create($request->except('costo'));
+        // Crear la factura automáticamente
+        $subtotal = $request->input('costo');
+        $iva = round($subtotal * 0.16, 2); // 16% IVA
+        $factura = Factura::create([
+            'cita_id' => $cita->cita_id,
+            'fecha_emision' => now(),
+            'subtotal' => $subtotal,
+            'iva' => $iva,
+            'estado_factura' => 'pendiente',
+            'activo_inactivo' => 1,
+        ]);
+        return redirect()->route('citas.index')->with('success', 'Cita y factura creadas correctamente');
     }
 
     public function edit($id)
@@ -88,10 +101,19 @@ class CitaController extends Controller
             'motivo' => 'required',
             'fecha_hora_inicio' => 'required|date',
             'fecha_hora_fin' => 'required|date',
-            'estado_cita' => 'required'
+            'estado_cita' => 'required',
+            'costo' => 'required|numeric|min:0',
         ]);
-        $cita->update($request->all());
-        return redirect()->route('citas.index')->with('success', 'Cita actualizada correctamente');
+        // Actualizar la cita (sin el campo costo)
+        $cita->update($request->except('costo'));
+        // Actualizar la factura relacionada (solo la primera si hay varias)
+        $factura = $cita->facturas()->first();
+        if ($factura) {
+            $factura->subtotal = $request->input('costo');
+            $factura->iva = round($factura->subtotal * 0.16, 2); // 16% IVA
+            $factura->save();
+        }
+        return redirect()->route('citas.index')->with('success', 'Cita y factura actualizadas correctamente');
     }
 
     public function destroy($id)
@@ -100,4 +122,6 @@ class CitaController extends Controller
         $cita->delete();
         return redirect()->route('citas.index')->with('success', 'Cita eliminada correctamente');
     }
+
+    
 }
