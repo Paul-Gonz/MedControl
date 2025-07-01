@@ -71,15 +71,30 @@ Route::post('/TiposConsultorio/destroy/{id}', [App\Http\Controllers\TipoConsulto
 
 Route::resource('citas', CitaController::class);
 
+
+<<<<<<< HEAD
+
+=======
 Route::resource('citas', CitaController::class);
+>>>>>>> 177633a47d494eecffb2eb2bfb30d0fcf3994704
 Route::resource('pagos', App\Http\Controllers\PagoController::class);
 
 
-//reportes
 Route::get('/Pacientes/pdf', [PacientesController::class, 'reporte'])->name('pacientes.reporte');
 Route::get('/Doctores/pdf', [DoctorController::class, 'reporte'])->name('doctores.reporte');
 Route::get('/Doctores/pdf-especialidad', [DoctorController::class, 'reportePorEspecialidad'])->name('doctores.reporte.especialidad');
+<<<<<<< HEAD
+
+Route::get('/citas/reporte', [App\Http\Controllers\CitaController::class, 'reporte'])->name('citas.reporte');
+=======
+>>>>>>> 177633a47d494eecffb2eb2bfb30d0fcf3994704
 
 Route::get('/pagos-doctores', [PagoDoctorController::class, 'index'])->name('pagos_doctores.index');
 Route::get('/pagos-doctores/crear', [PagoDoctorController::class, 'create'])->name('pagos_doctores.create');
 Route::post('/pagos-doctores', [PagoDoctorController::class, 'store'])->name('pagos_doctores.store');
+
+Route::get('/pagos-doctores', [PagoDoctorController::class, 'index'])->name('pagos_doctores.index');
+Route::get('/pagos-doctores/crear', [PagoDoctorController::class, 'create'])->name('pagos_doctores.create');
+Route::post('/pagos-doctores', [PagoDoctorController::class, 'store'])->name('pagos_doctores.store');
+
+Route::get('/citas/reporte', [App\Http\Controllers\CitaController::class, 'reporte'])->name('citas.reporte');

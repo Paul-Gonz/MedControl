@@ -19,6 +19,38 @@
         </div>
     @endif
 
+    <!-- Botón para generar reporte -->
+<button class="btn btn-info mb-3" data-bs-toggle="modal" data-bs-target="#modalReporteCitas">
+    Generar Reporte
+</button>
+
+<!-- Modal para seleccionar el tipo de reporte -->
+<div class="modal fade" id="modalReporteCitas" tabindex="-1" aria-labelledby="modalReporteCitasLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form action="{{ route('citas.reporte') }}" method="GET">
+        <div class="modal-header">
+          <h5 class="modal-title" id="modalReporteCitasLabel">Generar Reporte de Citas</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <div class="form-check">
+            <input class="form-check-input" type="radio" name="tipo" id="especialidad" value="especialidad" checked>
+            <label class="form-check-label" for="especialidad">Por Especialidad</label>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input" type="radio" name="tipo" id="doctor" value="doctor">
+            <label class="form-check-label" for="doctor">Por Doctor</label>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-primary">Generar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
     @if($mode == 'index')
         <a href="{{ route('citas.create') }}" class="btn btn-success mb-3">Nueva Cita</a>
         <table class="table table-bordered table-striped">
@@ -156,6 +188,9 @@
     @endif
 </div>
 @endsection
+
+<!-- Bootstrap 5 JS en tu layout principal, antes del cierre de body -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
 @section('css')
 <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
