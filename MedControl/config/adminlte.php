@@ -341,7 +341,7 @@ return [
         ],
         [
             'text' => 'Agenda y Calendario',
-            'url' => 'admin/pages',
+            'url' => 'agenda',
             'icon' => 'far fa-fw fa-calendar',
         ],
         
