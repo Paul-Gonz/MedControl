@@ -70,6 +70,35 @@ class CitaController extends Controller
         return redirect()->route('citas.index')->with('success', 'Cita y factura creadas correctamente');
     }
 
+    public function reporte(Request $request)
+{
+    $tipo = $request->input('tipo', 'especialidad');
+
+    if ($tipo == 'doctor') {
+        // Reporte por doctor
+        $reporte = \DB::table('citas')
+            ->join('doctor_por_especialidad', 'citas.doctor_especialista_id', '=', 'doctor_por_especialidad.relacion_id')
+            ->join('doctores', 'doctor_por_especialidad.doctor_id', '=', 'doctores.doctor_id')
+            ->select('doctores.nombre_completo as nombre', \DB::raw('COUNT(*) as total_citas'))
+            ->groupBy('doctores.nombre_completo')
+            ->get();
+        $titulo = "Citas por Doctor";
+        $columna = "Doctor";
+    } else {
+        // Reporte por especialidad
+        $reporte = \DB::table('citas')
+            ->join('doctor_por_especialidad', 'citas.doctor_especialista_id', '=', 'doctor_por_especialidad.relacion_id')
+            ->join('especialidades', 'doctor_por_especialidad.especialidad_id', '=', 'especialidades.especialidad_id')
+            ->select('especialidades.nombre as nombre', \DB::raw('COUNT(*) as total_citas'))
+            ->groupBy('especialidades.nombre')
+            ->get();
+        $titulo = "Citas por Especialidad";
+        $columna = "Especialidad";
+    }
+
+    return view('citas.reporte', compact('reporte', 'titulo', 'columna', 'tipo'));
+}
+
     public function edit($id)
     {
         $cita = Cita::findOrFail($id);

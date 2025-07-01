@@ -46,6 +46,14 @@ class PagoController extends Controller
         if ($factura) {
             $factura->estado_factura = 'pagada';
             $factura->save();
+            // Cambiar estado de la cita relacionada a 'completada'
+            if ($factura->cita_id) {
+                $cita = \App\Models\Cita::find($factura->cita_id);
+                if ($cita) {
+                    $cita->estado_cita = 'completada';
+                    $cita->save();
+                }
+            }
         }
         return redirect()->route('pagos.index')->with('success', 'Pago registrado correctamente.');
     }

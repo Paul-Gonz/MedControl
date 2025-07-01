@@ -8,10 +8,15 @@
 
 @section('content')
     <div class="container">
+        <div class="row mb-3">
+            <div class="col-12 text-end">
+                <!-- Botón de pagos a doctores eliminado -->
+            </div>
+        </div>
         <div class="row justify-content-center">
             <div class="col-md-6">
                 <div class="card mb-4">
-                    <div class="card-header">Gráfico de Barras (Ejemplo)</div>
+                    <div class="card-header">Citas de los Ultimos 6 Meses</div>
                     <div class="card-body d-flex justify-content-center align-items-center" style="height:320px;">
                         <canvas id="barChart" width="300" height="300" style="max-width:300px;max-height:300px;"></canvas>
                     </div>
@@ -19,49 +24,31 @@
             </div>
             <div class="col-md-6">
                 <div class="card mb-4">
-                    <div class="card-header">Gráfico de Torta (Ejemplo)</div>
+                    <div class="card-header">Especialidades más Demandadas de este Mes</div>
                     <div class="card-body d-flex justify-content-center align-items-center" style="height:320px;">
                         <canvas id="pieChart" width="300" height="300" style="max-width:300px;max-height:300px;"></canvas>
                     </div>
                 </div>
             </div>
         </div>
-        <!-- Tabla y calendario en la misma fila -->
+        <!-- Tabla: Top 10 doctores con más consultas (Ejemplo) -->
+        <div class="row mt-4">
+            <div class="col-md-12">
+                <div class="card mb-4">
+                    <div class="card-header">Top 10 Doctores con Más Consultas Pagadas Este Mes</div>
+                    <div class="card-body d-flex justify-content-center align-items-center" style="height:320px;">
+                        <canvas id="topDoctoresPagadasChart" style="width:100%;max-width:1000px;max-height:300px;"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Gráfico de Barras: Horas de uso de consultorios (ejemplo) y minicalendario -->
         <div class="row mt-4">
             <div class="col-md-8">
-                <div class="card">
-                    <div class="card-header">Tabla de Información de Ejemplo</div>
-                    <div class="card-body">
-                        <table class="table table-bordered table-striped">
-                            <thead>
-                                <tr>
-                                    <th>ID</th>
-                                    <th>Nombre</th>
-                                    <th>Email</th>
-                                    <th>Estado</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>1</td>
-                                    <td>Juan Pérez</td>
-                                    <td>juan@example.com</td>
-                                    <td><span class="badge badge-success">Activo</span></td>
-                                </tr>
-                                <tr>
-                                    <td>2</td>
-                                    <td>María López</td>
-                                    <td>maria@example.com</td>
-                                    <td><span class="badge badge-warning">Pendiente</span></td>
-                                </tr>
-                                <tr>
-                                    <td>3</td>
-                                    <td>Carlos Ruiz</td>
-                                    <td>carlos@example.com</td>
-                                    <td><span class="badge badge-danger">Inactivo</span></td>
-                                </tr>
-                            </tbody>
-                        </table>
+                <div class="card mb-4">
+                    <div class="card-header">Horas de Uso de Consultorios (Ejemplo)</div>
+                    <div class="card-body d-flex justify-content-center align-items-center" style="height:320px;">
+                        <canvas id="ocupacionChart" style="width:100%;max-width:1000px;max-height:300px;"></canvas>
                     </div>
                 </div>
             </div>
@@ -80,92 +67,327 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <!-- FullCalendar CDN -->
     <script>
-        // Gráfico de Barras de ejemplo
-        const ctxBar = document.getElementById('barChart').getContext('2d');
-        new Chart(ctxBar, {
-            type: 'bar',
+        // Gráfico de Barras: Citas médicas por mes (dinámico)
+        fetch("{{ route('dashboard.citasPorMes') }}")
+            .then(response => response.json())
+            .then(data => {
+                const ctxBar = document.getElementById('barChart').getContext('2d');
+                new Chart(ctxBar, {
+                    type: 'bar',
+                    data: {
+                        labels: data.labels,
+                        datasets: [
+                            {
+                                label: 'Programadas',
+                                data: data.programadas,
+                                backgroundColor: 'rgba(54, 162, 235, 0.7)'
+                            },
+                            {
+                                label: 'Realizadas',
+                                data: data.realizadas,
+                                backgroundColor: 'rgba(40, 167, 69, 0.7)'
+                            },
+                            {
+                                label: 'Canceladas',
+                                data: data.canceladas,
+                                backgroundColor: 'rgba(220, 53, 69, 0.7)'
+                            }
+                        ]
+                    },
+                    options: {
+                        responsive: false,
+                        maintainAspectRatio: false,
+                        scales: {
+                            y: {
+                                beginAtZero: true
+                            }
+                        }
+                    }
+                });
+            });
+
+        // Gráfico de Torta: Distribución de citas por especialidad (dinámico)
+        fetch("{{ route('dashboard.especialidadesMasDemandadas') }}")
+            .then(response => response.json())
+            .then(data => {
+                const ctxPie = document.getElementById('pieChart').getContext('2d');
+                let labels = data.labels;
+                let chartData = data.data;
+                let backgroundColor = [
+                    'rgba(54, 162, 235, 0.7)',
+                    'rgba(255, 99, 132, 0.7)',
+                    'rgba(255, 206, 86, 0.7)',
+                    'rgba(75, 192, 192, 0.7)',
+                    'rgba(153, 102, 255, 0.7)',
+                    'rgba(255, 159, 64, 0.7)',
+                    'rgba(40, 167, 69, 0.7)',
+                    'rgba(220, 53, 69, 0.7)',
+                    'rgba(0, 123, 255, 0.7)',
+                    'rgba(255, 193, 7, 0.7)'
+                ];
+                let borderColor = [
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(75, 192, 192, 1)',
+                    'rgba(153, 102, 255, 1)',
+                    'rgba(255, 159, 64, 1)',
+                    'rgba(40, 167, 69, 1)',
+                    'rgba(220, 53, 69, 1)',
+                    'rgba(0, 123, 255, 1)',
+                    'rgba(255, 193, 7, 1)'
+                ];
+                if (!labels || !Array.isArray(labels) || labels.length === 0 || !chartData || !Array.isArray(chartData) || chartData.length === 0) {
+                    labels = ['Sin datos'];
+                    chartData = [1];
+                    backgroundColor = ['#e0e0e0'];
+                    borderColor = ['#bdbdbd'];
+                }
+                new Chart(ctxPie, {
+                    type: 'pie',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: 'Citas por especialidad',
+                            data: chartData,
+                            backgroundColor: backgroundColor,
+                            borderColor: borderColor,
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        responsive: false,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            title: {
+                                display: true,
+                                text: 'Especialidades más demandadas - ' + (data.mes || '')
+                            }
+                        }
+                    }
+                });
+            });
+
+        // Gráfico de Línea: Ingresos y Egresos mensuales (ejemplo)
+        const ingresosChartContainer = document.getElementById('ingresosChart')?.parentElement;
+        if (ingresosChartContainer) {
+            ingresosChartContainer.parentElement.parentElement.remove(); // Elimina el gráfico anterior si existe
+        }
+        document.querySelector('.row.justify-content-center').insertAdjacentHTML('beforeend', `
+            <div class="col-md-12">
+                <div class="card mb-4">
+                    <div class="card-header">Ingresos y Egresos Mensuales (Ejemplo)</div>
+                    <div class="card-body d-flex justify-content-center align-items-center" style="height:320px;">
+                        <canvas id="ingresosChart" style="width:100%;max-width:1000px;max-height:300px;"></canvas>
+                    </div>
+                </div>
+            </div>
+        `);
+
+        const ctxIngresos = document.getElementById('ingresosChart').getContext('2d');
+        new Chart(ctxIngresos, {
+            type: 'line',
             data: {
                 labels: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo'],
-                datasets: [{
-                    label: 'Usuarios registrados',
-                    data: [12, 19, 3, 5, 2],
-                    backgroundColor: 'rgba(54, 162, 235, 0.7)',
-                    borderColor: 'rgba(54, 162, 235, 1)',
-                    borderWidth: 1
-                }]
+                datasets: [
+                    {
+                        label: 'Ingresos ($)',
+                        data: [1200, 1500, 1100, 1800, 1600],
+                        fill: false,
+                        borderColor: 'rgba(255, 159, 64, 1)',
+                        backgroundColor: 'rgba(255, 159, 64, 0.7)',
+                        tension: 0.3,
+                        pointBackgroundColor: 'rgba(255, 159, 64, 1)',
+                        pointBorderColor: '#fff',
+                        pointRadius: 6,
+                        pointHoverRadius: 8
+                    },
+                    {
+                        label: 'Egresos ($)',
+                        data: [800, 900, 950, 1000, 1100],
+                        fill: false,
+                        borderColor: 'rgba(54, 162, 235, 1)',
+                        backgroundColor: 'rgba(54, 162, 235, 0.7)',
+                        tension: 0.3,
+                        pointBackgroundColor: 'rgba(54, 162, 235, 1)',
+                        pointBorderColor: '#fff',
+                        pointRadius: 6,
+                        pointHoverRadius: 8
+                    }
+                ]
             },
             options: {
-                responsive: false,
+                responsive: true,
                 maintainAspectRatio: false,
                 scales: {
+                    x: {
+                        display: true,
+                        title: {
+                            display: true,
+                            text: 'Mes'
+                        }
+                    },
                     y: {
-                        beginAtZero: true
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: 'Monto ($)'
+                        }
                     }
                 }
             }
         });
 
-        // Gráfico de Torta de ejemplo
-        const ctxPie = document.getElementById('pieChart').getContext('2d');
-        new Chart(ctxPie, {
-            type: 'pie',
+        // Gráfico de Barras: Horas de uso de consultorios (ejemplo)
+        const ocupacionChartContainer = document.getElementById('ocupacionChart')?.parentElement;
+        if (ocupacionChartContainer) {
+            ocupacionChartContainer.parentElement.parentElement.remove(); // Elimina el gráfico anterior si existe
+        }
+        document.querySelector('.row.justify-content-center').insertAdjacentHTML('beforeend', `
+            <div class="col-md-12">
+                <div class="card mb-4">
+                    <div class="card-header">Horas de Uso de Consultorios (Ejemplo)</div>
+                    <div class="card-body d-flex justify-content-center align-items-center" style="height:320px;">
+                        <canvas id="ocupacionChart" style="width:100%;max-width:1000px;max-height:300px;"></canvas>
+                    </div>
+                </div>
+            </div>
+        `);
+
+        const ctxOcupacion = document.getElementById('ocupacionChart').getContext('2d');
+        new Chart(ctxOcupacion, {
+            type: 'bar',
             data: {
-                labels: ['Activos', 'Inactivos', 'Pendientes'],
-                datasets: [{
-                    label: 'Estado de usuarios',
-                    data: [10, 5, 3],
-                    backgroundColor: [
-                        'rgba(40, 167, 69, 0.7)',
-                        'rgba(220, 53, 69, 0.7)',
-                        'rgba(255, 193, 7, 0.7)'
-                    ],
-                    borderColor: [
-                        'rgba(40, 167, 69, 1)',
-                        'rgba(220, 53, 69, 1)',
-                        'rgba(255, 193, 7, 1)'
-                    ],
-                    borderWidth: 1
-                }]
+                labels: ['Consultorio 1', 'Consultorio 2', 'Consultorio 3', 'Consultorio 4', 'Consultorio 5'],
+                datasets: [
+                    {
+                        label: 'Horas de uso',
+                        data: [120, 95, 80, 140, 110],
+                        backgroundColor: [
+                            'rgba(54, 162, 235, 0.7)',
+                            'rgba(255, 99, 132, 0.7)',
+                            'rgba(255, 206, 86, 0.7)',
+                            'rgba(75, 192, 192, 0.7)',
+                            'rgba(153, 102, 255, 0.7)'
+                        ],
+                        borderColor: [
+                            'rgba(54, 162, 235, 1)',
+                            'rgba(255, 99, 132, 1)',
+                            'rgba(255, 206, 86, 1)',
+                            'rgba(75, 192, 192, 1)',
+                            'rgba(153, 102, 255, 1)'
+                        ],
+                        borderWidth: 1
+                    }
+                ]
             },
             options: {
-                responsive: false,
-                maintainAspectRatio: false
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: 'Horas de uso'
+                        }
+                    },
+                    x: {
+                        title: {
+                            display: true,
+                            text: 'Consultorios'
+                        }
+                    }
+                }
             }
         });
 
-        // Calendario de ejemplo con FullCalendar
-        document.addEventListener('DOMContentLoaded', function() {
-            var calendarEl = document.getElementById('calendar');
-            if (calendarEl) {
-                var calendar = new FullCalendar.Calendar(calendarEl, {
-                    initialView: 'dayGridMonth',
-                    locale: 'es',
-                    height: 500,
-                    headerToolbar: {
-                        left: 'prev,next today',
-                        center: 'title',
-                        right: 'dayGridMonth,timeGridWeek,timeGridDay'
-                    },
-                    events: [
-                        {
-                            title: 'Cita médica',
-                            start: new Date().toISOString().slice(0,10),
-                            color: '#28a745'
-                        },
-                        {
-                            title: 'Reunión',
-                            start: new Date(new Date().setDate(new Date().getDate() + 3)).toISOString().slice(0,10),
-                            color: '#007bff'
-                        },
-                        {
-                            title: 'Vacaciones',
-                            start: new Date(new Date().setDate(new Date().getDate() + 7)).toISOString().slice(0,10),
-                            color: '#ffc107'
+        // Gráfico de Barras: Cantidad de citas por día de esta semana
+        document.querySelector('.row.justify-content-center').insertAdjacentHTML('beforeend', `
+            <div class="col-md-12">
+                <div class="card mb-4">
+                    <div class="card-header">Cantidad de Citas por Día (Esta Semana)</div>
+                    <div class="card-body d-flex justify-content-center align-items-center" style="height:320px;">
+                        <canvas id="citasSemanaChart" style="width:100%;max-width:1000px;max-height:300px;"></canvas>
+                    </div>
+                </div>
+            </div>
+        `);
+
+        const ctxCitasSemana = document.getElementById('citasSemanaChart').getContext('2d');
+        new Chart(ctxCitasSemana, {
+            type: 'bar',
+            data: {
+                labels: ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'],
+                datasets: [
+                    {
+                        label: 'Citas agendadas',
+                        data: [3, 2, 4, 1, 2, 0, 0], // Ejemplo de datos
+                        backgroundColor: 'rgba(0, 123, 255, 0.7)'
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: 'Cantidad de citas'
                         }
-                    ]
-                });
-                calendar.render();
-            }
+                    },
+                    x: {
+                        title: {
+                            display: true,
+                            text: 'Día de la semana'
+                        }
+                    }
+                }
+            }});
+
+        // Gráfico de Barras: Top 10 doctores con más consultas pagadas este mes
+        document.addEventListener('DOMContentLoaded', function() {
+            const topDoctoresLabels = [
+                'Dr. Juan Pérez', 'Dra. María López', 'Dr. Carlos Ruiz', 'Dra. Ana Torres', 'Dr. Luis Gómez',
+                'Dra. Sofía Martínez', 'Dr. Pablo Sánchez', 'Dra. Laura Díaz', 'Dr. Andrés Castro', 'Dra. Paula Romero'
+            ];
+            const topDoctoresData = [25, 22, 20, 18, 17, 15, 14, 13, 12, 11]; // Ejemplo de datos
+            const ctxTopDoctores = document.getElementById('topDoctoresPagadasChart').getContext('2d');
+            new Chart(ctxTopDoctores, {
+                type: 'bar',
+                data: {
+                    labels: topDoctoresLabels,
+                    datasets: [{
+                        label: 'Consultas pagadas',
+                        data: topDoctoresData,
+                        backgroundColor: 'rgba(255, 99, 132, 0.7)',
+                        borderColor: 'rgba(255, 99, 132, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    indexAxis: 'y', // Barra horizontal
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        x: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Cantidad de consultas pagadas'
+                            }
+                        },
+                        y: {
+                            title: {
+                                display: true,
+                                text: 'Doctor'
+                            }
+                        }
+                    }
+                }
+            });
         });
     </script>
     <script> console.log("Hi, I'm using the Laravel-AdminLTE package!"); </script>

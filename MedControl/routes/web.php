@@ -11,6 +11,8 @@ use App\Http\Controllers\CitaController;
 use App\Http\Controllers\DoctorController;
 use App\Http\Controllers\EspecialidadController;
 use App\Http\Controllers\TipoConsultorioController;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\PagoDoctorController;
 
 
 Route::get('/', function () {
@@ -20,6 +22,8 @@ Route::get('/', function () {
 Route::get('/dashboard', function () {
     return view('dashboard');
 });
+Route::get('/dashboard/citas-por-mes', [DashboardController::class, 'citasPorMes'])->name('dashboard.citasPorMes');
+Route::get('/dashboard/especialidades-mas-demandadas', [DashboardController::class, 'especialidadesMasDemandadas'])->name('dashboard.especialidadesMasDemandadas');
 
 Route::get('/Pacientes', [PacientesController::class, 'index'])->name('pacientes.index');
 Route::post('/Pacientes', [PacientesController::class, 'store'])->name('pacientes.store');
@@ -66,12 +70,23 @@ Route::post('/TiposConsultorio/update/{id}', [App\Http\Controllers\TipoConsultor
 Route::post('/TiposConsultorio/destroy/{id}', [App\Http\Controllers\TipoConsultorioController::class, 'destroy'])->name('tipos-consultorio.destroy');
 
 Route::resource('citas', CitaController::class);
-
 Route::resource('citas', CitaController::class);
+
 Route::resource('pagos', App\Http\Controllers\PagoController::class);
 
-
-//reportes
 Route::get('/Pacientes/pdf', [PacientesController::class, 'reporte'])->name('pacientes.reporte');
+
 Route::get('/Doctores/pdf', [DoctorController::class, 'reporte'])->name('doctores.reporte');
 Route::get('/Doctores/pdf-especialidad', [DoctorController::class, 'reportePorEspecialidad'])->name('doctores.reporte.especialidad');
+
+Route::get('/citas/reporte', [App\Http\Controllers\CitaController::class, 'reporte'])->name('citas.reporte');
+
+Route::get('/pagos-doctores', [PagoDoctorController::class, 'index'])->name('pagos_doctores.index');
+Route::get('/pagos-doctores/crear', [PagoDoctorController::class, 'create'])->name('pagos_doctores.create');
+Route::post('/pagos-doctores', [PagoDoctorController::class, 'store'])->name('pagos_doctores.store');
+
+Route::get('/pagos-doctores', [PagoDoctorController::class, 'index'])->name('pagos_doctores.index');
+Route::get('/pagos-doctores/crear', [PagoDoctorController::class, 'create'])->name('pagos_doctores.create');
+Route::post('/pagos-doctores', [PagoDoctorController::class, 'store'])->name('pagos_doctores.store');
+
+Route::get('/citas/reporte', [App\Http\Controllers\CitaController::class, 'reporte'])->name('citas.reporte');
