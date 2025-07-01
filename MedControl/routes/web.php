@@ -26,6 +26,14 @@ Route::get('/dashboard', function () {
 });
 Route::get('/dashboard/citas-por-mes', [DashboardController::class, 'citasPorMes'])->name('dashboard.citasPorMes');
 Route::get('/dashboard/especialidades-mas-demandadas', [DashboardController::class, 'especialidadesMasDemandadas'])->name('dashboard.especialidadesMasDemandadas');
+// Gráfica de ingresos y egresos mensuales
+Route::get('/dashboard/ingresos-egresos', [DashboardController::class, 'ingresosEgresosPorMes'])->name('dashboard.ingresosEgresos');
+// Horas de uso de consultorios
+Route::get('/dashboard/horas-uso-consultorios', [App\Http\Controllers\DashboardController::class, 'horasUsoConsultorios'])->name('dashboard.horasUsoConsultorios');
+// Cantidad de citas por día de la semana actual
+Route::get('/dashboard/citas-por-dia-semana', [App\Http\Controllers\DashboardController::class, 'citasPorDiaSemana'])->name('dashboard.citasPorDiaSemana');
+// Top 10 doctores con más consultas pagadas este mes
+Route::get('/dashboard/top-doctores-pagadas', [App\Http\Controllers\DashboardController::class, 'topDoctoresPagadasMes'])->name('dashboard.topDoctoresPagadasMes');
 
 
 
@@ -84,10 +92,7 @@ Route::post('/TiposConsultorio/update/{id}', [App\Http\Controllers\TipoConsultor
 Route::post('/TiposConsultorio/destroy/{id}', [App\Http\Controllers\TipoConsultorioController::class, 'destroy'])->name('tipos-consultorio.destroy');
 
 Route::resource('citas', CitaController::class);
-
-
-
-
+Route::patch('/citas/{id}/completar', [CitaController::class, 'completar'])->name('citas.completar');
 
 Route::resource('pagos', App\Http\Controllers\PagoController::class);
 
@@ -101,12 +106,9 @@ Route::get('citas/reporte/pdf', [CitaController::class, 'reportePdf'])->name('ci
 
 
 Route::get('/pagos-doctores', [PagoDoctorController::class, 'index'])->name('pagos_doctores.index');
-Route::get('/pagos-doctores/crear', [PagoDoctorController::class, 'create'])->name('pagos_doctores.create');
 Route::post('/pagos-doctores', [PagoDoctorController::class, 'store'])->name('pagos_doctores.store');
-
-Route::get('/pagos-doctores', [PagoDoctorController::class, 'index'])->name('pagos_doctores.index');
-Route::get('/pagos-doctores/crear', [PagoDoctorController::class, 'create'])->name('pagos_doctores.create');
-Route::post('/pagos-doctores', [PagoDoctorController::class, 'store'])->name('pagos_doctores.store');
+Route::put('/pagos-doctores/update/{id}', [PagoDoctorController::class, 'update'])->name('pagos_doctores.update');
+Route::delete('/pagos-doctores/destroy/{id}', [PagoDoctorController::class, 'destroy'])->name('pagos_doctores.destroy');
 
 Route::get('/citas/reporte', [App\Http\Controllers\CitaController::class, 'reporte'])->name('citas.reporte');
 

@@ -19,41 +19,44 @@
         </div>
     @endif
 
-    <!-- Botón para generar reporte -->
-<button class="btn btn-info mb-3" data-bs-toggle="modal" data-bs-target="#modalReporteCitas">
-    Generar Reporte
-</button>
-
-<!-- Modal para seleccionar el tipo de reporte -->
-<div class="modal fade" id="modalReporteCitas" tabindex="-1" aria-labelledby="modalReporteCitasLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <form action="{{ route('citas.reporte.pdf') }}" method="GET" target="_blank">
-        <div class="modal-header">
-          <h5 class="modal-title" id="modalReporteCitasLabel">Generar Reporte de Citas</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-        </div>
-        <div class="modal-body">
-          <div class="form-check">
-            <input class="form-check-input" type="radio" name="tipo" id="especialidad" value="especialidad" checked>
-            <label class="form-check-label" for="especialidad">Por Especialidad</label>
-          </div>
-          <div class="form-check">
-            <input class="form-check-input" type="radio" name="tipo" id="doctor" value="doctor">
-            <label class="form-check-label" for="doctor">Por Doctor</label>
-          </div>
-        </div>
-        <div class="modal-footer">
-          <button type="submit" class="btn btn-primary">Generar PDF</button>
-        </div>
-      </form>
-    </div>
-  </div>
-</div>
-
     @if($mode == 'index')
+        <!-- Botón para generar reporte -->
+        <button class="btn btn-info mb-3" data-bs-toggle="modal" data-bs-target="#modalReporteCitas">
+            Generar Reporte
+        </button>
+
+        <!-- Modal para seleccionar el tipo de reporte -->
+        <div class="modal fade" id="modalReporteCitas" tabindex="-1" aria-labelledby="modalReporteCitasLabel" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <form action="{{ route('citas.reporte.pdf') }}" method="GET" target="_blank">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="modalReporteCitasLabel">Generar Reporte de Citas</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                  <div class="form-check">
+                    <input class="form-check-input" type="radio" name="tipo" id="especialidad" value="especialidad" checked>
+                    <label class="form-check-label" for="especialidad">Por Especialidad</label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="radio" name="tipo" id="doctor" value="doctor">
+                    <label class="form-check-label" for="doctor">Por Doctor</label>
+                  </div>
+                </div>
+                <div class="modal-footer">
+                  <button type="submit" class="btn btn-primary">Generar PDF</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
         <a href="{{ route('citas.create') }}" class="btn btn-success mb-3">Nueva Cita</a>
-        <table class="table table-bordered table-striped">
+        <!-- Barra de búsqueda -->
+        <div class="mb-3">
+            <input type="text" id="busquedaCita" class="form-control" placeholder="Buscar por paciente, motivo, estado o ID...">
+        </div>
+        <table class="table table-bordered table-striped" id="tablaCitas">
             <thead>
                 <tr>
                     <th>ID</th>
@@ -85,6 +88,9 @@
                             @method('DELETE')
                             <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('¿Eliminar esta cita?')">Eliminar</button>
                         </form>
+                        @if($cita->estado_cita !== 'completada')
+                            <button type="button" class="btn btn-success btn-sm btn-completar-cita" data-id="{{ $cita->cita_id }}">Completar</button>
+                        @endif
                     </td>
                 </tr>
             @endforeach
@@ -178,13 +184,17 @@
             </div>
             <div class="mb-3">
                 <label for="costo" class="form-label">Costo de la Cita en $</label>
-                <input type="number" step="0.01" name="costo" class="form-control" value="{{ old('costo', $cita->costo ?? '') }}" required>
+                <input type="number" step="0.01" name="costo" class="form-control"
+                    value="{{ old('costo', isset($cita) ? ($cita->costo ?? optional($cita->facturas->first())->subtotal ?? '') : '') }}" required>
             </div>
             <button type="submit" class="btn btn-{{ $isEdit ? 'primary' : 'success' }}">
                 {{ $isEdit ? 'Actualizar' : 'Guardar' }}
             </button>
             <a href="{{ route('citas.index') }}" class="btn btn-secondary">Cancelar</a>
         </form>
+        <div>
+            <p> </p>
+        </div>
     @endif
 </div>
 @endsection
@@ -210,6 +220,48 @@
             placeholder: 'Seleccione un paciente',
             allowClear: true
         });
+        // Acción para completar cita
+        $(document).on('click', '.btn-completar-cita', function() {
+            var btn = $(this);
+            var citaId = btn.data('id');
+            if(confirm('¿Marcar esta cita como completada?')) {
+                $.ajax({
+                    url: '/citas/' + citaId + '/completar',
+                    type: 'PATCH',
+                    data: {
+                        _token: '{{ csrf_token() }}'
+                    },
+                    success: function(response) {
+                        if(response.success) {
+                            // Actualizar la celda de estado y ocultar el botón
+                            var row = btn.closest('tr');
+                            row.find('td:nth-child(6)').text('Completada');
+                            btn.remove();
+                        } else {
+                            alert(response.message || 'No se pudo completar la cita.');
+                        }
+                    },
+                    error: function() {
+                        alert('Error al completar la cita.');
+                    }
+                });
+            }
+        });
     });
 </script>
+@push('js')
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const input = document.getElementById('busquedaCita');
+    const table = document.getElementById('tablaCitas');
+    input.addEventListener('keyup', function() {
+        const filtro = input.value.toLowerCase();
+        for (let row of table.tBodies[0].rows) {
+            let texto = row.innerText.toLowerCase();
+            row.style.display = texto.includes(filtro) ? '' : 'none';
+        }
+    });
+});
+</script>
+@endpush
 @endsection
