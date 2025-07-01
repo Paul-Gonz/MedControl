@@ -25,11 +25,23 @@ Route::get('/dashboard', function () {
 Route::get('/dashboard/citas-por-mes', [DashboardController::class, 'citasPorMes'])->name('dashboard.citasPorMes');
 Route::get('/dashboard/especialidades-mas-demandadas', [DashboardController::class, 'especialidadesMasDemandadas'])->name('dashboard.especialidadesMasDemandadas');
 
+
+
+
+         //pacientes
+
 Route::get('/Pacientes', [PacientesController::class, 'index'])->name('pacientes.index');
 Route::post('/Pacientes', [PacientesController::class, 'store'])->name('pacientes.store');
 Route::post('/Pacientes/update', [PacientesController::class, 'update'])->name('pacientes.update');
 Route::post('/Pacientes/destroy', [PacientesController::class, 'destroy'])->name('pacientes.destroy');
 Route::post('/Pacientes/reingresar', [PacientesController::class, 'reingresar'])->name('pacientes.reingresar');
+
+        //reporte de pacientes
+Route::get('/Pacientes/pdf', [PacientesController::class, 'reporte'])->name('pacientes.reporte');
+
+
+
+
 
 Route::get('/Doctores', [App\Http\Controllers\DoctorController::class, 'index'])->name('doctores.index');
 Route::post('/Doctores', [App\Http\Controllers\DoctorController::class, 'store'])->name('doctores.store');
@@ -72,9 +84,11 @@ Route::post('/TiposConsultorio/destroy/{id}', [App\Http\Controllers\TipoConsulto
 Route::resource('citas', CitaController::class);
 Route::resource('citas', CitaController::class);
 
+
+
 Route::resource('pagos', App\Http\Controllers\PagoController::class);
 
-Route::get('/Pacientes/pdf', [PacientesController::class, 'reporte'])->name('pacientes.reporte');
+
 
 Route::get('/Doctores/pdf', [DoctorController::class, 'reporte'])->name('doctores.reporte');
 Route::get('/Doctores/pdf-especialidad', [DoctorController::class, 'reportePorEspecialidad'])->name('doctores.reporte.especialidad');

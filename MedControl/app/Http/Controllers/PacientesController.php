@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Paciente;
 use Barryvdh\DomPDF\Facade\Pdf;
-use Carbon\Carbon;
+
 
 class PacientesController extends Controller
 {
@@ -34,13 +34,6 @@ class PacientesController extends Controller
         return view('pacientes', compact('pacientes'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
 
     /**
      * Store a newly created resource in storage.
@@ -71,22 +64,6 @@ class PacientesController extends Controller
         $paciente->save();
 
         return redirect()->route('pacientes.index')->with('success', 'Paciente creado correctamente.');
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
     }
 
     /**
@@ -142,6 +119,10 @@ class PacientesController extends Controller
 
     return redirect()->route('pacientes.index')->with('success', 'Paciente reingresado correctamente.');
 }
+
+
+
+
 
     public function reporte(Request $request)
     {

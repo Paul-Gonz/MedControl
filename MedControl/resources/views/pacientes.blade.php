@@ -189,13 +189,6 @@
                                                             <label>Fecha Registro</label>
                                                             <input type="datetime-local" class="form-control" name="fecha_registro" value="{{ \Carbon\Carbon::parse($paciente->fecha_registro)->format('Y-m-d\TH:i') }}" required>
                                                         </div>
-                                                        <div class="form-group">
-                                                            <label>Estado</label>
-                                                            <select class="form-control" name="activo_inactivo" required>
-                                                                <option value="1" {{ $paciente->activo_inactivo ? 'selected' : '' }}>Activo</option>
-                                                                <option value="0" {{ !$paciente->activo_inactivo ? 'selected' : '' }}>Inactivo</option>
-                                                            </select>
-                                                        </div>
 
                                                         <div class="form-group">
                                                             <label>Datos Relevantes</label>
