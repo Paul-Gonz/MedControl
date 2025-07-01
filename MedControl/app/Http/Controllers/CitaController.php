@@ -71,7 +71,7 @@ class CitaController extends Controller
         return redirect()->route('citas.index')->with('success', 'Cita y factura creadas correctamente');
     }
 
-    public function reporte(Request $request)
+    public function reportePdf(Request $request)
 {
     $tipo = $request->input('tipo', 'especialidad');
 
@@ -97,29 +97,11 @@ class CitaController extends Controller
         $columna = "Especialidad";
     }
 
-    return view('citas.reporte', compact('reporte', 'titulo', 'columna', 'tipo'));
-}
+    $pdf = \PDF::loadView('citasreporte_pdf', compact('reporte', 'titulo', 'columna', 'tipo'));
+    return $pdf->stream('reporte_citas.pdf');
+    }
 
 
-public function reportePdf()
-{
-    $citas = Cita::with(['paciente'])->get();
-
-    $pdf = Pdf::loadView('citas_pdf', compact('citas'));
-    return $pdf->stream('reporte_citas.pdf'); // Para abrir en el navegador
-}
-
-public function show($id)
-{
-    // Si no necesitas mostrar un detalle, puedes redirigir o mostrar un mensaje.
-    // Aquí te muestro ambas opciones, elige la que prefieras:
-
-    // Opción 1: Redirige a la lista de citas con un mensaje (recomendado si no usas show)
-    return redirect()->route('citas.index')->with('info', 'La vista de detalle no está implementada.');
-
-    // Opción 2: Si prefieres mostrar una vista personalizada:
-    // return view('citas.show', ['id' => $id]);
-}
 
     public function edit($id)
     {

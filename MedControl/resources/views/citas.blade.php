@@ -28,7 +28,7 @@
 <div class="modal fade" id="modalReporteCitas" tabindex="-1" aria-labelledby="modalReporteCitasLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
-      <form action="{{ route('citas.reporte') }}" method="GET" target="_blank">
+      <form action="{{ route('citas.reporte.pdf') }}" method="GET" target="_blank">
         <div class="modal-header">
           <h5 class="modal-title" id="modalReporteCitasLabel">Generar Reporte de Citas</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
@@ -44,12 +44,11 @@
           </div>
         </div>
         <div class="modal-footer">
-          <button type="submit" class="btn btn-primary">Generar</button>
+          <button type="submit" class="btn btn-primary">Generar PDF</button>
         </div>
       </form>
     </div>
   </div>
-  <a href="{{ route('citas.reporte.pdf') }}" target="_blank" class="btn btn-info mb-3">Generar Reporte PDF</a>
 </div>
 
     @if($mode == 'index')

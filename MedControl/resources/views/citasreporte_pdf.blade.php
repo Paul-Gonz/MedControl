@@ -1,9 +1,16 @@
-@extends('layouts.app')
-
-@section('content')
-<div class="container">
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ $titulo }}</title>
+    <style>
+        table { width: 100%; border-collapse: collapse; }
+        th, td { border: 1px solid #ccc; padding: 4px; font-size: 12px; }
+        th { background: #f5f5f5; }
+    </style>
+</head>
+<body>
     <h2>{{ $titulo }}</h2>
-    <table class="table table-bordered">
+    <table>
         <thead>
             <tr>
                 <th>{{ $columna }}</th>
@@ -23,6 +30,5 @@
             @endforelse
         </tbody>
     </table>
-    <a href="{{ route('citas.index') }}" class="btn btn-secondary">Volver a Citas</a>
-</div>
-@endsection
+</body>
+</html>
