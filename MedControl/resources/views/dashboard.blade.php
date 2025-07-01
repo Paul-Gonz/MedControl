@@ -102,6 +102,9 @@
             <div id="modalTableContainer"></div>
           </div>
           <div class="modal-footer">
+            <button type="button" class="btn btn-success" id="btnDescargarPDF">
+              Descargar PDF
+            </button>
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
           </div>
         </div>
@@ -499,8 +502,32 @@
 
             modal.show();
         }
+
+        // Descargar PDF del reporte del modal
+        document.getElementById('btnDescargarPDF').addEventListener('click', async function() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF({ orientation: 'landscape', unit: 'pt', format: 'a4' });
+            // Capturar la gráfica
+            const chartCanvas = document.getElementById('modalChart');
+            const chartImg = chartCanvas.toDataURL('image/png', 1.0);
+            const titulo = document.getElementById('modalReporteGraficaLabel').innerText;
+            doc.text(titulo, 40, 40);
+            doc.addImage(chartImg, 'PNG', 40, 60, 500, 250);
+            // Capturar la tabla
+            const table = document.getElementById('modalTableContainer');
+            await html2canvas(table).then(canvas => {
+                const tableImg = canvas.toDataURL('image/png', 1.0);
+                doc.addImage(tableImg, 'PNG', 40, 330, 700, 0);
+            });
+            // Generar nombre de archivo personalizado
+            let nombre = titulo.replace(/^reporte de gráfica\s*/i, '').trim();
+            nombre = nombre ? `Reporte de grafica ${nombre}.pdf` : 'Reporte de grafica.pdf';
+            doc.save(nombre);
+        });
     </script>
     <script> console.log("Hi, I'm using the Laravel-AdminLTE package!"); </script>
     <!-- Bootstrap 5 JS (asegúrate de tenerlo al final del body) -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 @stop
