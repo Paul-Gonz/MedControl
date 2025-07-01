@@ -78,7 +78,7 @@
                         labels: data.labels,
                         datasets: [
                             {
-                                label: 'Programadas',
+                                label: 'Totales',
                                 data: data.programadas,
                                 backgroundColor: 'rgba(54, 162, 235, 0.7)'
                             },
