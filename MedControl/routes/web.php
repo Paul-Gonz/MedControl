@@ -13,6 +13,7 @@ use App\Http\Controllers\EspecialidadController;
 use App\Http\Controllers\TipoConsultorioController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\PagoDoctorController;
+use App\Http\Controllers\ContabilidadController;
 
 
 Route::get('/', function () {
@@ -82,7 +83,8 @@ Route::post('/TiposConsultorio/update/{id}', [App\Http\Controllers\TipoConsultor
 Route::post('/TiposConsultorio/destroy/{id}', [App\Http\Controllers\TipoConsultorioController::class, 'destroy'])->name('tipos-consultorio.destroy');
 
 Route::resource('citas', CitaController::class);
-Route::resource('citas', CitaController::class);
+
+
 
 
 
@@ -93,6 +95,12 @@ Route::resource('pagos', App\Http\Controllers\PagoController::class);
 Route::get('/Doctores/pdf', [DoctorController::class, 'reporte'])->name('doctores.reporte');
 Route::get('/Doctores/pdf-especialidad', [DoctorController::class, 'reportePorEspecialidad'])->name('doctores.reporte.especialidad');
 
+
+
+Route::get('/citas/reporte', [App\Http\Controllers\CitaController::class, 'reporte'])->name('citas.reporte');
+
+
+
 Route::get('/citas/reporte', [App\Http\Controllers\CitaController::class, 'reporte'])->name('citas.reporte');
 
 Route::get('/pagos-doctores', [PagoDoctorController::class, 'index'])->name('pagos_doctores.index');
@@ -104,3 +112,9 @@ Route::get('/pagos-doctores/crear', [PagoDoctorController::class, 'create'])->na
 Route::post('/pagos-doctores', [PagoDoctorController::class, 'store'])->name('pagos_doctores.store');
 
 Route::get('/citas/reporte', [App\Http\Controllers\CitaController::class, 'reporte'])->name('citas.reporte');
+
+Route::prefix('/Contabilidad')->group(function () {
+    Route::get('/', [ContabilidadController::class, 'index'])->name('contabilidad.index');
+    Route::post('/libro-diario', [ContabilidadController::class, 'libroDiario'])->name('contabilidad.libro_diario');
+    Route::post('/libro-mayor', [ContabilidadController::class, 'libroMayor'])->name('contabilidad.libro_mayor');
+});

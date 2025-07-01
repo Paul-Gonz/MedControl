@@ -403,7 +403,7 @@ return [
             'submenu' => [
                 [
                     'text' => 'Facturación y pagos',
-                    'url' => '#',
+                    'url' => '/Contabilidad',
                 ],
             ],
         ],
