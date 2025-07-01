@@ -71,4 +71,6 @@ class CitaController extends Controller
         $cita->delete();
         return redirect()->route('citas.index')->with('success', 'Cita eliminada correctamente');
     }
+
+    
 }
