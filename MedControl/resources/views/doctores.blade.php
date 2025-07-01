@@ -16,6 +16,10 @@
     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#nuevoDoctorModal">
         Nuevo Doctor
     </button>
+    <!-- Botón para ver pagos a doctores -->
+    <a href="{{ route('pagos_doctores.index') }}" class="btn btn-success ml-2">
+        <i class="fas fa-money-check-alt"></i> Pagos a Doctores
+    </a>
 </div>
 
 <!-- Modal para seleccionar especialidad y generar PDF -->
@@ -133,14 +137,14 @@
             <thead>
                 <tr>
                     <th>ID</th>
+                    <th>Nombre Doctor</th>
+                    <th>Especialidad</th>
                     <th>Cédula Identidad</th>
                     <th>Cédula Profesional</th>
-                    <th>Nombre Completo</th>
                     <th>Honorarios</th>
                     <th>Teléfono</th>
                     <th>Email</th>
                     <th>Estado</th>
-                    <th>Especialidad</th>
                     <th>Acciones</th>
                 </tr>
             </thead>
@@ -148,9 +152,10 @@
                 @foreach($doctores as $doctor)
                     <tr>
                         <td>{{ $doctor->doctor_id }}</td>
+                        <td>{{ $doctor->nombre_completo }}</td>
+                        <td>{{ $doctor->especialidad_nombre ?? 'Sin asignar' }}</td>
                         <td>{{ $doctor->cedula_identidad }}</td>
                         <td>{{ $doctor->cedula_profesional }}</td>
-                        <td>{{ $doctor->nombre_completo }}</td>
                         <td>{{ $doctor->honorarios }}</td>
                         <td>{{ $doctor->contacto_telefono }}</td>
                         <td>{{ $doctor->contacto_email }}</td>
@@ -161,7 +166,6 @@
                                 <span class="badge badge-danger">Inactivo</span>
                             @endif
                         </td>
-                        <td>{{ $doctor->especialidad_nombre ?? 'Sin asignar' }}</td>
                         <td>
                             <!-- Botón Editar -->
                             <button type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#editarDoctorModal{{ $doctor->doctor_id }}">
