@@ -12,7 +12,10 @@
         <div class="row mt-4">
             <div class="col-md-12">
                 <div class="card mb-4">
-                    <div class="card-header">Ingresos y Egresos Mensuales</div>
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        Ingresos y Egresos Mensuales
+                        <button class="btn btn-primary btn-sm" onclick="mostrarReporte('ingresosChart')">Mostrar reporte</button>
+                    </div>
                     <div class="card-body d-flex justify-content-center align-items-center" style="height:320px;">
                         <canvas id="ingresosChart" style="width:100%;max-width:1000px;max-height:300px;"></canvas>
                     </div>
@@ -22,55 +25,87 @@
         <div class="row justify-content-center">
             <div class="col-md-6">
                 <div class="card mb-4">
-                    <div class="card-header">Citas de los Ultimos 6 Meses</div>
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        Citas de los Ultimos 6 Meses
+                        <button class="btn btn-primary btn-sm" onclick="mostrarReporte('barChart')">Mostrar reporte</button>
+                    </div>
                     <div class="card-body d-flex justify-content-center align-items-center" style="height:320px;">
                         <canvas id="barChart" width="300" height="300" style="max-width:300px;max-height:300px;"></canvas>
                     </div>
                 </div>
             </div>
-            
             <div class="col-md-6">
                 <div class="card mb-4">
-                    <div class="card-header">Especialidades más Demandadas de este Mes</div>
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        Especialidades más Demandadas de este Mes
+                        <button class="btn btn-primary btn-sm" onclick="mostrarReporte('pieChart')">Mostrar reporte</button>
+                    </div>
                     <div class="card-body d-flex justify-content-center align-items-center" style="height:320px;">
                         <canvas id="pieChart" width="300" height="300" style="max-width:300px;max-height:300px;"></canvas>
                     </div>
                 </div>
             </div>
         </div>
-        <!-- Tabla: Top 10 doctores con más consultas (Ejemplo) -->
         <div class="row mt-4">
             <div class="col-md-12">
                 <div class="card mb-4">
-                    <div class="card-header">Top 10 Doctores con Más Consultas Completadas Este Mes</div>
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        Top 10 Doctores con Más Consultas Completadas Este Mes
+                        <button class="btn btn-primary btn-sm" onclick="mostrarReporte('topDoctoresPagadasChart')">Mostrar reporte</button>
+                    </div>
                     <div class="card-body d-flex justify-content-center align-items-center" style="height:320px;">
                         <canvas id="topDoctoresPagadasChart" style="width:100%;max-width:1000px;max-height:300px;"></canvas>
                     </div>
                 </div>
             </div>
         </div>
-        <!-- Gráfico de Barras: Horas de uso de consultorios -->
         <div class="row mt-4">
             <div class="col-md-8">
                 <div class="card mb-4">
-                    <div class="card-header">Horas de Uso de Consultorios </div>
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        Horas de Uso de Consultorios
+                        <button class="btn btn-primary btn-sm" onclick="mostrarReporte('ocupacionChart')">Mostrar reporte</button>
+                    </div>
                     <div class="card-body d-flex justify-content-center align-items-center" style="height:320px;">
                         <canvas id="ocupacionChart" style="width:100%;max-width:1000px;max-height:300px;"></canvas>
                     </div>
                 </div>
             </div>
         </div>
-        <!-- Gráfico de Barras: Cantidad de citas por día de esta semana -->
         <div class="row mt-4">
             <div class="col-md-12">
                 <div class="card mb-4">
-                    <div class="card-header">Cantidad de Citas por Día de Esta Semana</div>
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        Cantidad de Citas por Día de Esta Semana
+                        <button class="btn btn-primary btn-sm" onclick="mostrarReporte('citasSemanaChart')">Mostrar reporte</button>
+                    </div>
                     <div class="card-body d-flex justify-content-center align-items-center" style="height:320px;">
                         <canvas id="citasSemanaChart" style="width:100%;max-width:1000px;max-height:300px;"></canvas>
                     </div>
                 </div>
             </div>
         </div>
+    </div>
+
+    <!-- Modal para mostrar reporte de gráfica -->
+    <div class="modal fade" id="modalReporteGrafica" tabindex="-1" aria-labelledby="modalReporteGraficaLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="modalReporteGraficaLabel">Reporte de Gráfica</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+          </div>
+          <div class="modal-body">
+            <div class="d-flex justify-content-center mb-3">
+              <canvas id="modalChart" style="max-width:700px;max-height:350px;"></canvas>
+            </div>
+            <div id="modalTableContainer"></div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+          </div>
+        </div>
+      </div>
     </div>
 @stop
 
@@ -402,6 +437,70 @@
                     }
                 });
             });
+
+        // Función para descargar el reporte de la gráfica como imagen PNG
+        let modalChartInstance = null;
+        function mostrarReporte(canvasId) {
+            // Obtener datos del gráfico original
+            const originalCanvas = document.getElementById(canvasId);
+            if (!originalCanvas) return;
+            const chartInstance = Chart.getChart(originalCanvas);
+            if (!chartInstance) return;
+
+            // Copiar datos y opciones
+            const chartData = JSON.parse(JSON.stringify(chartInstance.data));
+            const chartOptions = JSON.parse(JSON.stringify(chartInstance.options));
+            const chartType = chartInstance.config.type;
+
+            // Mostrar modal
+            const modal = new bootstrap.Modal(document.getElementById('modalReporteGrafica'));
+            document.getElementById('modalReporteGraficaLabel').innerText = chartInstance.options.plugins?.title?.text || 'Reporte de Gráfica';
+
+            // Limpiar canvas del modal
+            const modalCanvas = document.getElementById('modalChart');
+            if (modalChartInstance) {
+                modalChartInstance.destroy();
+            }
+            // Crear nueva gráfica en el modal
+            modalChartInstance = new Chart(modalCanvas, {
+                type: chartType,
+                data: chartData,
+                options: chartOptions
+            });
+
+            // Generar tabla de datos
+            let tableHtml = '<div class="table-responsive"><table class="table table-bordered table-sm"><thead><tr>';
+            // Encabezados
+            if (chartData.labels && chartData.labels.length > 0) {
+                tableHtml += '<th>Etiqueta</th>';
+                chartData.datasets.forEach(ds => {
+                    tableHtml += `<th>${ds.label || ''}</th>`;
+                });
+                tableHtml += '</tr></thead><tbody>';
+                // Filas
+                chartData.labels.forEach((label, i) => {
+                    tableHtml += `<tr><td>${label}</td>`;
+                    chartData.datasets.forEach(ds => {
+                        tableHtml += `<td>${Array.isArray(ds.data) ? (ds.data[i] ?? '') : ''}</td>`;
+                    });
+                    tableHtml += '</tr>';
+                });
+            } else if (chartData.datasets && chartData.datasets.length > 0) {
+                // Pie chart u otros sin labels
+                tableHtml += '<th>Dato</th></tr></thead><tbody>';
+                chartData.datasets.forEach(ds => {
+                    (ds.data || []).forEach((d, i) => {
+                        tableHtml += `<tr><td>${d}</td></tr>`;
+                    });
+                });
+            }
+            tableHtml += '</tbody></table></div>';
+            document.getElementById('modalTableContainer').innerHTML = tableHtml;
+
+            modal.show();
+        }
     </script>
     <script> console.log("Hi, I'm using the Laravel-AdminLTE package!"); </script>
+    <!-- Bootstrap 5 JS (asegúrate de tenerlo al final del body) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 @stop
