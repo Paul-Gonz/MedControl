@@ -82,12 +82,9 @@ Route::get('/Doctores/pdf', [DoctorController::class, 'reporte'])->name('doctore
 Route::get('/Doctores/pdf-especialidad', [DoctorController::class, 'reportePorEspecialidad'])->name('doctores.reporte.especialidad');
 
 
-
-Route::get('/citas/reporte', [App\Http\Controllers\CitaController::class, 'reporte'])->name('citas.reporte');
-
+Route::get('/citas/reporte/pdf', [CitaController::class, 'reportePdf'])->name('citas.reporte.pdf');
 
 
-Route::get('/citas/reporte', [App\Http\Controllers\CitaController::class, 'reporte'])->name('citas.reporte');
 
 Route::get('/pagos-doctores', [PagoDoctorController::class, 'index'])->name('pagos_doctores.index');
 Route::get('/pagos-doctores/crear', [PagoDoctorController::class, 'create'])->name('pagos_doctores.create');

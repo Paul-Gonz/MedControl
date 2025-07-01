@@ -10,6 +10,7 @@ use App\Models\Consultorio;
 use App\Models\Expediente;
 use App\Models\Factura;
 use Illuminate\Support\Facades\DB;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class CitaController extends Controller
 {
@@ -97,6 +98,27 @@ class CitaController extends Controller
     }
 
     return view('citas.reporte', compact('reporte', 'titulo', 'columna', 'tipo'));
+}
+
+
+public function reportePdf()
+{
+    $citas = Cita::with(['paciente'])->get();
+
+    $pdf = Pdf::loadView('citas_pdf', compact('citas'));
+    return $pdf->stream('reporte_citas.pdf'); // Para abrir en el navegador
+}
+
+public function show($id)
+{
+    // Si no necesitas mostrar un detalle, puedes redirigir o mostrar un mensaje.
+    // Aquí te muestro ambas opciones, elige la que prefieras:
+
+    // Opción 1: Redirige a la lista de citas con un mensaje (recomendado si no usas show)
+    return redirect()->route('citas.index')->with('info', 'La vista de detalle no está implementada.');
+
+    // Opción 2: Si prefieres mostrar una vista personalizada:
+    // return view('citas.show', ['id' => $id]);
 }
 
     public function edit($id)
