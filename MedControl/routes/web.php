@@ -116,7 +116,7 @@ Route::prefix('/Contabilidad')->group(function () {
 Route::get('/', [ContabilidadController::class, 'index'])->name('contabilidad.index');
 Route::post('/libro-diario', [ContabilidadController::class, 'libroDiario'])->name('contabilidad.libro_diario');
 Route::post('/libro-mayor', [ContabilidadController::class, 'libroMayor'])->name('contabilidad.libro_mayor');
+});
 
 Route::get('/agenda', [AgendaController::class, 'index'])->name('agenda.index');
 Route::get('/agenda/citas', [AgendaController::class, 'citas'])->name('agenda.citas');
-});

@@ -40,7 +40,7 @@ document.addEventListener('DOMContentLoaded', function() {
             center: 'title',
             right: 'dayGridMonth,timeGridWeek,timeGridDay'
         },
-        events: '{{ route('agenda.citas') }}',
+        events: @json(route('agenda.citas')),
         eventClick: function(info) {
             alert('Cita: ' + info.event.title);
         }
