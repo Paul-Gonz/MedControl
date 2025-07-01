@@ -67,14 +67,12 @@ Route::post('/TiposConsultorio/destroy/{id}', [App\Http\Controllers\TipoConsulto
 
 Route::resource('citas', CitaController::class);
 
-<<<<<<< HEAD
-Route::resource('citas', CitaController::class);
-=======
+
 Route::resource('pagos', App\Http\Controllers\PagoController::class);
 
 
-//reportes
 Route::get('/Pacientes/pdf', [PacientesController::class, 'reporte'])->name('pacientes.reporte');
 Route::get('/Doctores/pdf', [DoctorController::class, 'reporte'])->name('doctores.reporte');
 Route::get('/Doctores/pdf-especialidad', [DoctorController::class, 'reportePorEspecialidad'])->name('doctores.reporte.especialidad');
->>>>>>> 2956c8c2fbf9a0476986ee785bc4ddd464820a70
+
+Route::get('/citas/reporte', [App\Http\Controllers\CitaController::class, 'reporte'])->name('citas.reporte');
