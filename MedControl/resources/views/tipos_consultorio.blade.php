@@ -30,10 +30,6 @@
         </div>
         <div class="modal-body">
             <div class="form-group">
-                <label>Nombre del consultorio</label>
-                <input type="text" class="form-control" name="nombre_consultorio" required>
-            </div>
-            <div class="form-group">
                 <label>Descripción</label>
                 <textarea class="form-control" name="descripcion"></textarea>
             </div>
@@ -64,7 +60,6 @@
             <thead>
                 <tr>
                     <th>ID</th>
-                    <th>Nombre</th>
                     <th>Descripción</th>
                     <th>Equipamiento</th>
                     <th>Estado</th>
@@ -75,7 +70,6 @@
                 @foreach($tipos as $tipo)
                     <tr>
                         <td>{{ $tipo->tipo_consultorio_id }}</td>
-                        <td>{{ $tipo->nombre_consultorio }}</td>
                         <td>{{ $tipo->descripcion }}</td>
                         <td>{{ $tipo->equipamiento }}</td>
                         <td>
@@ -103,10 +97,6 @@
                                       </button>
                                     </div>
                                     <div class="modal-body">
-                                        <div class="form-group">
-                                            <label>Nombre del consultorio</label>
-                                            <input type="text" class="form-control" name="nombre_consultorio" value="{{ $tipo->nombre_consultorio }}" required>
-                                        </div>
                                         <div class="form-group">
                                             <label>Descripción</label>
                                             <textarea class="form-control" name="descripcion">{{ $tipo->descripcion }}</textarea>

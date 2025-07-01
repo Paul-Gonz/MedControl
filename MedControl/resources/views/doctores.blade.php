@@ -7,11 +7,46 @@
 @stop
 
 @section('content')
-<div class="mb-3">
+<div class="mb-3" style="margin-bottom: 2rem !important;">
+    <!-- Botón PDF -->
+    <button type="button" class="btn btn-danger mr-2" data-toggle="modal" data-target="#modalReporteEspecialidad">
+        PDF
+    </button>
     <!-- Botón para abrir el modal de nuevo doctor -->
     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#nuevoDoctorModal">
         Nuevo Doctor
     </button>
+</div>
+
+<!-- Modal para seleccionar especialidad y generar PDF -->
+<div class="modal fade" id="modalReporteEspecialidad" tabindex="-1" role="dialog" aria-labelledby="modalReporteEspecialidadLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <form id="formReporteEspecialidad" method="GET" action="{{ route('doctores.reporte.especialidad') }}" target="_blank">
+        <div class="modal-header">
+          <h5 class="modal-title" id="modalReporteEspecialidadLabel">Reporte por Especialidad</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="form-group">
+            <label for="especialidad_id">Especialidad</label>
+            <select class="form-control" name="especialidad_id" id="especialidad_id" required>
+              <option value="">Seleccione una especialidad</option>
+              @foreach($especialidades as $especialidad)
+                <option value="{{ $especialidad->especialidad_id }}">{{ $especialidad->nombre }}</option>
+              @endforeach
+            </select>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+          <button type="submit" class="btn btn-danger">Generar PDF</button>
+        </div>
+      </form>
+    </div>
+  </div>
 </div>
 
 <!-- Modal Nuevo Doctor -->
@@ -63,8 +98,22 @@
                         </select>
                     </div>
                     <div class="form-group">
-                        <label>ID de Cuenta</label>
-                        <input type="number" class="form-control" name="cuenta_id" required>
+                        <label>ID de Cuenta Bancaria</label>
+                        <select class="form-control select2" name="cuenta_id" required>
+                            <option value="">Seleccione una cuenta</option>
+                            @foreach($cuentas_bancarias as $cuenta)
+                                <option value="{{ $cuenta->id_cuenta_bancaria }}">{{ $cuenta->id_cuenta_bancaria }} - {{ $cuenta->nombre_titular }} - {{ $cuenta->banco }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Especialidad</label>
+                        <select class="form-control select2" name="especialidad_id" required>
+                            <option value="">Seleccione una especialidad</option>
+                            @foreach($especialidades as $especialidad)
+                                <option value="{{ $especialidad->especialidad_id }}">{{ $especialidad->nombre }}</option>
+                            @endforeach
+                        </select>
                     </div>
                 </div>
             </div>
@@ -91,6 +140,7 @@
                     <th>Teléfono</th>
                     <th>Email</th>
                     <th>Estado</th>
+                    <th>Especialidad</th>
                     <th>Acciones</th>
                 </tr>
             </thead>
@@ -111,6 +161,7 @@
                                 <span class="badge badge-danger">Inactivo</span>
                             @endif
                         </td>
+                        <td>{{ $doctor->especialidad_nombre ?? 'Sin asignar' }}</td>
                         <td>
                             <!-- Botón Editar -->
                             <button type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#editarDoctorModal{{ $doctor->doctor_id }}">
@@ -122,7 +173,7 @@
                                 <div class="modal-content">
                                   <form action="{{ route('doctores.update', $doctor->doctor_id) }}" method="POST">
                                     @csrf
-                                    @method('PUT')
+                                    <input type="hidden" name="doctor_id" value="{{ $doctor->doctor_id }}">
                                     <div class="modal-header">
                                       <h5 class="modal-title" id="editarDoctorModalLabel{{ $doctor->doctor_id }}">Editar Doctor</h5>
                                       <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
@@ -133,8 +184,15 @@
                                         <div class="row">
                                             <div class="col-md-6">
                                                 <div class="form-group">
-                                                    <label>ID de Cuenta</label>
-                                                    <input type="number" class="form-control" name="cuenta_id" value="{{ $doctor->cuenta_id }}" required>
+                                                    <label>ID de Cuenta Bancaria</label>
+                                                    <select class="form-control select2" name="cuenta_id" required>
+                                                        <option value="">Seleccione una cuenta</option>
+                                                        @foreach($cuentas_bancarias as $cuenta)
+                                                            <option value="{{ $cuenta->id_cuenta_bancaria }}" {{ $doctor->cuenta_id == $cuenta->id_cuenta_bancaria ? 'selected' : '' }}>
+                                                                {{ $cuenta->id_cuenta_bancaria }} - {{ $cuenta->nombre_titular }} - {{ $cuenta->banco }}
+                                                            </option>
+                                                        @endforeach
+                                                    </select>
                                                 </div>
                                                 <div class="form-group">
                                                     <label>Cédula Identidad</label>
@@ -169,6 +227,15 @@
                                                         <option value="0" {{ !$doctor->activo_inactivo ? 'selected' : '' }}>Inactivo</option>
                                                     </select>
                                                 </div>
+                                                <div class="form-group">
+                                                    <label>Especialidad</label>
+                                                    <select class="form-control select2" name="especialidad_id" required>
+                                                        <option value="">Seleccione una especialidad</option>
+                                                        @foreach($especialidades as $especialidad)
+                                                            <option value="{{ $especialidad->especialidad_id }}" {{ $doctor->especialidad_id == $especialidad->especialidad_id ? 'selected' : '' }}>{{ $especialidad->nombre }}</option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -197,11 +264,31 @@
 
 @section('css')
 {{-- Add here extra stylesheets --}}
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 {{-- <link rel="stylesheet" href="/css/admin_custom.css"> --}}
 @stop
 
 @section('js')
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 <script>
+    $(document).ready(function() {
+        $('.select2').select2({
+            width: '100%',
+            placeholder: 'Seleccione una cuenta',
+            allowClear: true,
+            dropdownParent: $('#nuevoDoctorModal')
+        });
+        // Para cada modal de editar doctor
+        @foreach($doctores as $doctor)
+            $('#editarDoctorModal{{ $doctor->doctor_id }} .select2').select2({
+                width: '100%',
+                placeholder: 'Seleccione una cuenta',
+                allowClear: true,
+                dropdownParent: $('#editarDoctorModal{{ $doctor->doctor_id }}')
+            });
+        @endforeach
+    });
     console.log("Hi, I'm using the Laravel-AdminLTE package!");
 </script>
 @stop

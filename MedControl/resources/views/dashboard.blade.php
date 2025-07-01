@@ -65,14 +65,6 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-4">
-                <div class="card">
-                    <div class="card-header">Calendario (Ejemplo)</div>
-                    <div class="card-body">
-                        <div id="calendar"></div>
-                    </div>
-                </div>
-            </div>
         </div>
     </div>
 @stop
@@ -81,19 +73,12 @@
     {{-- Add here extra stylesheets --}}
     {{-- <link rel="stylesheet" href="/css/admin_custom.css"> --}}
     <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/main.min.css" rel="stylesheet">
-    <style>
-        #calendar {
-            max-width: 900px;
-            margin: 0 auto;
-        }
-    </style>
 @stop
 
 @section('js')
     <!-- Chart.js CDN (puedes cambiarlo por asset si lo tienes local) -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <!-- FullCalendar CDN -->
-    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/main.min.js"></script>
     <script>
         // Gráfico de Barras de ejemplo
         const ctxBar = document.getElementById('barChart').getContext('2d');

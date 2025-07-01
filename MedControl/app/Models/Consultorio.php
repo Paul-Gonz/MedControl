@@ -11,6 +11,7 @@ class Consultorio extends Model
     public $timestamps = false;
 
     protected $fillable = [
+        'nombre_consultorio',
         'tipo_id',
         'ubicacion',
         'estado_consultorio',

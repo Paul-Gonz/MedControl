@@ -7,12 +7,26 @@
 @stop
 
 @section('content')
-<div class="mb-3">
+<div class="mb-3 d-flex justify-content-end">
+    <!-- Botón PDF -->
+    <a href="{{ route('pacientes.reporte') }}" target="_blank" class="btn btn-danger mr-2">
+        PDF
+    </a>
     <!-- Botón para abrir el modal de nuevo paciente -->
     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#nuevoPacienteModal">
         Nuevo Paciente
     </button>
 </div>
+
+<!-- Barra de búsqueda -->
+<form method="GET" action="{{ route('pacientes.index') }}" class="mb-3">
+    <div class="input-group">
+        <input type="text" name="buscar" class="form-control" placeholder="Buscar paciente..." value="{{ request('buscar') }}">
+        <div class="input-group-append">
+            <button class="btn btn-outline-secondary" type="submit">Buscar</button>
+        </div>
+    </div>
+</form>
 
 <!-- Modal Nuevo Paciente -->
 <div class="modal fade" id="nuevoPacienteModal" tabindex="-1" role="dialog" aria-labelledby="nuevoPacienteModalLabel" aria-hidden="true">

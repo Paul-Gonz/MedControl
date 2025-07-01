@@ -316,7 +316,7 @@ return [
         ],
          [
             'text' => 'Cerrar Sesión',
-            'url' => 'logout',
+            'url' => '/',
             'icon' => 'fas fa-fw fa-sign-out-alt',
             'topnav_right' => true
         ],
@@ -365,6 +365,11 @@ return [
             'icon' => 'fas fa-fw fa-calendar-check',
         ],
         [
+            'text' => 'Pagos',
+            'url' => 'pagos',
+            'icon' => 'fas fa-fw fa-credit-card',
+        ],
+        [
             'text' => 'Doctores',
             'url' => '/Doctores',
             'icon' => 'fas fa-fw fa-user-md',
@@ -389,7 +394,6 @@ return [
             'url' => '/Usuarios',
             'icon' => 'fas fa-fw fa-users-cog',
         ],
-
         
         ['header' => 'REPORTES'],
         

@@ -4,17 +4,34 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Paciente;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class PacientesController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
-    {
-        $pacientes = Paciente::all();
-        return view('pacientes', compact('pacientes'));
+    public function index(Request $request)
+{
+    $query = Paciente::query();
+
+    if ($request->filled('buscar')) {
+        $buscar = $request->buscar;
+        $query->where(function($q) use ($buscar) {
+            $q->where('cedula_identidad', 'like', "%$buscar%")
+              ->orWhere('nombre_completo', 'like', "%$buscar%")
+              ->orWhere('fecha_nacimiento', 'like', "%$buscar%")
+              ->orWhere('contacto_telefono', 'like', "%$buscar%")
+              ->orWhere('contacto_email', 'like', "%$buscar%")
+              ->orWhere('datos_relevantes', 'like', "%$buscar%")
+              ->orWhere('fecha_registro', 'like', "%$buscar%")
+              ->orWhere('activo_inactivo', 'like', "%$buscar%");
+        });
     }
+
+    $pacientes = $query->get();
+    return view('pacientes', compact('pacientes'));
+}
 
     /**
      * Show the form for creating a new resource.
@@ -29,6 +46,17 @@ class PacientesController extends Controller
      */
     public function store(Request $request)
     {
+        $request->validate([
+            'cedula_identidad'   => 'required|string|max:50',
+            'nombre_completo'    => 'required|string|max:255',
+            'fecha_nacimiento'   => 'required|date',
+            'contacto_telefono'  => 'nullable|string|max:50',
+            'contacto_email'     => 'nullable|email|max:255',
+            'datos_relevantes'   => 'nullable|string',
+            'fecha_registro'     => 'required|date',
+            'activo_inactivo'    => 'required|boolean',
+        ]);
+
         $paciente = new Paciente();
         $paciente->cedula_identidad = $request->cedula_identidad;
         $paciente->nombre_completo = $request->nombre_completo;
@@ -40,7 +68,6 @@ class PacientesController extends Controller
         $paciente->activo_inactivo = $request->activo_inactivo;
 
         $paciente->save();
-
 
         return redirect()->route('pacientes.index')->with('success', 'Paciente creado correctamente.');
     }
@@ -65,22 +92,34 @@ class PacientesController extends Controller
      * Update the specified resource in storage.
      */
     public function update(Request $request)
-    {
-        $paciente = Paciente::findOrFail($request->paciente_id);
+{
+    $request->validate([
+        'paciente_id'        => 'required|exists:pacientes,paciente_id',
+        'cedula_identidad'   => 'required|string|max:50',
+        'nombre_completo'    => 'required|string|max:255',
+        'fecha_nacimiento'   => 'required|date',
+        'contacto_telefono'  => 'nullable|string|max:50',
+        'contacto_email'     => 'nullable|email|max:255',
+        'datos_relevantes'   => 'nullable|string',
+        'fecha_registro'     => 'required|date',
+        'activo_inactivo'    => 'required|boolean',
+    ]);
 
-        $paciente->cedula_identidad = $request->cedula_identidad;
-        $paciente->nombre_completo = $request->nombre_completo;
-        $paciente->fecha_nacimiento = $request->fecha_nacimiento;
-        $paciente->contacto_telefono = $request->contacto_telefono;
-        $paciente->contacto_email = $request->contacto_email;
-        $paciente->datos_relevantes = $request->datos_relevantes;
-        $paciente->fecha_registro = $request->fecha_registro;
-        $paciente->activo_inactivo = $request->activo_inactivo;
+    $paciente = Paciente::findOrFail($request->paciente_id);
 
-        $paciente->save();
+    $paciente->cedula_identidad = $request->cedula_identidad;
+    $paciente->nombre_completo = $request->nombre_completo;
+    $paciente->fecha_nacimiento = $request->fecha_nacimiento;
+    $paciente->contacto_telefono = $request->contacto_telefono;
+    $paciente->contacto_email = $request->contacto_email;
+    $paciente->datos_relevantes = $request->datos_relevantes;
+    $paciente->fecha_registro = $request->fecha_registro;
+    $paciente->activo_inactivo = $request->activo_inactivo;
 
-        return redirect()->route('pacientes.index')->with('success', 'Paciente actualizado correctamente.');
-    }
+    $paciente->save();
+
+    return redirect()->route('pacientes.index')->with('success', 'Paciente actualizado correctamente.');
+}
 
     /**
      * Remove the specified resource from storage.
@@ -90,5 +129,13 @@ class PacientesController extends Controller
         Paciente::destroy($request->paciente_id);
 
         return redirect()->route('pacientes.index')->with('success', 'Paciente eliminado correctamente.');
+    }
+
+    public function reporte()
+    {
+        $pacientes = Paciente::all();
+
+        $pdf = PDF::loadView('pacientesPDF', compact('pacientes'));
+        return $pdf->stream('reportePacientes.pdf');
     }
 }

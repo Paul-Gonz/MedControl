@@ -31,6 +31,7 @@
                     <th>Fin</th>
                     <th>Estado</th>
                     <th>Activo</th>
+                    <th>Costo</th>
                     <th>Acciones</th>
                 </tr>
             </thead>
@@ -38,12 +39,13 @@
             @foreach($citas as $cita)
                 <tr>
                     <td>{{ $cita->cita_id }}</td>
-                    <td>{{ $cita->paciente->nombre ?? $cita->paciente_id }}</td>
+                    <td>{{ $cita->paciente->nombre_completo ?? $cita->paciente_id }}</td>
                     <td>{{ $cita->motivo }}</td>
                     <td>{{ $cita->fecha_hora_inicio }}</td>
                     <td>{{ $cita->fecha_hora_fin }}</td>
                     <td>{{ ucfirst($cita->estado_cita) }}</td>
                     <td>{{ $cita->activo_inactivo ? 'Sí' : 'No' }}</td>
+                    <td>{{ optional($cita->facturas->first())->subtotal !== null ? '$' . number_format($cita->facturas->first()->subtotal, 2) : '-' }}</td>
                     <td>
                         <a href="{{ route('citas.edit', $cita->cita_id) }}" class="btn btn-primary btn-sm">Editar</a>
                         <form action="{{ route('citas.destroy', $cita->cita_id) }}" method="POST" style="display:inline;">
@@ -68,24 +70,48 @@
             @endif
 
             <div class="mb-3">
-                <label for="paciente_id" class="form-label">Paciente (ID)</label>
-                <input type="number" name="paciente_id" class="form-control" 
-                  value="{{ old('paciente_id', $cita->paciente_id ?? '') }}" required>
+                <label for="paciente_id" class="form-label">Paciente</label>
+                <select name="paciente_id" class="form-control select2-paciente" required>
+                    <option value="">Seleccione un paciente</option>
+                    @foreach($pacientes as $paciente)
+                        <option value="{{ $paciente->paciente_id }}" {{ old('paciente_id', $cita->paciente_id ?? '') == $paciente->paciente_id ? 'selected' : '' }}>
+                            {{ $paciente->paciente_id }} - {{ $paciente->nombre_completo }} - {{ $paciente->cedula_identidad }}
+                        </option>
+                    @endforeach
+                </select>
             </div>
             <div class="mb-3">
-                <label for="doctor_especialista_id" class="form-label">Doctor Especialista (ID)</label>
-                <input type="number" name="doctor_especialista_id" class="form-control" 
-                  value="{{ old('doctor_especialista_id', $cita->doctor_especialista_id ?? '') }}" required>
+                <label for="doctor_especialista_id" class="form-label">Doctor Especialista</label>
+                <select name="doctor_especialista_id" class="form-control select2-doctor" required>
+                    <option value="">Seleccione un doctor</option>
+                    @foreach($doctores as $doctor)
+                        <option value="{{ $doctor->relacion_id }}" {{ old('doctor_especialista_id', $cita->doctor_especialista_id ?? '') == $doctor->relacion_id ? 'selected' : '' }}>
+                            {{ $doctor->doctor_id }} - {{ $doctor->nombre_completo }} - {{ $doctor->especialidad_nombre }}
+                        </option>
+                    @endforeach
+                </select>
             </div>
             <div class="mb-3">
-                <label for="consultorio_id" class="form-label">Consultorio (ID)</label>
-                <input type="number" name="consultorio_id" class="form-control" 
-                  value="{{ old('consultorio_id', $cita->consultorio_id ?? '') }}" required>
+                <label for="consultorio_id" class="form-label">Consultorio</label>
+                <select name="consultorio_id" class="form-control" required>
+                    <option value="">Seleccione un consultorio</option>
+                    @foreach($consultorios as $consultorio)
+                        <option value="{{ $consultorio->consultorio_id }}" {{ old('consultorio_id', $cita->consultorio_id ?? '') == $consultorio->consultorio_id ? 'selected' : '' }}>
+                            {{ $consultorio->consultorio_id }} - {{ $consultorio->nombre_consultorio ?? 'Consultorio' }} - {{ $consultorio->tipoConsultorio->descripcion ?? 'Tipo Sin Describir' }}
+                        </option>
+                    @endforeach
+                </select>
             </div>
             <div class="mb-3">
-                <label for="expediente_id" class="form-label">Expediente (ID)</label>
-                <input type="number" name="expediente_id" class="form-control" 
-                  value="{{ old('expediente_id', $cita->expediente_id ?? '') }}" required>
+                <label for="expediente_id" class="form-label">Expediente</label>
+                <select name="expediente_id" class="form-control" required>
+                    <option value="">Seleccione un expediente</option>
+                    @foreach($expedientes as $expediente)
+                        <option value="{{ $expediente->expediente_id }}" {{ old('expediente_id', $cita->expediente_id ?? '') == $expediente->expediente_id ? 'selected' : '' }}>
+                            {{ $expediente->expediente_id }} - {{ $expediente->descripcion ?? 'Expediente' }}
+                        </option>
+                    @endforeach
+                </select>
             </div>
             <div class="mb-3">
                 <label for="motivo" class="form-label">Motivo</label>
@@ -118,6 +144,10 @@
                     <option value="0" {{ old('activo_inactivo', $cita->activo_inactivo ?? 1) == 0 ? 'selected' : '' }}>Inactivo</option>
                 </select>
             </div>
+            <div class="mb-3">
+                <label for="costo" class="form-label">Costo de la Cita en $</label>
+                <input type="number" step="0.01" name="costo" class="form-control" value="{{ old('costo', $cita->costo ?? '') }}" required>
+            </div>
             <button type="submit" class="btn btn-{{ $isEdit ? 'primary' : 'success' }}">
                 {{ $isEdit ? 'Actualizar' : 'Guardar' }}
             </button>
@@ -125,4 +155,26 @@
         </form>
     @endif
 </div>
+@endsection
+
+@section('css')
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+@endsection
+
+@section('js')
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $('.select2-doctor').select2({
+            width: '100%',
+            placeholder: 'Seleccione un doctor',
+            allowClear: true
+        });
+        $('.select2-paciente').select2({
+            width: '100%',
+            placeholder: 'Seleccione un paciente',
+            allowClear: true
+        });
+    });
+</script>
 @endsection

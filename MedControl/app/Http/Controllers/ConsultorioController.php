@@ -18,6 +18,7 @@ class ConsultorioController extends Controller
     public function store(Request $request)
     {
         $validatedData = $request->validate([
+            'nombre_consultorio' => 'required|string|max:50',
             'tipo_id' => 'required|exists:tipo_consultorio,tipo_consultorio_id',
             'ubicacion' => 'required|string|max:255',
             'estado_consultorio' => 'required|in:disponible,en_mantenimiento,no_disponible',
@@ -33,6 +34,7 @@ class ConsultorioController extends Controller
         $consultorio = Consultorio::findOrFail($id);
 
         $validatedData = $request->validate([
+            'nombre_consultorio' => 'required|string|max:50',
             'tipo_id' => 'required|exists:tipo_consultorio,tipo_consultorio_id',
             'ubicacion' => 'required|string|max:255',
             'estado_consultorio' => 'required|in:disponible,en_mantenimiento,no_disponible',
