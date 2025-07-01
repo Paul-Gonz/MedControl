@@ -1,47 +1,20 @@
 @extends('adminlte::page')
 
-@section('title', 'Contabilidad')
+@section('title', 'Reportes: Facturación y Pagos')
 
 @section('content_header')
-    <h1>Pagos y Facturación</h1>
+    <h1>Reportes: Facturación y Pagos</h1>
 @stop
 
 @section('content')
-    <div class="row">
-        <div class="col-md-6 d-flex align-items-end">
-            <form action="{{ route('contabilidad.libro_diario') }}" method="POST" class="w-100 me-2">
-                @csrf
-                <div class="form-group">
-                    <label>Desde</label>
-                    <input type="date" name="desde" class="form-control" required>
-                </div>
-                <div class="form-group">
-                    <label>Hasta</label>
-                    <input type="date" name="hasta" class="form-control" required>
-                </div>
-                <button type="submit" class="btn btn-primary w-100">Generar Libro Diario</button>
-            </form>
-        </div>
-        <div class="col-md-6 d-flex align-items-end">
-            <form action="{{ route('contabilidad.libro_mayor') }}" method="POST" class="w-100 ms-2">
-                @csrf
-                <div class="form-group">
-                    <label>Mes</label>
-                    <input type="month" name="mes" class="form-control" required>
-                </div>
-                <button type="submit" class="btn btn-success w-100">Generar Libro Mayor</button>
-            </form>
-        </div>
-    </div>
-    <div> 
-        <p></p>
-    </div>
-     <div class="row mb-4">
-        <div class="col-md-12">
-            <div class="card mb-4">
-                <div class="card-header">Ingresos y Egresos Mensuales</div>
-                <div class="card-body d-flex justify-content-center align-items-center" style="height:320px;">
-                    <canvas id="ingresosChart" style="width:100%;max-width:1000px;max-height:300px;"></canvas>
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-12">
+                <div class="card mb-4">
+                    <div class="card-header">Ingresos y Egresos Mensuales</div>
+                    <div class="card-body d-flex justify-content-center align-items-center" style="height:320px;">
+                        <canvas id="ingresosChart" style="width:100%;max-width:1000px;max-height:300px;"></canvas>
+                    </div>
                 </div>
             </div>
         </div>

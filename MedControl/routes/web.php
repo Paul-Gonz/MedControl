@@ -25,6 +25,8 @@ Route::get('/dashboard', function () {
 });
 Route::get('/dashboard/citas-por-mes', [DashboardController::class, 'citasPorMes'])->name('dashboard.citasPorMes');
 Route::get('/dashboard/especialidades-mas-demandadas', [DashboardController::class, 'especialidadesMasDemandadas'])->name('dashboard.especialidadesMasDemandadas');
+// Gráfica de ingresos y egresos mensuales
+Route::get('/dashboard/ingresos-egresos', [DashboardController::class, 'ingresosEgresosPorMes'])->name('dashboard.ingresosEgresos');
 
 
 

@@ -86,4 +86,53 @@ class DashboardController extends Controller
             'mes' => $nombreMes
         ]);
     }
+
+    public function ingresosEgresosPorMes()
+    {
+        try {
+            // Rango: últimos 6 meses incluyendo el actual
+            $start = Carbon::now()->subMonths(5)->startOfMonth();
+            $end = Carbon::now()->endOfMonth();
+            \App::setLocale('es');
+            $meses = collect();
+            $period = \Carbon\CarbonPeriod::create($start, '1 month', $end);
+            foreach ($period as $date) {
+                $meses->push([
+                    'mes' => $date->format('Y-m'),
+                    'nombre' => ucfirst($date->isoFormat('MMMM YYYY'))
+                ]);
+            }
+
+            // Ingresos: pagos de pacientes (tabla pagos)
+            $ingresos = DB::table('pagos')
+                ->selectRaw('DATE_FORMAT(fecha_pago, "%Y-%m") as mes, SUM(monto) as total')
+                ->whereBetween('fecha_pago', [$start, $end])
+                ->groupBy('mes')
+                ->pluck('total', 'mes');
+
+            // Egresos: pagos a doctores (tabla pago_doctores)
+            $egresos = DB::table('pagos_doctores')
+                ->selectRaw('DATE_FORMAT(fecha_pago, "%Y-%m") as mes, SUM(monto) as total')
+                ->whereBetween('fecha_pago', [$start, $end])
+                ->groupBy('mes')
+                ->pluck('total', 'mes');
+
+            $result = [
+                'labels' => $meses->pluck('nombre'),
+                'ingresos' => [],
+                'egresos' => [],
+                'total' => []
+            ];
+            foreach ($meses as $mes) {
+                $ing = (float)($ingresos[$mes['mes']] ?? 0);
+                $egr = (float)($egresos[$mes['mes']] ?? 0);
+                $result['ingresos'][] = $ing;
+                $result['egresos'][] = $egr;
+                $result['total'][] = $ing - $egr;
+            }
+            return response()->json($result);
+        } catch (\Throwable $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
+    }
 }

@@ -8,9 +8,15 @@
 
 @section('content')
     <div class="container">
-        <div class="row mb-3">
-            <div class="col-12 text-end">
-                <!-- Botón de pagos a doctores eliminado -->
+        <!-- Gráfico de Línea: Ingresos y Egresos mensuales (funcional) -->
+        <div class="row mt-4">
+            <div class="col-md-12">
+                <div class="card mb-4">
+                    <div class="card-header">Ingresos y Egresos Mensuales</div>
+                    <div class="card-body d-flex justify-content-center align-items-center" style="height:320px;">
+                        <canvas id="ingresosChart" style="width:100%;max-width:1000px;max-height:300px;"></canvas>
+                    </div>
+                </div>
             </div>
         </div>
         <div class="row justify-content-center">
@@ -22,6 +28,7 @@
                     </div>
                 </div>
             </div>
+            
             <div class="col-md-6">
                 <div class="card mb-4">
                     <div class="card-header">Especialidades más Demandadas de este Mes</div>
@@ -42,7 +49,7 @@
                 </div>
             </div>
         </div>
-        <!-- Gráfico de Barras: Horas de uso de consultorios (ejemplo) y minicalendario -->
+        <!-- Gráfico de Barras: Horas de uso de consultorios -->
         <div class="row mt-4">
             <div class="col-md-8">
                 <div class="card mb-4">
@@ -168,75 +175,77 @@
                 });
             });
 
-        // Gráfico de Línea: Ingresos y Egresos mensuales (ejemplo)
-        const ingresosChartContainer = document.getElementById('ingresosChart')?.parentElement;
-        if (ingresosChartContainer) {
-            ingresosChartContainer.parentElement.parentElement.remove(); // Elimina el gráfico anterior si existe
-        }
-        document.querySelector('.row.justify-content-center').insertAdjacentHTML('beforeend', `
-            <div class="col-md-12">
-                <div class="card mb-4">
-                    <div class="card-header">Ingresos y Egresos Mensuales (Ejemplo)</div>
-                    <div class="card-body d-flex justify-content-center align-items-center" style="height:320px;">
-                        <canvas id="ingresosChart" style="width:100%;max-width:1000px;max-height:300px;"></canvas>
-                    </div>
-                </div>
-            </div>
-        `);
-
-        const ctxIngresos = document.getElementById('ingresosChart').getContext('2d');
-        new Chart(ctxIngresos, {
-            type: 'line',
-            data: {
-                labels: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo'],
-                datasets: [
-                    {
-                        label: 'Ingresos ($)',
-                        data: [1200, 1500, 1100, 1800, 1600],
-                        fill: false,
-                        borderColor: 'rgba(255, 159, 64, 1)',
-                        backgroundColor: 'rgba(255, 159, 64, 0.7)',
-                        tension: 0.3,
-                        pointBackgroundColor: 'rgba(255, 159, 64, 1)',
-                        pointBorderColor: '#fff',
-                        pointRadius: 6,
-                        pointHoverRadius: 8
+        // Gráfico de Línea: Ingresos y Egresos mensuales (funcional)
+        fetch("{{ route('dashboard.ingresosEgresos') }}")
+            .then(response => response.json())
+            .then(data => {
+                const ctxIngresos = document.getElementById('ingresosChart').getContext('2d');
+                new Chart(ctxIngresos, {
+                    type: 'line',
+                    data: {
+                        labels: data.labels,
+                        datasets: [
+                            {
+                                label: 'Ingresos ($)',
+                                data: data.ingresos,
+                                fill: false,
+                                borderColor: 'rgba(255, 159, 64, 1)',
+                                backgroundColor: 'rgba(255, 159, 64, 0.7)',
+                                tension: 0.3,
+                                pointBackgroundColor: 'rgba(255, 159, 64, 1)',
+                                pointBorderColor: '#fff',
+                                pointRadius: 6,
+                                pointHoverRadius: 8
+                            },
+                            {
+                                label: 'Egresos ($)',
+                                data: data.egresos,
+                                fill: false,
+                                borderColor: 'rgba(54, 162, 235, 1)',
+                                backgroundColor: 'rgba(54, 162, 235, 0.7)',
+                                tension: 0.3,
+                                pointBackgroundColor: 'rgba(54, 162, 235, 1)',
+                                pointBorderColor: '#fff',
+                                pointRadius: 6,
+                                pointHoverRadius: 8
+                            },
+                            {
+                                label: 'Total (Ingresos - Egresos)',
+                                data: data.total,
+                                fill: false,
+                                borderColor: 'rgba(40, 167, 69, 1)',
+                                backgroundColor: 'rgba(40, 167, 69, 0.7)',
+                                borderDash: [5, 5],
+                                tension: 0.3,
+                                pointBackgroundColor: 'rgba(40, 167, 69, 1)',
+                                pointBorderColor: '#fff',
+                                pointRadius: 6,
+                                pointHoverRadius: 8
+                            }
+                        ]
                     },
-                    {
-                        label: 'Egresos ($)',
-                        data: [800, 900, 950, 1000, 1100],
-                        fill: false,
-                        borderColor: 'rgba(54, 162, 235, 1)',
-                        backgroundColor: 'rgba(54, 162, 235, 0.7)',
-                        tension: 0.3,
-                        pointBackgroundColor: 'rgba(54, 162, 235, 1)',
-                        pointBorderColor: '#fff',
-                        pointRadius: 6,
-                        pointHoverRadius: 8
-                    }
-                ]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                scales: {
-                    x: {
-                        display: true,
-                        title: {
-                            display: true,
-                            text: 'Mes'
-                        }
-                    },
-                    y: {
-                        beginAtZero: true,
-                        title: {
-                            display: true,
-                            text: 'Monto ($)'
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            x: {
+                                display: true,
+                                title: {
+                                    display: true,
+                                    text: 'Mes'
+                                }
+                            },
+                            y: {
+                                beginAtZero: true,
+                                title: {
+                                    display: true,
+                                    text: 'Monto ($)'
+                                }
+                            }
                         }
                     }
-                }
-            }
-        });
+                });
+            });
 
         // Gráfico de Barras: Horas de uso de consultorios (ejemplo)
         const ocupacionChartContainer = document.getElementById('ocupacionChart')?.parentElement;
