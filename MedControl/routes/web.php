@@ -100,12 +100,9 @@ Route::get('citas/reporte/pdf', [CitaController::class, 'reportePdf'])->name('ci
 
 
 Route::get('/pagos-doctores', [PagoDoctorController::class, 'index'])->name('pagos_doctores.index');
-Route::get('/pagos-doctores/crear', [PagoDoctorController::class, 'create'])->name('pagos_doctores.create');
 Route::post('/pagos-doctores', [PagoDoctorController::class, 'store'])->name('pagos_doctores.store');
-
-Route::get('/pagos-doctores', [PagoDoctorController::class, 'index'])->name('pagos_doctores.index');
-Route::get('/pagos-doctores/crear', [PagoDoctorController::class, 'create'])->name('pagos_doctores.create');
-Route::post('/pagos-doctores', [PagoDoctorController::class, 'store'])->name('pagos_doctores.store');
+Route::put('/pagos-doctores/update/{id}', [PagoDoctorController::class, 'update'])->name('pagos_doctores.update');
+Route::delete('/pagos-doctores/destroy/{id}', [PagoDoctorController::class, 'destroy'])->name('pagos_doctores.destroy');
 
 Route::get('/citas/reporte', [App\Http\Controllers\CitaController::class, 'reporte'])->name('citas.reporte');
 

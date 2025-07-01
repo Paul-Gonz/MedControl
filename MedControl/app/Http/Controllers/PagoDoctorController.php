@@ -11,19 +11,14 @@ class PagoDoctorController extends Controller
     public function index()
     {
         $pagos = PagoDoctor::with('doctor')->orderBy('fecha_pago', 'desc')->get();
-        return view('pagos_doctores', compact('pagos'));
-    }
-
-    public function create()
-    {
         $doctores = Doctor::all();
-        return view('pagos_doctores.create', compact('doctores'));
+        return view('pagos_doctores', compact('pagos', 'doctores'));
     }
 
     public function store(Request $request)
     {
         $request->validate([
-            'doctor_id' => 'required|exists:doctores,id',
+            'doctor_id' => 'required|exists:doctores,doctor_id',
             'monto' => 'required|numeric|min:0',
             'fecha_pago' => 'required|date',
             'metodo_pago' => 'nullable|string|max:255',
@@ -31,5 +26,26 @@ class PagoDoctorController extends Controller
         ]);
         PagoDoctor::create($request->all());
         return redirect()->route('pagos_doctores.index')->with('success', 'Pago registrado correctamente.');
+    }
+
+    public function update(Request $request, $id)
+    {
+        $request->validate([
+            'doctor_id' => 'required|exists:doctores,doctor_id',
+            'monto' => 'required|numeric|min:0',
+            'fecha_pago' => 'required|date',
+            'metodo_pago' => 'nullable|string|max:255',
+            'observaciones' => 'nullable|string',
+        ]);
+        $pago = PagoDoctor::findOrFail($id);
+        $pago->update($request->all());
+        return redirect()->route('pagos_doctores.index')->with('success', 'Pago actualizado correctamente.');
+    }
+
+    public function destroy($id)
+    {
+        $pago = PagoDoctor::findOrFail($id);
+        $pago->delete();
+        return redirect()->route('pagos_doctores.index')->with('success', 'Pago eliminado correctamente.');
     }
 }
