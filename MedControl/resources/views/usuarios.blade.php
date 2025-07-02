@@ -101,7 +101,7 @@
                                 <div class="modal-content">
                                   <form action="{{ route('usuarios.update', $usuario->usuario_id) }}" method="POST">
                                     @csrf
-                                    @method('PUT')
+                                    @method('POST')
                                     <div class="modal-header">
                                       <h5 class="modal-title" id="editarUsuarioModalLabel{{ $usuario->usuario_id }}">Editar Usuario</h5>
                                       <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
@@ -145,12 +145,6 @@
                                 </div>
                               </div>
                             </div>
-                            <!-- Botón Eliminar -->
-                            <form action="{{ route('usuarios.destroy', $usuario->usuario_id) }}" method="POST" style="display:inline;">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('¿Seguro que deseas eliminar este usuario?')">Eliminar</button>
-                            </form>
                         </td>
                     </tr>
                 @endforeach

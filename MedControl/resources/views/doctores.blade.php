@@ -251,12 +251,6 @@
                                 </div>
                               </div>
                             </div>
-                            <!-- Botón Eliminar -->
-                            <form action="{{ route('doctores.destroy', $doctor->doctor_id) }}" method="POST" style="display:inline;">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('¿Seguro que deseas eliminar este doctor?')">Eliminar</button>
-                            </form>
                         </td>
                     </tr>
                 @endforeach

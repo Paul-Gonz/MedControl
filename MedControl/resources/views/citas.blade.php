@@ -86,7 +86,7 @@
                         <form action="{{ route('citas.destroy', $cita->cita_id) }}" method="POST" style="display:inline;">
                             @csrf
                             @method('DELETE')
-                            <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('¿Eliminar esta cita?')">Eliminar</button>
+                            
                         </form>
                         @if($cita->estado_cita !== 'completada')
                             <button type="button" class="btn btn-success btn-sm btn-completar-cita" data-id="{{ $cita->cita_id }}">Completar</button>

@@ -20,7 +20,7 @@ use App\Http\Controllers\AgendaController;
 Route::get('/', function () {
     return view('login');
 });
-
+ 
 Route::get('/dashboard', function () {
     return view('dashboard');
 });

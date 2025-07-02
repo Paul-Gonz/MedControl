@@ -181,12 +181,6 @@
     </div>
   </div>
 </div>
-                            <!-- Botón Eliminar -->
-                            <form action="{{ route('expedientes.destroy') }}" method="POST" style="display:inline;">
-                                @csrf
-                                <input type="hidden" name="expediente_id" value="{{ $expediente->expediente_id }}">
-                                <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('¿Seguro que deseas eliminar este expediente?')">Eliminar</button>
-                            </form>
                         </td>
                     </tr>
                 @endforeach

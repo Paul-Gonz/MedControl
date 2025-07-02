@@ -339,11 +339,6 @@ return [
             'url' => 'dashboard', 
             'icon' => 'fas fa-fw fa-home',
         ],
-        [
-            'text' => 'Agenda y Calendario',
-            'url' => 'agenda',
-            'icon' => 'far fa-fw fa-calendar',
-        ],
         
          ['header' => 'GESTION DE DATOS'],
 

@@ -149,7 +149,7 @@
                             {
                                 label: 'Canceladas',
                                 data: data.canceladas,
-                                backgroundColor: 'rgba(220, 53, 69, 0.7)'
+                                backgroundColor: 'rgba(220, 53, 69, 0.7)' 
                             }
                         ]
                     },
