@@ -468,6 +468,7 @@
             if (modalChartInstance) {
                 modalChartInstance.destroy();
             }
+            
             // Crear nueva gráfica en el modal
             modalChartInstance = new Chart(modalCanvas, {
                 type: chartType,
