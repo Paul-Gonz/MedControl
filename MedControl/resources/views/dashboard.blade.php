@@ -22,6 +22,7 @@
                 </div>
             </div>
         </div>
+
         <div class="row justify-content-center">
             <div class="col-md-6">
                 <div class="card mb-4">
@@ -34,6 +35,7 @@
                     </div>
                 </div>
             </div>
+
             <div class="col-md-6">
                 <div class="card mb-4">
                     <div class="card-header d-flex justify-content-between align-items-center">
@@ -46,6 +48,7 @@
                 </div>
             </div>
         </div>
+        
         <div class="row mt-4">
             <div class="col-md-12">
                 <div class="card mb-4">
@@ -158,7 +161,7 @@
                 });
             });
 
-        // Gráfico de Torta: Distribución de citas por especialidad (dinámico)
+        // Gráfico de Torta: Distribución de citas por especialidad
         fetch("{{ route('dashboard.especialidadesMasDemandadas') }}")
             .then(response => response.json())
             .then(data => {
@@ -195,6 +198,7 @@
                     backgroundColor = ['#e0e0e0'];
                     borderColor = ['#bdbdbd'];
                 }
+
                 new Chart(ctxPie, {
                     type: 'pie',
                     data: {
@@ -460,6 +464,7 @@
             if (modalChartInstance) {
                 modalChartInstance.destroy();
             }
+            
             // Crear nueva gráfica en el modal
             modalChartInstance = new Chart(modalCanvas, {
                 type: chartType,
@@ -522,7 +527,6 @@
         });
     </script>
     <script> console.log("Hi, I'm using the Laravel-AdminLTE package!"); </script>
-    <!-- Bootstrap 5 JS (asegúrate de tenerlo al final del body) -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
