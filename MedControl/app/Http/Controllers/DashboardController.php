@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\App;
 
 class DashboardController extends Controller
 {
@@ -17,14 +18,14 @@ class DashboardController extends Controller
         // Estados a mostrar: programada, completada, cancelada
         $estados = ['programada', 'completada', 'cancelada'];
 
-        // Generar los meses del rango (en español)
-        \App::setLocale('es'); // Forzar español para los nombres de meses
+        // Generar los meses del rango
+        App::setLocale('es');
         $meses = collect();
         $period = \Carbon\CarbonPeriod::create($start, '1 month', $end);
         foreach ($period as $date) {
             $meses->push([
                 'mes' => $date->format('Y-m'),
-                'nombre' => ucfirst($date->isoFormat('MMMM YYYY')) // Nombre de mes en español
+                'nombre' => ucfirst($date->isoFormat('MMMM YYYY'))
             ]);
         }
 
@@ -64,7 +65,7 @@ class DashboardController extends Controller
         // Rango: mes calendario actual
         $start = Carbon::now()->startOfMonth();
         $end = Carbon::now()->endOfMonth();
-        \App::setLocale('es'); // Forzar español para los nombres de meses
+        App::setLocale('es'); // Forzar español para los nombres de meses
         $nombreMes = ucfirst(Carbon::now()->isoFormat('MMMM YYYY'));
 
         // Consulta: cantidad de citas por especialidad (todas las citas del mes actual)
@@ -93,7 +94,7 @@ class DashboardController extends Controller
             // Rango: últimos 6 meses incluyendo el actual
             $start = Carbon::now()->subMonths(5)->startOfMonth();
             $end = Carbon::now()->endOfMonth();
-            \App::setLocale('es');
+            App::setLocale('es');
             $meses = collect();
             $period = \Carbon\CarbonPeriod::create($start, '1 month', $end);
             foreach ($period as $date) {
@@ -144,7 +145,7 @@ class DashboardController extends Controller
         // Rango: últimos 6 meses incluyendo el actual
         $start = Carbon::now()->subMonths(5)->startOfMonth();
         $end = Carbon::now()->endOfMonth();
-        \App::setLocale('es');
+        App::setLocale('es');
         $meses = collect();
         $period = \Carbon\CarbonPeriod::create($start, '1 month', $end);
         foreach ($period as $date) {
@@ -166,7 +167,7 @@ class DashboardController extends Controller
             ->pluck('horas', 'consultorio_id');
 
         $labels = $consultorios->pluck('nombre_consultorio');
-        $data = $consultorios->map(function($c) use ($horasPorConsultorio) {
+        $data = $consultorios->map(function ($c) use ($horasPorConsultorio) {
             return round($horasPorConsultorio[$c->consultorio_id] ?? 0, 1);
         });
 
@@ -181,13 +182,13 @@ class DashboardController extends Controller
     {
         $start = Carbon::now()->startOfWeek();
         $end = Carbon::now()->endOfWeek();
-        \App::setLocale('es');
+        App::setLocale('es');
         $dias = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'];
         $fechas = [];
         for ($i = 0; $i < 7; $i++) {
             $fechas[] = $start->copy()->addDays($i)->format('d/m');
         }
-        $labels = array_map(function($dia, $fecha) {
+        $labels = array_map(function ($dia, $fecha) {
             return $dia . ' (' . $fecha . ')';
         }, $dias, $fechas);
         $citas = DB::table('citas')

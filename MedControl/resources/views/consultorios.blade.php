@@ -156,70 +156,77 @@
                             @endif
                         </td>
                         <td>
-                            <button type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#editarConsultorioModal{{ $consultorio->consultorio_id }}">
-                                Editar
-                            </button>
-                            <!-- Modal Editar -->
-                            <div class="modal fade" id="editarConsultorioModal{{ $consultorio->consultorio_id }}" tabindex="-1" role="dialog" aria-labelledby="editarConsultorioModalLabel{{ $consultorio->consultorio_id }}" aria-hidden="true">
-                              <div class="modal-dialog" role="document">
-                                <div class="modal-content">
-                                  <form action="{{ route('consultorios.update', $consultorio->consultorio_id) }}" method="POST">
-                                    @csrf
-                                    @method('PUT')
-                                    <div class="modal-header">
-                                      <h5 class="modal-title" id="editarConsultorioModalLabel{{ $consultorio->consultorio_id }}">Editar Consultorio</h5>
-                                      <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
-                                        <span aria-hidden="true">&times;</span>
-                                      </button>
+                            @if($consultorio->activo_inactivo)
+                                <button type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#editarConsultorioModal{{ $consultorio->consultorio_id }}">
+                                    Editar
+                                </button>
+                                <!-- Modal Editar -->
+                                <div class="modal fade" id="editarConsultorioModal{{ $consultorio->consultorio_id }}" tabindex="-1" role="dialog" aria-labelledby="editarConsultorioModalLabel{{ $consultorio->consultorio_id }}" aria-hidden="true">
+                                  <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                      <form action="{{ route('consultorios.update', $consultorio->consultorio_id) }}" method="POST">
+                                        @csrf
+                                        @method('PUT')
+                                        <div class="modal-header">
+                                          <h5 class="modal-title" id="editarConsultorioModalLabel{{ $consultorio->consultorio_id }}">Editar Consultorio</h5>
+                                          <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
+                                            <span aria-hidden="true">&times;</span>
+                                          </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div class="form-group">
+                                                <label>Nombre del Consultorio</label>
+                                                <input type="text" class="form-control" name="nombre_consultorio" value="{{ $consultorio->nombre_consultorio }}" required>
+                                            </div>
+                                            <div class="form-group">
+                                                <label>Tipo de Consultorio</label>
+                                                <select class="form-control" name="tipo_id" required>
+                                                    @foreach($tiposConsultorio as $tipo)
+                                                        <option value="{{ $tipo->tipo_consultorio_id }}" {{ $consultorio->tipo_id == $tipo->tipo_consultorio_id ? 'selected' : '' }}>
+                                                            {{ $tipo->tipo_consultorio_id }} - {{ $tipo->descripcion }}
+                                                        </option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                            <div class="form-group">
+                                                <label>Ubicación</label>
+                                                <input type="text" class="form-control" name="ubicacion" value="{{ $consultorio->ubicacion }}" required>
+                                            </div>
+                                            <div class="form-group">
+                                                <label>Estado del Consultorio</label>
+                                                <select class="form-control" name="estado_consultorio" required>
+                                                    <option value="disponible" {{ $consultorio->estado_consultorio == 'disponible' ? 'selected' : '' }}>Disponible</option>
+                                                    <option value="en_mantenimiento" {{ $consultorio->estado_consultorio == 'en_mantenimiento' ? 'selected' : '' }}>En Mantenimiento</option>
+                                                    <option value="no_disponible" {{ $consultorio->estado_consultorio == 'no_disponible' ? 'selected' : '' }}>No Disponible</option>
+                                                </select>
+                                            </div>
+                                            <div class="form-group">
+                                                <label>Estado</label>
+                                                <select class="form-control" name="activo_inactivo" required>
+                                                    <option value="1" {{ $consultorio->activo_inactivo ? 'selected' : '' }}>Activo</option>
+                                                    <option value="0" {{ !$consultorio->activo_inactivo ? 'selected' : '' }}>Inactivo</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                                          <button type="submit" class="btn btn-success">Actualizar</button>
+                                        </div>
+                                      </form>
                                     </div>
-                                    <div class="modal-body">
-                                        <div class="form-group">
-                                            <label>Nombre del Consultorio</label>
-                                            <input type="text" class="form-control" name="nombre_consultorio" value="{{ $consultorio->nombre_consultorio }}" required>
-                                        </div>
-                                        <div class="form-group">
-                                            <label>Tipo de Consultorio</label>
-                                            <select class="form-control" name="tipo_id" required>
-                                                @foreach($tiposConsultorio as $tipo)
-                                                    <option value="{{ $tipo->tipo_consultorio_id }}" {{ $consultorio->tipo_id == $tipo->tipo_consultorio_id ? 'selected' : '' }}>
-                                                        {{ $tipo->tipo_consultorio_id }} - {{ $tipo->descripcion }}
-                                                    </option>
-                                                @endforeach
-                                            </select>
-                                        </div>
-                                        <div class="form-group">
-                                            <label>Ubicación</label>
-                                            <input type="text" class="form-control" name="ubicacion" value="{{ $consultorio->ubicacion }}" required>
-                                        </div>
-                                        <div class="form-group">
-                                            <label>Estado del Consultorio</label>
-                                            <select class="form-control" name="estado_consultorio" required>
-                                                <option value="disponible" {{ $consultorio->estado_consultorio == 'disponible' ? 'selected' : '' }}>Disponible</option>
-                                                <option value="en_mantenimiento" {{ $consultorio->estado_consultorio == 'en_mantenimiento' ? 'selected' : '' }}>En Mantenimiento</option>
-                                                <option value="no_disponible" {{ $consultorio->estado_consultorio == 'no_disponible' ? 'selected' : '' }}>No Disponible</option>
-                                            </select>
-                                        </div>
-                                        <div class="form-group">
-                                            <label>Estado</label>
-                                            <select class="form-control" name="activo_inactivo" required>
-                                                <option value="1" {{ $consultorio->activo_inactivo ? 'selected' : '' }}>Activo</option>
-                                                <option value="0" {{ !$consultorio->activo_inactivo ? 'selected' : '' }}>Inactivo</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="modal-footer">
-                                      <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                                      <button type="submit" class="btn btn-success">Actualizar</button>
-                                    </div>
-                                  </form>
+                                  </div>
                                 </div>
-                              </div>
-                            </div>
-                            <form action="{{ route('consultorios.destroy', $consultorio->consultorio_id) }}" method="POST" style="display:inline;">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('¿Seguro que deseas eliminar este consultorio?')">Eliminar</button>
-                            </form>
+                                <form action="{{ route('consultorios.destroy', $consultorio->consultorio_id) }}" method="POST" style="display:inline;">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('¿Seguro que deseas eliminar este consultorio?')">Eliminar</button>
+                                </form>
+                            @else
+                                <form action="{{ route('consultorios.reingresar', $consultorio->consultorio_id) }}" method="POST" style="display:inline;">
+                                    @csrf
+                                    <button type="submit" class="btn btn-success btn-sm" onclick="return confirm('¿Seguro que deseas reingresar este consultorio?')">Reingresar</button>
+                                </form>
+                            @endif
                         </td>
                     </tr>
                 @endforeach
@@ -246,6 +253,30 @@
             const selected = tipoSelect.options[tipoSelect.selectedIndex];
             descripcion.value = selected.getAttribute('data-descripcion') || '';
             equipamiento.value = selected.getAttribute('data-equipamiento') || '';
+        });
+
+        // Limpiar formulario y campos dependientes al cerrar el modal de nuevo consultorio
+        $('#nuevoConsultorioModal').on('hidden.bs.modal', function () {
+            $(this).find('form')[0].reset();
+            $('#descripcion_tipo').val('');
+            $('#equipamiento_tipo').val('');
+        });
+
+        // Limpiar también al hacer click en "Cancelar"
+        $('#nuevoConsultorioModal .btn-secondary').on('click', function () {
+            $(this).closest('.modal').find('form')[0].reset();
+            $('#descripcion_tipo').val('');
+            $('#equipamiento_tipo').val('');
+        });
+
+        // Limpiar formulario de editsr consultorio al cerrar el modal
+        $('[id^=editarConsultorioModal]').on('hidden.bs.modal', function () {
+            $(this).find('form')[0].reset();
+        });
+
+        // Limpiar al hacer click en "cancelar" en el modal de editar
+        $('[id^=editarConsultorioModal] .btn-secondary').on('click', function () {
+            $(this).closest('.modal').find('form')[0].reset();
         });
     });
 </script>

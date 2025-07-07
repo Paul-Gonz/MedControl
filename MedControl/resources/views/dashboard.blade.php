@@ -113,17 +113,13 @@
 @stop
 
 @section('css')
-    {{-- Add here extra stylesheets --}}
-    {{-- <link rel="stylesheet" href="/css/admin_custom.css"> --}}
     <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/main.min.css" rel="stylesheet">
 @stop
 
 @section('js')
-    <!-- Chart.js CDN (puedes cambiarlo por asset si lo tienes local) -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <!-- FullCalendar CDN -->
     <script>
-        // Gráfico de Barras: Citas médicas por mes (dinámico)
+        // Gráfico de Barras de citas médicas por mes
         fetch("{{ route('dashboard.citasPorMes') }}")
             .then(response => response.json())
             .then(data => {
