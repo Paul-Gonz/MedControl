@@ -11,6 +11,7 @@ return new class extends Migration
         Schema::create('especialidades', function (Blueprint $table) {
             $table->id('especialidad_id');
             $table->string('nombre', 100);
+            $table->decimal('costo_especialidad', 10, 2)->default(0); // Nuevo campo
             $table->text('descripcion')->nullable();
             $table->tinyInteger('activo_inactivo')->default(1);
         });

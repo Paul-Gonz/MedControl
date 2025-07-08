@@ -27,6 +27,7 @@ class EspecialidadController extends Controller
         $especialidad->nombre = $request->nombre;
         $especialidad->descripcion = $request->descripcion;
         $especialidad->activo_inactivo = $request->activo_inactivo;
+        $especialidad->costo_especialidad = $request->costo_especialidad;
 
         $especialidad->save();
 
@@ -53,6 +54,7 @@ class EspecialidadController extends Controller
         $especialidad->nombre = $request->nombre;
         $especialidad->descripcion = $request->descripcion;
         $especialidad->activo_inactivo = $request->activo_inactivo;
+        $especialidad->costo_especialidad = $request->costo_especialidad;
 
         $especialidad->save();
 

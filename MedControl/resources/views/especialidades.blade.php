@@ -41,6 +41,10 @@
                     <option value="0">Inactivo</option>
                 </select>
             </div>
+            <div class="form-group">
+                <label>Costo de la Especialidad ($)</label>
+                <input type="number" step="0.01" class="form-control" name="costo_especialidad" required>
+            </div>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
@@ -60,6 +64,7 @@
                     <th>Nombre</th>
                     <th>Descripción</th>
                     <th>Estado</th>
+                    <th>Costo</th>
                     <th>Acciones</th>
                 </tr>
             </thead>
@@ -76,6 +81,7 @@
                                 <span class="badge badge-danger">Inactivo</span>
                             @endif
                         </td>
+                        <td>{{ number_format($especialidad->costo_especialidad, 2) }}</td>
                         <td>
 
                             <!-- Botón Editar -->
@@ -110,6 +116,10 @@
                                                 <option value="1" {{ $especialidad->activo_inactivo ? 'selected' : '' }}>Activo</option>
                                                 <option value="0" {{ !$especialidad->activo_inactivo ? 'selected' : '' }}>Inactivo</option>
                                             </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Costo de la Especialidad ($)</label>
+                                            <input type="number" step="0.01" class="form-control" name="costo_especialidad" value="{{ $especialidad->costo_especialidad }}" required>
                                         </div>
                                     </div>
                                     <div class="modal-footer">

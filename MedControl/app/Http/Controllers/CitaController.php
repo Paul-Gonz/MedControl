@@ -32,7 +32,9 @@ class CitaController extends Controller
                 'dpe.relacion_id',
                 'd.doctor_id',
                 'd.nombre_completo',
-                'e.nombre as especialidad_nombre'
+                'e.nombre as especialidad_nombre',
+                'e.costo_especialidad', // nuevo campo para autollenar costo
+                'd.honorarios'
             )
             ->get();
 
@@ -113,7 +115,9 @@ class CitaController extends Controller
                 'dpe.relacion_id',
                 'd.doctor_id',
                 'd.nombre_completo',
-                'e.nombre as especialidad_nombre'
+                'e.nombre as especialidad_nombre',
+                'e.costo_especialidad', // nuevo campo para autollenar costo
+                'd.honorarios'
             )
             ->get();
         $pacientes = Paciente::all();
