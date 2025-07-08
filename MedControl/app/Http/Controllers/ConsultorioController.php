@@ -48,7 +48,16 @@ class ConsultorioController extends Controller
     public function destroy($id)
     {
         $consultorio = Consultorio::findOrFail($id);
-        $consultorio->delete();
+        $consultorio->activo_inactivo = 0;
+        $consultorio->save();
         return redirect()->route('consultorios.index')->with('success', 'Consultorio eliminado correctamente.');
+    }
+
+    public function reingresar($id)
+    {
+        $consultorio = Consultorio::findOrFail($id);
+        $consultorio->activo_inactivo = 1;
+        $consultorio->save();
+        return redirect()->route('consultorios.index')->with('success', 'Consultorio reingresado correctamente.');
     }
 }

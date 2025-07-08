@@ -44,8 +44,16 @@ class TipoConsultorioController extends Controller
     public function destroy($id)
     {
         $tipo = TipoConsultorio::findOrFail($id);
-        $tipo->delete();
-
+        $tipo->activo_inactivo = 0;
+        $tipo->save();
         return redirect()->back()->with('success', 'Tipo de consultorio eliminado correctamente.');
+    }
+
+    public function reingresar($id)
+    {
+        $tipo = TipoConsultorio::findOrFail($id);
+        $tipo->activo_inactivo = 1;
+        $tipo->save();
+        return redirect()->back()->with('success', 'Tipo de consultorio reingresado correctamente.');
     }
 }
