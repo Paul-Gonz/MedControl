@@ -257,7 +257,7 @@ return [
     */
 
     'use_route_url' => false,
-    'dashboard_url' => 'admin',
+    'dashboard_url' => 'dashboard',
     'logout_url' => 'logout',
     'login_url' => 'login',
     'register_url' => 'register',
@@ -338,11 +338,6 @@ return [
             'text' => 'Dashboard',
             'url' => 'dashboard', 
             'icon' => 'fas fa-fw fa-home',
-        ],
-        [
-            'text' => 'Agenda y Calendario',
-            'url' => 'agenda',
-            'icon' => 'far fa-fw fa-calendar',
         ],
         
          ['header' => 'GESTION DE DATOS'],

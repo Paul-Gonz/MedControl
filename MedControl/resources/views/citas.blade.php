@@ -86,7 +86,7 @@
                         <form action="{{ route('citas.destroy', $cita->cita_id) }}" method="POST" style="display:inline;">
                             @csrf
                             @method('DELETE')
-                            <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('¿Eliminar esta cita?')">Eliminar</button>
+                            
                         </form>
                         @if($cita->estado_cita !== 'completada')
                             <button type="button" class="btn btn-success btn-sm btn-completar-cita" data-id="{{ $cita->cita_id }}">Completar</button>
@@ -123,7 +123,7 @@
                 <select name="doctor_especialista_id" class="form-control select2-doctor" required>
                     <option value="">Seleccione un doctor</option>
                     @foreach($doctores as $doctor)
-                        <option value="{{ $doctor->relacion_id }}" {{ old('doctor_especialista_id', $cita->doctor_especialista_id ?? '') == $doctor->relacion_id ? 'selected' : '' }}>
+                        <option value="{{ $doctor->relacion_id }}" data-costo="{{ $doctor->costo_especialidad ?? '' }}" {{ old('doctor_especialista_id', $cita->doctor_especialista_id ?? '') == $doctor->relacion_id ? 'selected' : '' }}>
                             {{ $doctor->doctor_id }} - {{ $doctor->nombre_completo }} - {{ $doctor->especialidad_nombre }}
                         </option>
                     @endforeach
@@ -184,7 +184,7 @@
             </div>
             <div class="mb-3">
                 <label for="costo" class="form-label">Costo de la Cita en $</label>
-                <input type="number" step="0.01" name="costo" class="form-control"
+                <input type="number" step="0.01" name="costo" class="form-control" id="costoCita"
                     value="{{ old('costo', isset($cita) ? ($cita->costo ?? optional($cita->facturas->first())->subtotal ?? '') : '') }}" required>
             </div>
             <button type="submit" class="btn btn-{{ $isEdit ? 'primary' : 'success' }}">
@@ -219,6 +219,14 @@
             width: '100%',
             placeholder: 'Seleccione un paciente',
             allowClear: true
+        });
+        // Autollenar costo al seleccionar doctor (costo de especialidad)
+        $(document).on('change', 'select.select2-doctor', function() {
+            var selected = $(this).find('option:selected');
+            var costo = selected.data('costo');
+            if (costo !== undefined && costo !== '' && costo !== null) {
+                $('#costoCita').val(costo);
+            }
         });
         // Acción para completar cita
         $(document).on('click', '.btn-completar-cita', function() {

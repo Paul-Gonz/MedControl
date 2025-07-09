@@ -80,7 +80,7 @@ class PacientesController extends Controller
             'contacto_email'     => 'nullable|email|max:255',
             'datos_relevantes'   => 'nullable|string',
             'fecha_registro'     => 'required|date',
-            'activo_inactivo'    => 'required|boolean',
+            //'activo_inactivo'    => 'required|boolean',
         ]);
 
         $paciente = Paciente::findOrFail($request->paciente_id);
@@ -92,7 +92,7 @@ class PacientesController extends Controller
         $paciente->contacto_email = $request->contacto_email;
         $paciente->datos_relevantes = $request->datos_relevantes;
         $paciente->fecha_registro = $request->fecha_registro;
-        $paciente->activo_inactivo = $request->activo_inactivo;
+        //$paciente->activo_inactivo = $request->activo_inactivo;
 
         $paciente->save();
 
