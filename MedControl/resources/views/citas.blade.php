@@ -184,8 +184,8 @@
             </div>
             <div class="mb-3">
                 <label for="costo" class="form-label">Costo de la Cita en $</label>
-                <input type="number" step="0.01" name="costo" class="form-control" id="costoCita"
-                    value="{{ old('costo', isset($cita) ? ($cita->costo ?? optional($cita->facturas->first())->subtotal ?? '') : '') }}" required>
+                <input type="number" step="0.01" name="costo" class="form-control"
+                     value="{{ \App\Http\Controllers\CitaController::COSTO_CITA_FIJO }}" readonly>
             </div>
             <button type="submit" class="btn btn-{{ $isEdit ? 'primary' : 'success' }}">
                 {{ $isEdit ? 'Actualizar' : 'Guardar' }}

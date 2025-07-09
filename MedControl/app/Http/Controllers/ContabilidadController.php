@@ -14,26 +14,25 @@ class ContabilidadController extends Controller
         return view('contabilidad');
     }
 
-    public function libroDiario(Request $request)
-    {
-        $desde = $request->input('desde');
-        $hasta = $request->input('hasta');
+   public function libroDiario(Request $request)
+{
+    $desde = $request->input('desde');
+    $hasta = $request->input('hasta');
+    $movimientos = MovimientoContable::whereBetween('fecha', [$desde, $hasta])->orderBy('fecha')->get();
+    return view('libro_diario', compact('movimientos', 'desde', 'hasta'));
+}
 
-        $pagos = Pago::whereBetween('fecha_pago', [$desde, $hasta])->get();
-        $pagos_doctores = PagoDoctor::whereBetween('fecha_pago', [$desde, $hasta])->get();
+public function libroMayor(Request $request)
+{
+    $mes = $request->input('mes'); 
+    $cuenta = $request->input('cuenta'); 
+    $inicio = \Carbon\Carbon::parse($mes . '-01')->startOfMonth();
+    $fin = \Carbon\Carbon::parse($mes . '-01')->endOfMonth();
 
-        return view('libro_diario', compact('pagos', 'pagos_doctores', 'desde', 'hasta'));
-    }
+    $movimientos = MovimientoContable::where('cuenta', $cuenta)
+        ->whereBetween('fecha', [$inicio, $fin])
+        ->orderBy('fecha')->get();
 
-    public function libroMayor(Request $request)
-    {
-        $mes = $request->input('mes'); // formato: YYYY-MM
-        $inicio = Carbon::parse($mes . '-01')->startOfMonth();
-        $fin = Carbon::parse($mes . '-01')->endOfMonth();
-
-        $pagos = Pago::whereBetween('fecha_pago', [$inicio, $fin])->get();
-        $pagos_doctores = PagoDoctor::whereBetween('fecha_pago', [$inicio, $fin])->get();
-
-        return view('libro_mayor', compact('pagos', 'pagos_doctores', 'mes'));
-    }
+    return view('libro_mayor', compact('movimientos', 'cuenta', 'mes'));
+}
 }

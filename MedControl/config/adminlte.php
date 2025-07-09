@@ -400,7 +400,12 @@ return [
                     'text' => 'Facturación y pagos',
                     'url' => '/Contabilidad',
                 ],
+                 [
+                    'text' => 'Gastos',
+                    'url' => '/gastos',
+                ],
             ],
+            
         ],
     ],
 

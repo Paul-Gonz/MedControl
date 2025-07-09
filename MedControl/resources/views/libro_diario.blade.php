@@ -7,55 +7,28 @@
 @stop
 
 @section('content')
-    <h3>Pagos de Pacientes</h3>
-    <table class="table table-bordered">
-        <thead>
-            <tr>
-                <th>Fecha</th>
-                <th>Monto</th>
-                <th>Método</th>
-                <th>Referencia</th>
-            </tr>
-        </thead>
-        <tbody>
-            @forelse($pagos as $pago)
-                <tr>
-                    <td>{{ $pago->fecha_pago }}</td>
-                    <td>{{ $pago->monto }}</td>
-                    <td>{{ $pago->metodo_pago }}</td>
-                    <td>{{ $pago->numero_referencia }}</td>
-                </tr>
-            @empty
-                <tr>
-                    <td colspan="4" class="text-center">No hay pagos registrados.</td>
-                </tr>
-            @endforelse
-        </tbody>
-    </table>
-
-    <h3>Pagos a Doctores</h3>
-    <table class="table table-bordered">
-        <thead>
-            <tr>
-                <th>Fecha</th>
-                <th>Doctor</th>
-                <th>Monto</th>
-                <th>Método</th>
-            </tr>
-        </thead>
-        <tbody>
-            @forelse($pagos_doctores as $pago)
-                <tr>
-                    <td>{{ $pago->fecha_pago }}</td>
-                    <td>{{ $pago->doctor->nombre ?? '-' }}</td>
-                    <td>{{ $pago->monto }}</td>
-                    <td>{{ $pago->metodo_pago }}</td>
-                </tr>
-            @empty
-                <tr>
-                    <td colspan="4" class="text-center">No hay pagos a doctores registrados.</td>
-                </tr>
-            @endforelse
-        </tbody>
-    </table>
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Fecha</th>
+            <th>Cuenta</th>
+            <th>Descripción</th>
+            <th>Debe</th>
+            <th>Haber</th>
+            <th>Referencia</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach($movimientos as $mov)
+        <tr>
+            <td>{{ $mov->fecha }}</td>
+            <td>{{ $mov->cuenta }}</td>
+            <td>{{ $mov->descripcion }}</td>
+            <td>{{ number_format($mov->debe,2) }}</td>
+            <td>{{ number_format($mov->haber,2) }}</td>
+            <td>{{ $mov->referencia }}</td>
+        </tr>
+        @endforeach
+    </tbody>
+</table>
 @stop

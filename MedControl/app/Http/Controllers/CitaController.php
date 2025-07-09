@@ -14,6 +14,7 @@ use Barryvdh\DomPDF\Facade\Pdf;
 
 class CitaController extends Controller
 {
+    const COSTO_CITA_FIJO = 40.00; 
     public function index()
     {
         $citas = Cita::with('paciente')->get();
@@ -46,7 +47,7 @@ class CitaController extends Controller
     }
 
     public function store(Request $request)
-    {
+    {   
         $request->validate([
             'paciente_id' => 'required',
             'doctor_especialista_id' => 'required',
@@ -56,8 +57,13 @@ class CitaController extends Controller
             'fecha_hora_inicio' => 'required|date',
             'fecha_hora_fin' => 'required|date',
             'estado_cita' => 'required',
-            'costo' => 'required|numeric|min:0',
+            'costo' => 'nullable|numeric|min:0',
         ]);
+
+        $data = $request->all();
+        $data['costo'] = self::COSTO_CITA_FIJO; // fuerza el valor fijo
+
+        $cita = Cita::create($data);
         $cita = Cita::create($request->except('costo'));
         // Crear la factura automáticamente
         $subtotal = $request->input('costo');

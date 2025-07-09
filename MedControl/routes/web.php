@@ -15,6 +15,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\PagoDoctorController;
 use App\Http\Controllers\ContabilidadController;
 use App\Http\Controllers\AgendaController;
+use App\Http\Controllers\GastoController;
 
 
 Route::get('/', function () {
@@ -116,9 +117,12 @@ Route::get('/citas/reporte', [App\Http\Controllers\CitaController::class, 'repor
 
 Route::prefix('/Contabilidad')->group(function () {
     Route::get('/', [ContabilidadController::class, 'index'])->name('contabilidad.index');
-    Route::post('/libro-diario', [ContabilidadController::class, 'libroDiario'])->name('contabilidad.libro_diario');
-    Route::post('/libro-mayor', [ContabilidadController::class, 'libroMayor'])->name('contabilidad.libro_mayor');
-});
+    Route::post('/contabilidad/libro_diario', [ContabilidadController::class, 'libroDiario'])->name('contabilidad.libro_diario');
+Route::post('/contabilidad/libro_mayor', [ContabilidadController::class, 'libroMayor'])->name('contabilidad.libro_mayor');
+    });
 
 Route::get('/agenda', [AgendaController::class, 'index'])->name('agenda.index');
 Route::get('/agenda/citas', [AgendaController::class, 'citas'])->name('agenda.citas');
+
+Route::get('/gastos', [GastoController::class, 'create'])->name('gastos.create');
+Route::post('/gastos', [GastoController::class, 'store'])->name('gastos.store');
