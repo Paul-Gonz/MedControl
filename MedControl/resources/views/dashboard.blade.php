@@ -88,6 +88,55 @@
                 </div>
             </div>
         </div>
+
+        <!-- Parte de Reportes Gerenciales -->
+        <div class="row mt-5">
+            <div class="col-12">
+                <h3 class="mb-4 text-primary">Reportes Gerenciales</h3>
+            </div>
+        </div>
+        <div class="row">
+            <!-- Gráfica de ingresos por especialidad -->
+            <div class="col-md-12">
+                <div class="card mb-4">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        Reporte de Ingresos por Especialidad
+                        <button class="btn btn-primary btn-sm" onclick="mostrarReporte('ingresosEspecialidadChart')">Mostrar reporte</button>
+                    </div>
+                    <div class="card-body d-flex justify-content-center align-items-center" style="height:320px;">
+                        <canvas id="ingresosEspecialidadChart" style="width:100%;max-width:1000px;max-height:300px;"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Gráfica de torta de distribución del presupuesto por área -->
+        <div class="row">
+            <div class="col-md-8 offset-md-2">
+                <div class="card mb-4">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        Distribución del Presupuesto por Área - Total $100,000
+                        <button class="btn btn-primary btn-sm" onclick="mostrarReporte('presupuestoAreasChart')">Mostrar reporte</button>
+                    </div>
+                    <div class="card-body d-flex justify-content-center align-items-center" style="height:320px;">
+                        <canvas id="presupuestoAreasChart" style="width:100%;max-width:600px;max-height:300px;"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Gráfica de barras de cantidad de pacientes atendidos por especialidad -->
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card mb-4">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        Cantidad de pacientes atendidos por especialidad
+                        <button class="btn btn-primary btn-sm" onclick="mostrarReporte('pacientesEspecialidadChart')">Mostrar reporte</button>
+                    </div>
+                    <div class="card-body d-flex justify-content-center align-items-center" style="height:320px;">
+                        <canvas id="pacientesEspecialidadChart" style="width:100%;max-width:1000px;max-height:300px;"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
     <!-- Modal para mostrar reporte de gráfica -->
@@ -441,7 +490,179 @@
                 });
             });
 
-        // Función para descargar el reporte de la gráfica como imagen PNG
+        document.addEventListener('DOMContentLoaded', function() {
+            const ctx = document.getElementById('ingresosEspecialidadChart');
+            if (!ctx) return;
+            new Chart(ctx.getContext('2d'), {
+                type: 'bar',
+                data: {
+                    labels: ['Cardiología', 'Pediatría', 'Dermatología', 'Ginecología', 'Traumatología'],
+                    datasets: [
+                        {
+                            label: 'Ingresos (USD)',
+                            data: [12000, 9600, 7800, 5400, 6300],
+                            backgroundColor: [
+                                'rgba(54, 162, 235, 0.7)',
+                                'rgba(255, 99, 132, 0.7)',
+                                'rgba(255, 206, 86, 0.7)',
+                                'rgba(75, 192, 192, 0.7)',
+                                'rgba(153, 102, 255, 0.7)'
+                            ],
+                            borderColor: [
+                                'rgba(54, 162, 235, 1)',
+                                'rgba(255, 99, 132, 1)',
+                                'rgba(255, 206, 86, 1)',
+                                'rgba(75, 192, 192, 1)',
+                                'rgba(153, 102, 255, 1)'
+                            ],
+                            borderWidth: 1
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Reporte de Ingresos por Especialidad - Enero-Febrero-Marzo-2025'
+                        },
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Ingresos (USD)'
+                            }
+                        },
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Especialidad'
+                            }
+                        }
+                    }
+                }
+            });
+        });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const ctx = document.getElementById('presupuestoAreasChart');
+            if (!ctx) return;
+            new Chart(ctx.getContext('2d'), {
+                type: 'pie',
+                data: {
+                    labels: ['Quirófano', 'Urgencias', 'Hospitalización', 'Laboratorio', 'Administración'],
+                    datasets: [{
+                        data: [55, 20, 15, 7, 3],
+                        backgroundColor: [
+                            'rgba(255, 99, 132, 0.7)',
+                            'rgba(54, 162, 235, 0.7)',
+                            'rgba(255, 206, 86, 0.7)',
+                            'rgba(75, 192, 192, 0.7)',
+                            'rgba(153, 102, 255, 0.7)'
+                        ],
+                        borderColor: [
+                            'rgba(255, 99, 132, 1)',
+                            'rgba(54, 162, 235, 1)',
+                            'rgba(255, 206, 86, 1)',
+                            'rgba(75, 192, 192, 1)',
+                            'rgba(153, 102, 255, 1)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Distribución del Presupuesto por Área - Total $100,000'
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    const label = context.label || '';
+                                    const value = context.parsed;
+                                    const monto = Math.round((value / 100) * 100000);
+                                    return `${label}: ${value}% ($${monto.toLocaleString()})`;
+                                }
+                            }
+                        },
+                        legend: {
+                            display: true
+                        }
+                    }
+                }
+            });
+        });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const ctx = document.getElementById('pacientesEspecialidadChart');
+            if (!ctx) return;
+            new Chart(ctx.getContext('2d'), {
+                type: 'bar',
+                data: {
+                    labels: ['Cardiología', 'Pediatría', 'Dermatología', 'Ginecología', 'Traumatología'],
+                    datasets: [
+                        {
+                            label: 'Pacientes atendidos',
+                            data: [320, 410, 290, 180, 230],
+                            backgroundColor: [
+                                'rgba(54, 162, 235, 0.7)',
+                                'rgba(255, 99, 132, 0.7)',
+                                'rgba(255, 206, 86, 0.7)',
+                                'rgba(75, 192, 192, 0.7)',
+                                'rgba(153, 102, 255, 0.7)'
+                            ],
+                            borderColor: [
+                                'rgba(54, 162, 235, 1)',
+                                'rgba(255, 99, 132, 1)',
+                                'rgba(255, 206, 86, 1)',
+                                'rgba(75, 192, 192, 1)',
+                                'rgba(153, 102, 255, 1)'
+                            ],
+                            borderWidth: 1
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Cantidad de pacientes atendidos por especialidad - Enero-Febreo-Marzo-2025'
+                        },
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Cantidad de pacientes'
+                            }
+                        },
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Especialidad'
+                            }
+                        }
+                    }
+                }
+            });
+        });
+
+
         let modalChartInstance = null;
         function mostrarReporte(canvasId) {
             // Obtener datos del gráfico original
@@ -474,19 +695,33 @@
 
             // Generar tabla de datos
             let tableHtml = '<div class="table-responsive"><table class="table table-bordered table-sm"><thead><tr>';
-            // Encabezados
             if (chartData.labels && chartData.labels.length > 0) {
                 tableHtml += '<th>Etiqueta</th>';
                 chartData.datasets.forEach(ds => {
-                    tableHtml += `<th>${ds.label || ''}</th>`;
+
+                    if (canvasId !== 'presupuestoAreasChart') {
+                        tableHtml += `<th>${ds.label || ''}</th>`;
+                    }
                 });
+
+                if (canvasId === 'presupuestoAreasChart') {
+                    tableHtml += '<th>Porcentaje (%)</th><th>Monto (USD)</th>';
+                }
                 tableHtml += '</tr></thead><tbody>';
-                // Filas
                 chartData.labels.forEach((label, i) => {
                     tableHtml += `<tr><td>${label}</td>`;
                     chartData.datasets.forEach(ds => {
-                        tableHtml += `<td>${Array.isArray(ds.data) ? (ds.data[i] ?? '') : ''}</td>`;
+
+                        if (canvasId !== 'presupuestoAreasChart') {
+                            tableHtml += `<td>${Array.isArray(ds.data) ? (ds.data[i] ?? '') : ''}</td>`;
+                        }
                     });
+
+                    if (canvasId === 'presupuestoAreasChart') {
+                        const porcentaje = chartData.datasets[0].data[i];
+                        const monto = Math.round((porcentaje / 100) * 100000);
+                        tableHtml += `<td>${porcentaje}%</td><td>$${monto.toLocaleString()}</td>`;
+                    }
                     tableHtml += '</tr>';
                 });
             } else if (chartData.datasets && chartData.datasets.length > 0) {
