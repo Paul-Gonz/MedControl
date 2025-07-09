@@ -137,6 +137,20 @@
                 </div>
             </div>
         </div>
+        <!-- Gráfica de barras de ingresos por servicio -->
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card mb-4">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        Reporte de Ingresos por Servicio
+                        <button class="btn btn-primary btn-sm" onclick="mostrarReporte('ingresosServicioChart')">Mostrar reporte</button>
+                    </div>
+                    <div class="card-body d-flex justify-content-center align-items-center" style="height:320px;">
+                        <canvas id="ingresosServicioChart" style="width:100%;max-width:1000px;max-height:300px;"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
     <!-- Modal para mostrar reporte de gráfica -->
@@ -662,6 +676,64 @@
             });
         });
 
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const ctx = document.getElementById('ingresosServicioChart');
+            if (!ctx) return;
+            new Chart(ctx.getContext('2d'), {
+                type: 'bar',
+                data: {
+                    labels: ['Ecografías', 'Cirugías', 'Exámenes de sangre', 'Endoscopías'],
+                    datasets: [
+                        {
+                            label: 'Ingresos (USD)',
+                            data: [3500, 12000, 2200, 4800],
+                            backgroundColor: [
+                                'rgba(54, 162, 235, 0.7)',
+                                'rgba(255, 99, 132, 0.7)',
+                                'rgba(255, 206, 86, 0.7)',
+                                'rgba(75, 192, 192, 0.7)'
+                            ],
+                            borderColor: [
+                                'rgba(54, 162, 235, 1)',
+                                'rgba(255, 99, 132, 1)',
+                                'rgba(255, 206, 86, 1)',
+                                'rgba(75, 192, 192, 1)'
+                            ],
+                            borderWidth: 1
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Reporte de Ingresos por Servicio - Enero-Febrero-Marzo-2025'
+                        },
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Ingresos (USD)'
+                            }
+                        },
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Servicio'
+                            }
+                        }
+                    }
+                }
+            });
+        });
 
         let modalChartInstance = null;
         function mostrarReporte(canvasId) {
