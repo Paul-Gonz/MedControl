@@ -1,5 +1,4 @@
 <?php
-
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PacientesController;
 use App\Http\Controllers\UsuarioController;
@@ -19,7 +18,6 @@ use App\Http\Controllers\GastoController;
 use App\Http\Controllers\PlanCuentasController;
 use App\Http\Controllers\MovimientoContableController;
 
-
 Route::get('/', function () {
     return view('login');
 });
@@ -27,6 +25,7 @@ Route::get('/', function () {
 Route::get('/dashboard', function () {
     return view('dashboard');
 });
+
 Route::get('/dashboard/citas-por-mes', [DashboardController::class, 'citasPorMes'])->name('dashboard.citasPorMes');
 Route::get('/dashboard/especialidades-mas-demandadas', [DashboardController::class, 'especialidadesMasDemandadas'])->name('dashboard.especialidadesMasDemandadas');
 // Gráfica de ingresos y egresos mensuales
@@ -38,11 +37,7 @@ Route::get('/dashboard/citas-por-dia-semana', [App\Http\Controllers\DashboardCon
 // Top 10 doctores con más consultas pagadas este mes
 Route::get('/dashboard/top-doctores-pagadas', [App\Http\Controllers\DashboardController::class, 'topDoctoresPagadasMes'])->name('dashboard.topDoctoresPagadasMes');
 
-
-
-
 //pacientes
-
 Route::get('/Pacientes', [PacientesController::class, 'index'])->name('pacientes.index');
 Route::post('/Pacientes', [PacientesController::class, 'store'])->name('pacientes.store');
 Route::post('/Pacientes/update', [PacientesController::class, 'update'])->name('pacientes.update');
@@ -51,10 +46,6 @@ Route::post('/Pacientes/reingresar', [PacientesController::class, 'reingresar'])
 
 //reporte de pacientes
 Route::get('/Pacientes/pdf', [PacientesController::class, 'reporte'])->name('pacientes.reporte');
-
-
-
-
 
 Route::get('/Doctores', [App\Http\Controllers\DoctorController::class, 'index'])->name('doctores.index');
 Route::post('/Doctores', [App\Http\Controllers\DoctorController::class, 'store'])->name('doctores.store');
@@ -101,14 +92,10 @@ Route::patch('/citas/{id}/completar', [CitaController::class, 'completar'])->nam
 
 Route::resource('pagos', App\Http\Controllers\PagoController::class);
 
-
-
 Route::get('/Doctores/pdf', [DoctorController::class, 'reporte'])->name('doctores.reporte');
 Route::get('/Doctores/pdf-especialidad', [DoctorController::class, 'reportePorEspecialidad'])->name('doctores.reporte.especialidad');
 
-
 Route::get('citas/reporte/pdf', [CitaController::class, 'reportePdf'])->name('citas.reporte.pdf');
-
 
 Route::get('/pagos-doctores', [PagoDoctorController::class, 'index'])->name('pagos_doctores.index');
 Route::post('/pagos-doctores', [PagoDoctorController::class, 'store'])->name('pagos_doctores.store');
@@ -125,9 +112,6 @@ Route::post('/contabilidad/libro_mayor', [ContabilidadController::class, 'libroM
 
 Route::get('/agenda', [AgendaController::class, 'index'])->name('agenda.index');
 Route::get('/agenda/citas', [AgendaController::class, 'citas'])->name('agenda.citas');
-
-// Route::get('/gastos', [GastoController::class, 'create'])->name('gastos.create');
-// Route::post('/gastos', [GastoController::class, 'store'])->name('gastos.store');
 
 Route::get('plan-cuentas', [PlanCuentasController::class, 'index'])->name('plan-cuentas.index');
 Route::post('plan-cuentas', [PlanCuentasController::class, 'store'])->name('plan-cuentas.store');
