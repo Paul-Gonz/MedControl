@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Pago;
 use App\Models\Factura;
+use App\Models\PlanCuenta;
 use Illuminate\Http\Request;
 
 class PagoController extends Controller
@@ -40,7 +41,20 @@ class PagoController extends Controller
             'numero_referencia' => 'required',
             'activo_inactivo' => 'required|boolean',
         ]);
-        Pago::create($request->all());
+        $pago = Pago::create($request->all());
+
+        // Buscar cuenta de ingresos
+        $cuentaIngreso = PlanCuenta::where('tipo', 'ingreso')->first();
+        if ($cuentaIngreso) {
+            \App\Models\MovimientoContable::create([
+                'fecha' => $request->fecha_pago,
+                'cuenta' => $cuentaIngreso->cuenta_id,
+                'descripcion' => 'Ingreso por pago de cliente (Factura ID: ' . $request->factura_id . ')',
+                'debe' => 0,
+                'haber' => $request->monto,
+                'referencia' => $request->numero_referencia,
+            ]);
+        }
         // Cambiar estado de la factura a 'pagada'
         $factura = \App\Models\Factura::find($request->factura_id);
         if ($factura) {

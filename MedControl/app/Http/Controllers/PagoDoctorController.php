@@ -25,6 +25,20 @@ class PagoDoctorController extends Controller
             'observaciones' => 'nullable|string',
         ]);
         PagoDoctor::create($request->all());
+
+        // Buscar cuenta de egresos
+        $cuentaEgreso = \App\Models\PlanCuenta::where('tipo', 'egreso')->first();
+        if ($cuentaEgreso) {
+            \App\Models\MovimientoContable::create([
+                'fecha' => $request->fecha_pago,
+                'cuenta' => $cuentaEgreso->cuenta_id,
+                'descripcion' => 'Egreso por pago a doctor (Doctor ID: ' . $request->doctor_id . ')',
+                'debe' => $request->monto,
+                'haber' => 0,
+                'referencia' => $request->metodo_pago,
+            ]);
+        }
+
         return redirect()->route('pagos_doctores.index')->with('success', 'Pago registrado correctamente.');
     }
 
