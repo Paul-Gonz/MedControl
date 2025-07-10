@@ -12,6 +12,7 @@
         <tr>
             <th>Fecha</th>
             <th>Cuenta</th>
+            <th>Nombre de Cuenta</th>
             <th>Descripción</th>
             <th>Debe</th>
             <th>Haber</th>
@@ -23,6 +24,7 @@
         <tr>
             <td>{{ $mov->fecha }}</td>
             <td>{{ $mov->cuenta }}</td>
+            <td>{{ $mov->cuentaContable->nombre ?? '-' }}</td>
             <td>{{ $mov->descripcion }}</td>
             <td>{{ number_format($mov->debe,2) }}</td>
             <td>{{ number_format($mov->haber,2) }}</td>

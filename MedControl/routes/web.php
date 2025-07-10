@@ -16,6 +16,8 @@ use App\Http\Controllers\PagoDoctorController;
 use App\Http\Controllers\ContabilidadController;
 use App\Http\Controllers\AgendaController;
 use App\Http\Controllers\GastoController;
+use App\Http\Controllers\PlanCuentasController;
+use App\Http\Controllers\MovimientoContableController;
 
 
 Route::get('/', function () {
@@ -124,5 +126,14 @@ Route::post('/contabilidad/libro_mayor', [ContabilidadController::class, 'libroM
 Route::get('/agenda', [AgendaController::class, 'index'])->name('agenda.index');
 Route::get('/agenda/citas', [AgendaController::class, 'citas'])->name('agenda.citas');
 
-Route::get('/gastos', [GastoController::class, 'create'])->name('gastos.create');
-Route::post('/gastos', [GastoController::class, 'store'])->name('gastos.store');
+// Route::get('/gastos', [GastoController::class, 'create'])->name('gastos.create');
+// Route::post('/gastos', [GastoController::class, 'store'])->name('gastos.store');
+
+Route::get('plan-cuentas', [PlanCuentasController::class, 'index'])->name('plan-cuentas.index');
+Route::post('plan-cuentas', [PlanCuentasController::class, 'store'])->name('plan-cuentas.store');
+Route::get('plan-cuentas/{id}/edit', [PlanCuentasController::class, 'edit'])->name('plan-cuentas.edit');
+Route::put('plan-cuentas/{id}', [PlanCuentasController::class, 'update'])->name('plan-cuentas.update');
+Route::delete('plan-cuentas/{id}', [PlanCuentasController::class, 'destroy'])->name('plan-cuentas.destroy');
+
+Route::get('movimientos/create', [MovimientoContableController::class, 'create'])->name('movimientos.create');
+Route::post('movimientos', [MovimientoContableController::class, 'store'])->name('movimientos.store');

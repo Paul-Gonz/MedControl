@@ -397,12 +397,12 @@ return [
             'icon' => 'fas fa-fw fa-coins',
             'submenu' => [
                 [
-                    'text' => 'Facturación y pagos',
+                    'text' => 'Libro Diario y Mayor',
                     'url' => '/Contabilidad',
                 ],
                  [
-                    'text' => 'Gastos',
-                    'url' => '/gastos',
+                    'text' => 'Movimientos',
+                    'url' => '/movimientos/create',
                 ],
             ],
             

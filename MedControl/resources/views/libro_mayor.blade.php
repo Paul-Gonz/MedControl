@@ -3,7 +3,7 @@
 @section('title', 'Libro Mayor')
 
 @section('content_header')
-    <h1>Libro Mayor ({{ $cuenta }} - Mes: {{ $mes }})</h1>
+    <h1>Libro Mayor ({{ $cuentaNombre }} - Mes: {{ $mes }})</h1>
 @stop
 
 @section('content')

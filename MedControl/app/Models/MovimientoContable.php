@@ -11,4 +11,9 @@ class MovimientoContable extends Model
     protected $fillable = [
         'fecha', 'cuenta', 'descripcion', 'debe', 'haber', 'referencia'
     ];
+
+    public function cuentaContable()
+    {
+        return $this->belongsTo(PlanCuenta::class, 'cuenta', 'cuenta_id');
+    }
 }
