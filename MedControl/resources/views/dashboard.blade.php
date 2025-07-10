@@ -596,7 +596,7 @@
                     plugins: {
                         title: {
                             display: true,
-                            text: 'Distribución del Presupuesto por Área - Total $100,000'
+                            text: 'Distribución del Presupuesto por Área - Total $100,000 - Enero-Febrero-Marzo-2025'
                         },
                         tooltip: {
                             callbacks: {
